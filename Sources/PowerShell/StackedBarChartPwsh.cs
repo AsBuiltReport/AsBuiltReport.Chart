@@ -2,7 +2,7 @@ using System.Management.Automation;
 
 namespace AsBuiltReportChart.PowerShell
 {
-    [Cmdlet(VerbsCommon.New, "StackedBar")]
+    [Cmdlet(VerbsCommon.New, "StackedBarChart")]
     public class NewStackedBarChartCommand : Cmdlet
     {
         // Declare the parameters for the cmdlet.
@@ -210,7 +210,7 @@ namespace AsBuiltReportChart.PowerShell
                 Chart.AxesMarginsLeft = AxesMarginsLeft;
                 Chart.AxesMarginsRight = AxesMarginsRight;
 
-                // Set file directory save path 
+                // Set file directory save path
                 Chart.OutputFolderPath = OutputFolderPath;
 
                 Chart.Format = Format;
