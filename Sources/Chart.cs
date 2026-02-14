@@ -1,0 +1,411 @@
+using ScottPlot;
+using System.Text.RegularExpressions;
+using AsBuiltReportChart.Enums;
+namespace AsBuiltReportChart;
+
+public partial class Chart
+{
+    // Save settings (All Charts)
+    public static Formats Format { get; set; } = Formats.png;
+
+    // Title setting  (All Charts)
+    public static string? Title { get; set; }
+    public static bool TitleFontBold { get; set; }
+    public static int TitleFontSize { get; set; } = 14;
+    public static BasicColors TitleFontColor { get; set; } = BasicColors.Black;
+
+    // Global Font settings  (All Charts)
+    public static string FontName { get; set; } = "Arial";
+
+    // Label Font settings  (All Charts)
+    public static int LabelFontSize { get; set; } = 14;
+    public static BasicColors LabelFontColor { get; set; } = BasicColors.Black;
+    public static bool LabelBold { get; set; }
+
+    // Set font for the X and Y axis labels (Bar Chart)
+    public static string LabelYAxis { get; set; } = "Count";
+    public static string LabelXAxis { get; set; } = "Values";
+
+    // this set the distance of the labels from the chart center (Pie Chart)
+    internal static double _labelDistance = 0.6;
+    public static double LabelDistance
+    {
+        get { return _labelDistance; }
+        set
+        {
+            if (value is >= 0.5 and <= 0.9)
+            {
+                _labelDistance = value;
+            }
+            else
+            {
+                throw new ArgumentException("Error: LabelDistance value range must be from 0.5 to 0.9.");
+            }
+        }
+    }
+
+    // this set the orientation chart area  (Bar Chart)
+    public static Orientations AreaOrientation { get; set; } = Orientations.Vertical;
+
+    // this set the distance of the chart area elements (Pie Chart)
+    internal static double _areaExplodeFraction;
+    public static double AreaExplodeFraction
+    {
+        get { return _areaExplodeFraction; }
+        set
+        {
+            if (value is >= 0.0 and <= 0.5)
+            {
+                _areaExplodeFraction = value;
+            }
+            else
+            {
+                throw new ArgumentException("Error: AreaExplodeFraction value range must be from 0.0 to 0.5.");
+            }
+        }
+    }
+
+    // Legend setting (Pie Chart)
+    public static bool EnableLegend { get; set; }
+
+    // Legend Font settings (Pie Chart)
+    public static int LegendFontSize { get; set; } = 12;
+    public static BasicColors LegendFontColor { get; set; } = BasicColors.Black;
+    public static bool LegendlBold { get; set; }
+
+    // Legend border settings (Pie Chart)
+    public static BorderStyles LegendBorderStyle { get; set; } = BorderStyles.Solid;
+    public static int LegendBorderSize { get; set; } = 1;
+    public static BasicColors LegendBorderColor { get; set; } = BasicColors.Black; // Todo change this to rgb color
+    public static Orientations LegendOrientation { get; set; } = Orientations.Vertical;
+
+    public static Alignments LegendAlignment { get; set; } = Alignments.LowerRight;
+
+    // Chart border settings (All Charts)
+    public static bool EnableChartBorder { get; set; }
+    public static BorderStyles ChartBorderStyle { get; set; }
+    public static int ChartBorderSize { get; set; } = 1;
+    public static BasicColors ChartBorderColor { get; set; } = BasicColors.Black;  // Todo change this to rgb color
+
+    // Color Palette settings (All Charts)
+    internal static readonly IReadOnlyDictionary<ColorPalettes, IPalette> ColorPaletteMap = new Dictionary<ColorPalettes, IPalette>()
+    {
+            { ColorPalettes.Amber, new ScottPlot.Palettes.Amber() },
+            { ColorPalettes.Category10, new ScottPlot.Palettes.Category10() },
+            { ColorPalettes.Category20, new ScottPlot.Palettes.Category20() },
+            { ColorPalettes.Aurora, new ScottPlot.Palettes.Aurora() },
+            { ColorPalettes.Building, new ScottPlot.Palettes.Building() },
+            { ColorPalettes.ColorblindFriendly, new ScottPlot.Palettes.ColorblindFriendly() },
+            { ColorPalettes.Dark, new ScottPlot.Palettes.Dark() },
+            { ColorPalettes.DarkPastel, new ScottPlot.Palettes.DarkPastel() },
+            { ColorPalettes.Frost, new ScottPlot.Palettes.Frost() },
+            { ColorPalettes.LightOcean, new ScottPlot.Palettes.LightOcean() },
+            { ColorPalettes.LightSpectrum, new ScottPlot.Palettes.LightSpectrum() },
+            { ColorPalettes.Microcharts, new ScottPlot.Palettes.Microcharts() },
+            { ColorPalettes.Nero, new ScottPlot.Palettes.Nero() },
+            { ColorPalettes.Nord, new ScottPlot.Palettes.Nord() },
+            { ColorPalettes.Normal, new ScottPlot.Palettes.Normal() },
+            { ColorPalettes.OneHalf, new ScottPlot.Palettes.OneHalf() },
+            { ColorPalettes.OneHalfDark, new ScottPlot.Palettes.OneHalfDark() },
+            { ColorPalettes.PastelWheel, new ScottPlot.Palettes.PastelWheel() },
+            { ColorPalettes.Penumbra, new ScottPlot.Palettes.Penumbra() },
+            { ColorPalettes.PolarNight, new ScottPlot.Palettes.PolarNight() },
+            { ColorPalettes.Redness, new ScottPlot.Palettes.Redness() },
+            { ColorPalettes.SnowStorm, new ScottPlot.Palettes.SnowStorm() },
+            { ColorPalettes.SummerSplash, new ScottPlot.Palettes.SummerSplash() },
+            { ColorPalettes.Tsitsulin, new ScottPlot.Palettes.Tsitsulin() },
+    };
+    internal static IPalette? colorPalette;
+    public static ColorPalettes? ColorPalette
+    {
+        get => ColorPaletteMap.FirstOrDefault(x => x.Value == colorPalette).Key;
+        set
+        {
+            if (value is not null)
+            {
+                colorPalette = ColorPaletteMap[value.Value];
+            }
+        }
+    }
+
+    // Custom color palette (All Charts)
+    public static bool InvertCustomColorPalette;
+    internal static string[]? _customColorPalette;
+    public static string[] CustomColorPalette
+    {
+        get => _customColorPalette ?? [];
+        set
+        {
+            if (value is not null or [])
+            {
+                foreach (var color in value)
+                {
+                    if (!IsValidHexColor(color))
+                    {
+                        throw new ArgumentException($"Error: '{color}' is not a valid hex color code.");
+                    }
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Error: CustomColorPalette cannot be null or empty when setting custom colors.");
+            }
+            if (InvertCustomColorPalette)
+            {
+                Array.Reverse(value);
+                _customColorPalette = value;
+            }
+            else
+            {
+                _customColorPalette = value;
+            }
+        }
+    }
+    public static bool EnableCustomColorPalette { get; set; }
+
+    internal static string? _outputFolderPath;
+
+    public static string OutputFolderPath
+    {
+        get
+        {
+            return _outputFolderPath ?? Directory.GetCurrentDirectory();
+        }
+        set
+        {
+            if (value is null)
+            {
+                _outputFolderPath = Directory.GetCurrentDirectory();
+            }
+            else if (Directory.Exists(value))
+            {
+                _outputFolderPath = value;
+            }
+            else
+            {
+                throw new ArgumentException("Error: Directory Not Found Exception");
+            }
+        }
+    }
+
+    public static bool IsValidHexColor(string hexCode)
+    {
+        // Regex for #RGB, #RRGGBB, #RGBA, or #RRGGBBAA formats (case-insensitive)
+        var regex = MyRegex();
+        return regex.IsMatch(hexCode);
+    }
+
+    [GeneratedRegex("^#([A-Fa-f0-9]{3,4}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$")]
+    private static partial Regex MyRegex();
+
+    internal static readonly IReadOnlyDictionary<BorderStyles, LinePattern> LegendBorderStyleMap = new Dictionary<BorderStyles, LinePattern>()
+    {
+        {BorderStyles.Solid, LinePattern.Solid},
+        {BorderStyles.Dashed , LinePattern.Dashed},
+        {BorderStyles.Dotted ,LinePattern.Dotted},
+        {BorderStyles.DenselyDashed, LinePattern.DenselyDashed},
+    };
+
+    internal static readonly IReadOnlyDictionary<Orientations, Orientation> LegendOrientationMap = new Dictionary<Orientations, Orientation>()
+    {
+        {Orientations.Horizontal, Orientation.Horizontal},
+        {Orientations.Vertical, Orientation.Vertical},
+    };
+
+    internal static readonly IReadOnlyDictionary<Alignments, Alignment> LegendAlignmentMap = new Dictionary<Alignments, Alignment>()
+    {
+        {Alignments.LowerCenter, Alignment.LowerCenter},
+        {Alignments.LowerLeft,Alignment.LowerLeft},
+        {Alignments.LowerRight, Alignment.LowerRight},
+        {Alignments.MiddleCenter,Alignment.MiddleCenter},
+        {Alignments.MiddleLeft, Alignment.MiddleLeft},
+        {Alignments.MiddleRight,Alignment.MiddleRight},
+        {Alignments.UpperCenter,Alignment.UpperCenter},
+        {Alignments.UpperLeft,Alignment.UpperLeft},
+        {Alignments.UpperRight, Alignment.UpperRight},
+    };
+    internal static readonly IReadOnlyDictionary<BorderStyles, LinePattern> ChartBorderStyleMap = new Dictionary<BorderStyles, LinePattern>()
+    {
+        {BorderStyles.Solid, LinePattern.Solid},
+        {BorderStyles.Dashed, LinePattern.Dashed},
+        {BorderStyles.Dotted, LinePattern.Dotted},
+        {BorderStyles.DenselyDashed, LinePattern.DenselyDashed},
+    };
+
+    internal static readonly IReadOnlyDictionary<BasicColors, Color> ColorMap = new Dictionary<BasicColors, Color>()
+    {
+        { BasicColors.Black,  Colors.Black },
+        { BasicColors.White,  Colors.White },
+        { BasicColors.Red,  Colors.Red },
+        { BasicColors.Yellow,  Colors.Yellow },
+        { BasicColors.Green,  Colors.Green },
+        { BasicColors.Brown,  Colors.Brown },
+        { BasicColors.Orange,  Colors.Orange },
+        { BasicColors.Pink,  Colors.Pink },
+        { BasicColors.Purple,  Colors.Purple },
+        { BasicColors.Gray,  Colors.Gray },
+        { BasicColors.Blue,  Colors.Blue },
+        { BasicColors.DarkBlue,  Colors.DarkBlue },
+        { BasicColors.DarkGreen,  Colors.DarkGreen },
+    };
+
+    // Set area axes margins
+    internal static double _axesMarginsTop = 0.07;
+    public static double AxesMarginsTop
+    {
+        get { return _axesMarginsTop; }
+        set
+        {
+            if (value is >= 0.0 and <= 1)
+            {
+                _axesMarginsTop = value;
+            }
+            else
+            {
+                throw new ArgumentException("Error: AxesMarginsTop value range must be from 0.0 to 1.0 (fractions).");
+            }
+        }
+    }
+    internal static double _axesMarginsDown = 0.07;
+    public static double AxesMarginsDown
+    {
+        get { return _axesMarginsDown; }
+        set
+        {
+            if (value is >= 0.0 and <= 1)
+            {
+                _axesMarginsDown = value;
+            }
+            else
+            {
+                throw new ArgumentException("Error: AxesMarginsDown value range must be from 0.0 to 1.0 (fractions).");
+            }
+        }
+    }
+    internal static double _axesMarginsLeft = 0.05;
+    public static double AxesMarginsLeft
+    {
+        get { return _axesMarginsLeft; }
+        set
+        {
+            if (value is >= 0.0 and <= 1)
+            {
+                _axesMarginsLeft = value;
+            }
+            else
+            {
+                throw new ArgumentException("Error: AxesMarginsLeft value range must be from 0.0 to 1.0 (fractions).");
+            }
+        }
+    }
+    internal static double _axesMarginsRight = 0.05;
+    public static double AxesMarginsRight
+    {
+        get { return _axesMarginsRight; }
+        set
+        {
+            if (value is >= 0.0 and <= 1)
+            {
+                _axesMarginsRight = value;
+            }
+            else
+            {
+                throw new ArgumentException("Error: AxesMarginsRight value range must be from 0.0 to 1.0 (fractions).");
+            }
+        }
+    }
+
+    public static Color GetDrawingColor(BasicColors color)
+    {
+        return ColorMap[color];
+    }
+    public static string GenerateToken(Byte length)
+    {
+        var bytes = new byte[length];
+        var rnd = new Random();
+        rnd.NextBytes(bytes);
+        return Convert.ToBase64String(bytes).Replace("=", "").Replace("+", "").Replace("/", "");
+    }
+    public static object SaveInFormat(Plot plot, int width, int height, string filepath, string filename, Formats Format)
+    {
+        switch (Format)
+        {
+            case Formats.png:
+                plot.SavePng(Path.Combine(filepath, $"{filename}.png"), width, height);
+                if (File.Exists(Path.Combine(filepath, $"{filename}.png")))
+                {
+                    FileInfo fileInfo = new(Path.Combine(filepath, $"{filename}.png"));
+                    return fileInfo;
+                }
+                else
+                {
+                    throw new ArgumentException("Error: Unable to Export Chart Exception");
+                }
+            case Formats.jpg:
+                plot.SaveJpeg(Path.Combine(filepath, $"{filename}.jpeg"), width, height);
+                if (File.Exists(Path.Combine(filepath, $"{filename}.png")))
+                {
+                    System.IO.FileInfo fileInfo = new(Path.Combine(filepath, $"{filename}.jpeg"));
+                    return fileInfo;
+                }
+                else
+                {
+                    throw new ArgumentException("Error: Unable to Export Chart Exception");
+                }
+            case Formats.jpeg:
+                plot.SaveJpeg(Path.Combine(filepath, $"{filename}.jpg"), width, height);
+                if (File.Exists(Path.Combine(filepath, $"{filename}.png")))
+                {
+                    System.IO.FileInfo fileInfo = new(Path.Combine(filepath, $"{filename}.jpg"));
+                    return fileInfo;
+                }
+                else
+                {
+                    throw new ArgumentException("Error: Unable to Export Chart Exception");
+                }
+            case Formats.bmp:
+                plot.SaveBmp(Path.Combine(filepath, $"{filename}.bmp"), width, height);
+                if (File.Exists(Path.Combine(filepath, $"{filename}.png")))
+                {
+                    System.IO.FileInfo fileInfo = new(Path.Combine(filepath, $"{filename}.bmp"));
+                    return fileInfo;
+                }
+                else
+                {
+                    throw new ArgumentException("Error: Unable to Export Chart Exception");
+                }
+            case Formats.svg:
+                plot.SaveSvg(Path.Combine(filepath, $"{filename}.svg"), width, height);
+                if (File.Exists(Path.Combine(filepath, $"{filename}.png")))
+                {
+                    System.IO.FileInfo fileInfo = new(Path.Combine(filepath, $"{filename}.svg"));
+                    return fileInfo;
+                }
+                else
+                {
+                    throw new ArgumentException("Error: Unable to Export Chart Exception");
+                }
+            case Formats.base64:
+                byte[] imgBytes = plot.GetImageBytes(width, height, ImageFormat.Png);
+                if (imgBytes != null)
+                {
+                    return Convert.ToBase64String(imgBytes);
+                }
+                else
+                {
+                    throw new ArgumentException("Error: Unable to Export Chart Exception");
+                }
+            default:
+                plot.SavePng(Path.Combine(filepath, $"{filename}.png"), width, height);
+                if (File.Exists(Path.Combine(filepath, $"{filename}.png")))
+                {
+                    System.IO.FileInfo fileInfo = new(Path.Combine(filepath, $"{filename}.png"));
+                    return fileInfo;
+                }
+                else
+                {
+                    throw new ArgumentException("Error: Unable to Export Chart Exception");
+                }
+        }
+    }
+}
