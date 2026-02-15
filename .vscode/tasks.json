@@ -1,0 +1,64 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Compile Solution",
+			"type": "dotnet",
+			"task": "build",
+			"file": "${workspaceFolder}/Sources/AsBuiltReportChart.csproj",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [],
+		},
+		{
+			"label": "Copy libHarfBuzzSharp runtime",
+			"type": "shell",
+			"command": "cp",
+			"args": [
+				"${workspaceFolder}/Sources/bin/Debug/net8.0/runtimes/linux-x64/native/libHarfBuzzSharp.so",
+				"${workspaceFolder}/Sources/bin/Debug/net8.0/"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"reveal": "silent"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Copy SkiaSharp runtime",
+			"type": "shell",
+			"command": "cp",
+			"args": [
+				"${workspaceFolder}/Sources/bin/Debug/net8.0/runtimes/linux-x64/native/libSkiaSharp.so",
+				"${workspaceFolder}/Sources/bin/Debug/net8.0/"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"reveal": "silent"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Debug PWSH Binary Module",
+			"dependsOn": [
+				"Compile Solution",
+				"Copy SkiaSharp runtime"
+			],
+			"dependsOrder": "sequence" // "sequence" ensures tasks run one after another; default is "parallel"
+		}
+	]
+}
