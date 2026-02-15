@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Management.Automation;
 
 namespace AsBuiltReportChart.PowerShell
@@ -10,14 +12,14 @@ namespace AsBuiltReportChart.PowerShell
         public string Filename { get; set; } = Chart.GenerateToken(8);
 
         [Parameter(Mandatory = true, HelpMessage = "Array of numeric values to display in the bar chart.")]
-        public double[]? Values { get; set; }
+        public double[] Values { get; set; }
 
         [Parameter(Mandatory = true, HelpMessage = "Array of labels for each bar in the chart.")]
-        public string[]? Labels { get; set; }
+        public string[] Labels { get; set; }
 
         // Title settings
         [Parameter(Mandatory = true, HelpMessage = "Title text for the chart.")]
-        public string? Title { get; set; }
+        public string Title { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "Make the title font bold.")]
         public SwitchParameter TitleFontBold { get; set; }
@@ -41,7 +43,7 @@ namespace AsBuiltReportChart.PowerShell
         public int LegendFontSize { get; set; } = 14;
 
         [Parameter(Mandatory = false, HelpMessage = "Make the legend font bold.")]
-        public SwitchParameter LegendlBold { get; set; }
+        public SwitchParameter LegendBold { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "Font color for the legend text.")]
         public BasicColors LegendFontColor { get; set; } = BasicColors.Black;
@@ -80,7 +82,7 @@ namespace AsBuiltReportChart.PowerShell
         public SwitchParameter InvertCustomColorPalette { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "Array of custom hex color codes for the chart bars.")]
-        public string[]? CustomColorPalette { get; set; }
+        public string[] CustomColorPalette { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "Font name to use for all text in the chart.")]
         public string FontName { get; set; } = "Arial";
@@ -145,7 +147,7 @@ namespace AsBuiltReportChart.PowerShell
                     // Legend font settings
                     Chart.LegendFontSize = LegendFontSize;
                     Chart.LegendFontColor = LegendFontColor;
-                    Chart.LegendlBold = LegendlBold;
+                    Chart.LegendBold = LegendBold;
                     // Legend border settings
                     Chart.LegendBorderStyle = LegendBorderStyle;
                     Chart.LegendBorderSize = LegendBorderSize;
@@ -163,7 +165,7 @@ namespace AsBuiltReportChart.PowerShell
                 // Color palette settings
                 if (EnableCustomColorPalette)
                 {
-                    if (CustomColorPalette is not null or [])
+                    if (CustomColorPalette != null && CustomColorPalette.Length > 0)
                     {
                         // Set ScottPlot custom color palette
                         Chart.EnableCustomColorPalette = EnableCustomColorPalette;
@@ -208,11 +210,11 @@ namespace AsBuiltReportChart.PowerShell
                 Chart.AxesMarginsLeft = AxesMarginsLeft;
                 Chart.AxesMarginsRight = AxesMarginsRight;
 
-                // Set file directory save path 
+                // Set file directory save path
                 Chart.OutputFolderPath = OutputFolderPath;
 
                 Chart.Format = Format;
-                Bar myBar = new();
+                Bar myBar = new Bar();
                 WriteObject(myBar.Chart(Values, Labels, Filename, Width, Height));
             }
             else

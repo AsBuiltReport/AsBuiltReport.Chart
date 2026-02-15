@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
 using System.Management.Automation;
 
 namespace AsBuiltReportChart.PowerShell
@@ -13,17 +16,17 @@ namespace AsBuiltReportChart.PowerShell
         public string Filename { get; set; } = Chart.GenerateToken(8);
 
         [Parameter(Mandatory = true, HelpMessage = "Provide a list of double arrays for the values to be plotted. Each array represents a series in the stacked bar chart.")]
-        public List<double[]>? Values { get; set; }
+        public List<double[]> Values { get; set; }
 
         [Parameter(Mandatory = true, HelpMessage = "Provide an array of strings for the labels of each bar in the chart.")]
-        public string[]? Labels { get; set; }
+        public string[] Labels { get; set; }
 
         [Parameter(Mandatory = true, HelpMessage = "Povide an array of strings for the legend categories in the chart.")]
-        public string[]? LegendCategories { get; set; }
+        public string[] LegendCategories { get; set; }
 
         // Title settings
         [Parameter(Mandatory = true, HelpMessage = "Provide a title for the chart. If not provided, no title will be displayed.")]
-        public string? Title { get; set; }
+        public string Title { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "Enable bold font for the chart title.")]
         public SwitchParameter TitleFontBold { get; set; }
@@ -83,7 +86,7 @@ namespace AsBuiltReportChart.PowerShell
         public SwitchParameter InvertCustomColorPalette { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "Set the custom color palette for the chart.")]
-        public string[]? CustomColorPalette { get; set; }
+        public string[] CustomColorPalette { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "Set the font name for the chart.")]
         public string FontName { get; set; } = "Arial";
@@ -165,7 +168,7 @@ namespace AsBuiltReportChart.PowerShell
                 // Color palette settings
                 if (EnableCustomColorPalette)
                 {
-                    if (CustomColorPalette is not null or [])
+                    if (CustomColorPalette != null && CustomColorPalette.Length > 0)
                     {
                         // Set ScottPlot custom color palette
                         Chart.EnableCustomColorPalette = EnableCustomColorPalette;
@@ -214,7 +217,7 @@ namespace AsBuiltReportChart.PowerShell
                 Chart.OutputFolderPath = OutputFolderPath;
 
                 Chart.Format = Format;
-                StackedBar myStackedBar = new();
+                StackedBar myStackedBar = new StackedBar();
                 WriteObject(myStackedBar.Chart(Values, Labels, LegendCategories, Filename, Width, Height));
             }
             else

@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Management.Automation;
 
 namespace AsBuiltReportChart.PowerShell
@@ -10,13 +12,13 @@ namespace AsBuiltReportChart.PowerShell
         public string Filename { get; set; } = Chart.GenerateToken(8);
 
         [Parameter(Mandatory = true, HelpMessage = "Array of numeric values to display in the pie chart.")]
-        public double[]? Values { get; set; }
+        public double[] Values { get; set; }
 
         [Parameter(Mandatory = true, HelpMessage = "Array of labels corresponding to each pie slice.")]
-        public string[]? Labels { get; set; }
+        public string[] Labels { get; set; }
 
         [Parameter(Mandatory = true, HelpMessage = "Title text to display on the chart.")]
-        public string? Title { get; set; }
+        public string Title { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "Switch to make the title font bold.")]
         public SwitchParameter TitleFontBold { get; set; }
@@ -80,7 +82,7 @@ namespace AsBuiltReportChart.PowerShell
         public SwitchParameter InvertCustomColorPalette { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "Array of custom hex color values for the chart.")]
-        public string[]? CustomColorPalette { get; set; }
+        public string[] CustomColorPalette { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "Font name to use for all text. Defaults to Arial.")]
         public string FontName { get; set; } = "Arial";
@@ -157,7 +159,7 @@ namespace AsBuiltReportChart.PowerShell
                 // Color palette settings
                 if (EnableCustomColorPalette)
                 {
-                    if (CustomColorPalette is not null or [])
+                    if (CustomColorPalette != null && CustomColorPalette.Length > 0)
                     {
                         // Set ScottPlot custom color palette
                         Chart.EnableCustomColorPalette = EnableCustomColorPalette;
@@ -198,11 +200,11 @@ namespace AsBuiltReportChart.PowerShell
                 Chart.LabelFontColor = LabelFontColor;
                 Chart.LabelBold = LabelBold;
 
-                // Set file directory save path 
+                // Set file directory save path
                 Chart.OutputFolderPath = OutputFolderPath;
 
                 Chart.Format = Format;
-                Pie myPie = new();
+                Pie myPie = new Pie();
                 WriteObject(myPie.Chart(Values, Labels, Filename, Width, Height));
             }
             else
