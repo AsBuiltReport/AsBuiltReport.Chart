@@ -14,7 +14,7 @@
                 "-NoExit",
                 "-NoProfile",
                 "-Command",
-                "import-module ./Sources/bin/Debug/netstandard2.0/AsBuiltReportChart.dll",
+                "import-module ./Sources/bin/Debug/net8.0/AsBuiltReportChart.dll",
             ],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,

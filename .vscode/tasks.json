@@ -1,71 +1,87 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Compile Solution",
-			"type": "dotnet",
-			"task": "build",
-			"file": "${workspaceFolder}/Sources/AsBuiltReportChart.csproj",
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
-			"problemMatcher": [],
-		},
-		{
-			"label": "Copy libHarfBuzzSharp runtime",
-			"type": "shell",
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compile Solution",
+            "type": "dotnet",
+            "task": "build",
+            "file": "${workspaceFolder}/Sources/AsBuiltReportChart.csproj",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+        },
+        {
+            "label": "Copy libHarfBuzzSharp runtime",
+            "type": "shell",
             "windows": {
+                "command": "powershell",
+                "args": [
+                    "-NoProfile",
+                    "-Command",
+                    "Copy-Item -Force \"${workspaceFolder}/Sources/bin/Debug/net8.0/runtimes/win-x64/native/libHarfBuzzSharp.dll\" \"${workspaceFolder}/Sources/bin/Debug/net8.0/\""
+                ],
+                "enabled": false
+            },
+            "linux": {
+                "command": "cp",
+                "args": [
+                    "${workspaceFolder}/Sources/bin/Debug/net8.0/runtimes/linux-x64/native/libHarfBuzzSharp.so",
+                    "${workspaceFolder}/Sources/bin/Debug/net8.0/"
+                ],
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Copy SkiaSharp runtime",
+            "type": "shell",
+            "windows": {
+                "command": "powershell",
+                "args": [
+                    "-NoProfile",
+                    "-Command",
+                    "Copy-Item -Force \"${workspaceFolder}/Sources/bin/Debug/net8.0/runtimes/win-x64/native/libSkiaSharp.dll\" \"${workspaceFolder}/Sources/bin/Debug/net8.0/\""
+                ],
                 "hide": true
             },
-			"command": "cp",
-			"args": [
-				"${workspaceFolder}/Sources/bin/Debug/net8.0/runtimes/linux-x64/native/libHarfBuzzSharp.so",
-				"${workspaceFolder}/Sources/bin/Debug/net8.0/"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
-			"presentation": {
-				"reveal": "silent"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "Copy SkiaSharp runtime",
-			"type": "shell",
-            "windows": {
-                "hide": true
+            "linux": {
+                "command": "cp",
+                "args": [
+                    "${workspaceFolder}/Sources/bin/Debug/net8.0/runtimes/linux-x64/native/libSkiaSharp.so",
+                    "${workspaceFolder}/Sources/bin/Debug/net8.0/"
+                ],
             },
-			"command": "cp",
-			"args": [
-				"${workspaceFolder}/Sources/bin/Debug/net8.0/runtimes/linux-x64/native/libSkiaSharp.so",
-				"${workspaceFolder}/Sources/bin/Debug/net8.0/"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
-			"presentation": {
-				"reveal": "silent"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "Debug PWSH Binary Module",
-			"dependsOn": [
-				"Compile Solution",
-				"Copy SkiaSharp runtime", // Ensure SkiaSharp runtime is copied before debugging on Linux
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Debug PWSH Binary Module",
+            "dependsOn": [
+                "Compile Solution",
+                "Copy SkiaSharp runtime", // Ensure SkiaSharp runtime is copied before debugging on Linux
                 "Copy libHarfBuzzSharp runtime"
-			],
-			"dependsOrder": "sequence" // "sequence" ensures tasks run one after another; default is "parallel"
-		}
-	]
+            ],
+            "dependsOrder": "sequence" // "sequence" ensures tasks run one after another; default is "parallel"
+        }
+    ]
 }
