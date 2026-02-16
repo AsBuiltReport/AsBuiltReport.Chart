@@ -15,6 +15,9 @@
 		{
 			"label": "Copy libHarfBuzzSharp runtime",
 			"type": "shell",
+            "windows": {
+                "hide": true
+            },
 			"command": "cp",
 			"args": [
 				"${workspaceFolder}/Sources/bin/Debug/net8.0/runtimes/linux-x64/native/libHarfBuzzSharp.so",
@@ -35,6 +38,9 @@
 		{
 			"label": "Copy SkiaSharp runtime",
 			"type": "shell",
+            "windows": {
+                "hide": true
+            },
 			"command": "cp",
 			"args": [
 				"${workspaceFolder}/Sources/bin/Debug/net8.0/runtimes/linux-x64/native/libSkiaSharp.so",
@@ -56,7 +62,8 @@
 			"label": "Debug PWSH Binary Module",
 			"dependsOn": [
 				"Compile Solution",
-				// "Copy SkiaSharp runtime"
+				"Copy SkiaSharp runtime", // Ensure SkiaSharp runtime is copied before debugging on Linux
+                "Copy libHarfBuzzSharp runtime"
 			],
 			"dependsOrder": "sequence" // "sequence" ensures tasks run one after another; default is "parallel"
 		}
