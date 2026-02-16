@@ -2,15 +2,15 @@
 switch ($PSVersionTable.PSEdition) {
     'Core' {
         if ($IsMacOS) {
-            Import-Module ("$PSScriptRoot{0}Src{0}Assemblies{0}osx-x64{0}AsBuiltReportChart.dll" -f [System.IO.Path]::DirectorySeparatorChar)
+            Import-Module ("$PSScriptRoot{0}Src{0}Assemblies{0}Core{0}osx-x64{0}AsBuiltReportChart.dll" -f [System.IO.Path]::DirectorySeparatorChar)
         } elseif ($IsLinux) {
-            Import-Module ("$PSScriptRoot{0}Src{0}Assemblies{0}linux-x64{0}AsBuiltReportChart.dll" -f [System.IO.Path]::DirectorySeparatorChar)
+            Import-Module ("$PSScriptRoot{0}Src{0}Assemblies{0}Core{0}linux-x64{0}AsBuiltReportChart.dll" -f [System.IO.Path]::DirectorySeparatorChar)
         } elseif ($IsWindows) {
-            Import-Module ("$PSScriptRoot{0}Src{0}Assemblies{0}windows-x64{0}AsBuiltReportChart.dll" -f [System.IO.Path]::DirectorySeparatorChar)
+            Import-Module ("$PSScriptRoot{0}Src{0}Assemblies{0}Core{0}windows-x64{0}AsBuiltReportChart.dll" -f [System.IO.Path]::DirectorySeparatorChar)
         }
     }
     'Desktop' {
-        Import-Module ("$PSScriptRoot{0}Src{0}Assemblies{0}windows-x64{0}AsBuiltReportChart.dll" -f [System.IO.Path]::DirectorySeparatorChar)
+        Import-Module ("$PSScriptRoot{0}Src{0}Assemblies{0}Desktop{0}windows-x64{0}AsBuiltReportChart.dll" -f [System.IO.Path]::DirectorySeparatorChar)
     }
     default {
         Write-Verbose -Message 'Unable to find compatible assemblies.'

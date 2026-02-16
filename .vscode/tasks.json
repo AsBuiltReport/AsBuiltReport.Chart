@@ -56,7 +56,7 @@
 			"label": "Debug PWSH Binary Module",
 			"dependsOn": [
 				"Compile Solution",
-				"Copy SkiaSharp runtime"
+				// "Copy SkiaSharp runtime"
 			],
 			"dependsOrder": "sequence" // "sequence" ensures tasks run one after another; default is "parallel"
 		}

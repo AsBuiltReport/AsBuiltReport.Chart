@@ -33,7 +33,7 @@
     Description = 'AsBuiltReport.Charts is a PowerShell module that aims to provide chart generation capabilities. Underneath it uses ScottPlot and SkiaSharp libraries.'
 
     # Minimum version of the PowerShell engine required by this module
-    PowerShellVersion = '7.5'
+    PowerShellVersion = '5.1'
 
     # Name of the PowerShell host required by this module
     # PowerShellHostName = ''
