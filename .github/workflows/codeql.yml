@@ -1,75 +1,42 @@
-name: "CodeQL Advanced"
+name: "CodeQL Analysis"
 
 on:
   push:
-    branches: [ "dev" ]
-    paths-ignore:
-      - '*.md'
-      - 'Docs/**'
-      - 'Examples/**'
-      - '.gitignore'
+    branches: [ dev ]
   pull_request:
-    branches: [ "dev" ]
-    paths-ignore:
-      - '*.md'
-      - 'Docs/**'
-      - 'Examples/**'
-      - '.gitignore'
+    branches: [ dev ]
   schedule:
-    - cron: '23 3 * * 1'
+    - cron: '0 2 * * *'
 
 jobs:
   analyze:
-    name: Analyze (${{ matrix.language }})
-    runs-on: ${{ 'ubuntu-latest' }}
-    timeout-minutes: 20
-    permissions:
-      security-events: write
-      packages: read
-      actions: read
-      contents: read
-
+    name: Analyze
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - language: csharp
-            build-mode: manual
+        language: [ 'csharp' ]
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Setup .NET SDK
-        if: matrix.build-mode == 'manual'
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: |
-            8.0.x
-            10.0.x
+    # Initializes the CodeQL tools and creates a CodeQL database
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        # If you have custom queries, you can add them here using a queries property
 
-      - name: Cache NuGet packages
-        if: matrix.build-mode == 'manual'
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
+    # Autobuild attempts to build the C# project automatically.
+    # For complex C# projects, you may need to replace this with custom build commands (e.g., using `dotnet build`)
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v3
+      with:
+        working-directory: ./Sources
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: ${{ matrix.language }}
-          build-mode: ${{ matrix.build-mode }}
-
-      - name: Restore and Build
-        if: matrix.build-mode == 'manual'
-        run: |
-          dotnet restore
-          dotnet build --configuration Release
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
-        with:
-          category: "/language:${{ matrix.language }}"
+    # Performs the CodeQL analysis and uploads the results to GitHub
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{ matrix.language }}"
