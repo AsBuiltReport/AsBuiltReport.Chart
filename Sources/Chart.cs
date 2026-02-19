@@ -8,10 +8,10 @@ using AsBuiltReportChart.Enums;
 
 namespace AsBuiltReportChart
 {
-    public partial class Chart
+    internal partial class Chart
     {
         // Save settings (All Charts)
-        public static Formats Format { get; set; } = Formats.png;
+        internal static Formats Format { get; set; } = Formats.png;
 
         // Title setting  (All Charts)
         public static string Title { get; set; }

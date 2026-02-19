@@ -3,7 +3,7 @@ using System;
 using System.IO;
 namespace AsBuiltReportChart
 {
-    public class Pie : Chart
+    internal class Pie : Chart
     {
         public Pie() { }
         public object Chart(double[] values, string[] labels, string filename = "output", int width = 400, int height = 300)

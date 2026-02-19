@@ -5,7 +5,7 @@ using System.IO;
 using AsBuiltReportChart.Enums;
 namespace AsBuiltReportChart
 {
-    public class StackedBar : Chart
+    internal class StackedBar : Chart
     {
         static StackedBar() { }
         public object Chart(List<double[]> values, string[] labels, string[] categoryNames, string filename = "output", int width = 400, int height = 300)

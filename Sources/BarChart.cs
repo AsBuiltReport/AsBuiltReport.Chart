@@ -5,7 +5,7 @@ using AsBuiltReportChart.Enums;
 
 namespace AsBuiltReportChart
 {
-    public class Bar : Chart
+    internal class Bar : Chart
     {
         static Bar() { }
         public object Chart(double[] values, string[] labels, string filename = "output", int width = 400, int height = 300)
