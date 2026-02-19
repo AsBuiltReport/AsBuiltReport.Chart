@@ -18,15 +18,15 @@ jobs:
       - name: Build the library for MacOS
         run: dotnet publish ./Sources -c Release -r osx-x64
       - name: Copy the library for MacOS
-        run: copy ./Sources/bin/Release/netstandard2.0/osx-x64/publish/*.dll ./AsBuiltReport.Charts/Src/Assemblies/Core/osx-x64
+        run: copy ./Sources/bin/Release/netstandard2.0/osx-x64/publish/*.* ./AsBuiltReport.Charts/Src/Assemblies/Core/osx-x64
       - name: Build the library for Linux
         run: dotnet publish ./Sources -c Release -r linux-x64
       - name: Copy the library for Linux
-        run: copy ./Sources/bin/Release/netstandard2.0/linux-x64/publish/*.dll ./AsBuiltReport.Charts/Src/Assemblies/Core/linux-x64
+        run: copy ./Sources/bin/Release/netstandard2.0/linux-x64/publish/*.* ./AsBuiltReport.Charts/Src/Assemblies/Core/linux-x64
       - name: Build the library for Windows
         run: dotnet publish ./Sources -c Release -r win-x64
       - name: Copy the library for Windows
-        run: copy ./Sources/bin/Release/netstandard2.0/win-x64/publish/*.dll ./AsBuiltReport.Charts/Src/Assemblies/Core/windows-x64
+        run: copy ./Sources/bin/Release/netstandard2.0/win-x64/publish/*.* ./AsBuiltReport.Charts/Src/Assemblies/Core/windows-x64
       - name: Run tests
         run: dotnet test --no-build --verbosity normal ./Sources
       - name: Set PSRepository to Trusted for PowerShell Gallery
