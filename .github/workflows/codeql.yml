@@ -29,6 +29,7 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v4
       with:
+        build-mode: none
         languages: ${{ matrix.language }}
         # If you have custom queries, you can add them here using a queries property
 
