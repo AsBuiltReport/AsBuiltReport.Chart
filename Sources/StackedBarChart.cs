@@ -10,6 +10,10 @@ namespace AsBuiltReportChart
         static StackedBar() { }
         public object Chart(List<double[]> values, string[] labels, string[] categoryNames, string filename = "output", int width = 400, int height = 300)
         {
+             if (values.Count != categoryNames.Length)
+            {
+                throw new Exception("Error: Values and category names must be equal.");
+            }
             if (values.Count == labels.Length)
             {
                 Plot myPlot = new Plot();
