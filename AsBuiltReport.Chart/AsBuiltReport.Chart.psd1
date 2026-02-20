@@ -18,7 +18,7 @@
     # CompatiblePSEditions = @()
 
     # ID used to uniquely identify this module
-    GUID = 'a10b82c8-ab95-4af3-8038-dbd39b39beea'
+    GUID = 'a10b82c8-ab95-4af3-8038-dbd39b39beeb'
 
     # Author of this module
     Author = 'Jonathan Colon'
@@ -129,5 +129,6 @@
     # DefaultCommandPrefix = ''
 
 }
+
 
 
