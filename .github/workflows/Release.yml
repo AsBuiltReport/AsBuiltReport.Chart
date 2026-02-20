@@ -15,10 +15,14 @@ jobs:
           dotnet-version: '8.0.x'
       - name: Restore dependencies
         run: dotnet restore ./Sources
-      - name: Build the library for MacOS
+      - name: Build the library for MacOS X64
         run: dotnet publish ./Sources -c Release -r osx-x64
-      - name: Copy the library for MacOS
-        run: copy ./Sources/bin/Release/netstandard2.0/osx-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/osx-x64
+      - name: Copy the library for MacOS X64
+        run: copy ./Sources/bin/Release/netstandard2.0/osx-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/mac-osx/x64
+      - name: Build the library for MacOS Arm64
+        run: dotnet publish ./Sources -c Release -r osx-arm64
+      - name: Copy the library for MacOS Arm64
+        run: copy ./Sources/bin/Release/netstandard2.0/osx-arm64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/mac-osx/arm
       - name: Build the library for Linux
         run: dotnet publish ./Sources -c Release -r linux-x64
       - name: Copy the library for Linux
@@ -27,6 +31,10 @@ jobs:
         run: dotnet publish ./Sources -c Release -r win-x64
       - name: Copy the library for Windows
         run: copy ./Sources/bin/Release/netstandard2.0/win-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/windows-x64
+      - name: Build the library for Windows PowerShell
+        run: dotnet publish ./Sources -c Release -r win-x64
+      - name: Copy the library for Windows PowerShell
+        run: copy ./Sources/bin/Release/netstandard2.0/win-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Desktop/windows-x64
       - name: Run tests
         run: dotnet test --no-build --verbosity normal ./Sources
       - name: Set PSRepository to Trusted for PowerShell Gallery
