@@ -1,4 +1,4 @@
-# :arrows_clockwise: AsBuiltReport Charts Changelog
+# :arrows_clockwise: AsBuiltReport Chart Changelog
 
 All notable changes to this project will be documented in this file.
 
@@ -9,5 +9,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Initial release of AsBuiltReport Charts, providing basic charting capabilities for AsBuiltReport data visualization.
-
+- Initial release of AsBuiltReport Chart, providing basic charting capabilities for AsBuiltReport data visualization.
