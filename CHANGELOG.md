@@ -9,4 +9,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Initial release of AsBuiltReport Chart, providing basic charting capabilities for AsBuiltReport data visualization.
+- Initial release of AsBuiltReport Chart, providing basic charting capabilities for AsBuiltReport data visualization

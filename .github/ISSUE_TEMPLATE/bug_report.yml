@@ -16,8 +16,8 @@ body:
     attributes:
       label: Command-line input
       description: >-
-        Please provide the command line input you are using to run AsBuiltReport. Please ensure that you obscure any sensitive information.
-      placeholder: New-AsBuiltReport -Report Charts.Charts -Target xxxxxxx -Format Word,HTML -OutputFolderPath .\Documents\ -AsBuiltConfigFilePath .\AsBuiltReport\AsBuiltReport.json -ReportConfigFilePath .\AsBuiltReport\AsBuiltReport.Chart.Charts.json -EnableHealthCheck -Verbose
+        Please provide the command line input you are using to run AsBuiltReport.Chart. Please ensure that you obscure any sensitive information.
+      placeholder: New-PieChart -Values @(1,2,3,4,5,6,7,8) -Labels @('house', 'car', 'boat', 'gazebo', 'ca', 'co', 'ba', 'na') -Title 'House' -Format png -Width 800 -Height 800 -EnableLegend -Filename house -LegendOrientation Horizontal -LegendAlignment UpperCenter
     validations:
       required: true
   - type: textarea

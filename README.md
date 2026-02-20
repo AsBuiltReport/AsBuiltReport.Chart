@@ -54,7 +54,7 @@ This report is compatible with the following PowerShell versions;
 <!-- ********** Update supported PowerShell versions ********** -->
 | Windows PowerShell 5.1 |    PowerShell 7    |
 | :--------------------: | :----------------: |
-|          :white_check_mark:           | :white_check_mark: |
+|   :white_check_mark:   | :white_check_mark: |
 
 ## 🗺️ Language Support
 <!-- ********** Update supported languages ********** -->
