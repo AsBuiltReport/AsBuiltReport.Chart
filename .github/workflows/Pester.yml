@@ -46,16 +46,22 @@ jobs:
         run: dotnet restore ./Sources
       - name: Build the library for MacOS
         run: dotnet publish ./Sources -c Release -r osx-x64
+        if: matrix.os == 'macos-latest'
       - name: Copy the library for MacOS
         run: copy ./Sources/bin/Release/netstandard2.0/osx-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/osx-x64
+        if: matrix.os == 'macos-latest'
       - name: Build the library for Linux
         run: dotnet publish ./Sources -c Release -r linux-x64
+        if: matrix.os == 'ubuntu-latest'
       - name: Copy the library for Linux
         run: copy ./Sources/bin/Release/netstandard2.0/linux-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/linux-x64
+        if: matrix.os == 'ubuntu-latest'
       - name: Build the library for Windows
         run: dotnet publish ./Sources -c Release -r win-x64
+        if: matrix.os == 'windows-latest'
       - name: Copy the library for Windows
         run: copy ./Sources/bin/Release/netstandard2.0/win-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/windows-x64
+        if: matrix.os == 'windows-latest'
       - name: Run tests
         run: dotnet test --no-build --verbosity normal ./Sources
 
