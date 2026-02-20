@@ -34,7 +34,7 @@
 <!-- ********** REMOVE THIS MESSAGE WHEN THE MODULE IS FUNCTIONAL ********** -->
 ## :exclamation: THIS ASBUILTREPORT MODULE IS CURRENTLY IN DEVELOPMENT AND MIGHT NOT YET BE FUNCTIONAL ❗
 
-AsBuiltReport.Chart As Built Report is a PowerShell module which works in conjunction with [AsBuiltReport.Core](https://github.com/AsBuiltReport/AsBuiltReport.Core).
+AsBuiltReport.Chart is a PowerShell module which works in conjunction with [AsBuiltReport.Core](https://github.com/AsBuiltReport/AsBuiltReport.Core).
 
 [AsBuiltReport](https://github.com/AsBuiltReport/AsBuiltReport) is an open-sourced community project which utilises PowerShell to produce as-built documentation in multiple document formats for multiple vendors and technologies.
 
@@ -42,7 +42,7 @@ Please refer to the AsBuiltReport [website](https://www.asbuiltreport.com) for m
 
 # :beginner: Getting Started
 
-Below are the instructions on how to install, AsBuiltReport Chart.
+The following simple list of instructions will get you started with the AsBuiltReport.Chart module.
 
 ## :floppy_disk: Supported Versions
 <!-- ********** Update supported Chart versions ********** -->
