@@ -1,4 +1,4 @@
-# Contributing to AsBuiltReport.Charts
+# Contributing to AsBuiltReport.Chart
 
 Your contribution is welcomed and appreciated! Thank you for taking the time to contribute to this project.
 
@@ -52,7 +52,7 @@ A bug is a demonstrable problem that is caused by the code in the repository. Go
 
 Please perform the following due diligence:
 
-1. **Read the documentation** - Check the `README` in the AsBuiltReport.Charts repository, including Supported Versions, System Requirements, and Module Installation sections.
+1. **Read the documentation** - Check the `README` in the AsBuiltReport.Chart repository, including Supported Versions, System Requirements, and Module Installation sections.
 2. **Update to the latest version** - Your issue may already be fixed in the most recent release.
 3. **Check dependencies** - Try upgrading or downgrading vendor PowerShell modules if applicable.
 4. **Use the `-Verbose` parameter** - This may help identify the issue.
@@ -120,9 +120,9 @@ Always create pull requests against the `dev` branch:
 
 2. Clone your fork and add the upstream remote:
    ```bash
-   git clone https://github.com/<your-username>/AsBuiltReport.Charts
-   cd AsBuiltReport.Charts
-   git remote add upstream https://github.com/AsBuiltReport/AsBuiltReport.Charts
+   git clone https://github.com/<your-username>/AsBuiltReport.Chart
+   cd AsBuiltReport.Chart
+   git remote add upstream https://github.com/AsBuiltReport/AsBuiltReport.Chart
    ```
 
 3. Create a new feature branch from `dev`:
@@ -213,7 +213,7 @@ Use [PSScriptAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer) to check 
 
 If you have questions or want to discuss contributions:
 
-- Raise an issue in the AsBuiltReport.Charts [repository](https://github.com/AsBuiltReport/AsBuiltReport.Charts)
+- Raise an issue in the AsBuiltReport.Chart [repository](https://github.com/AsBuiltReport/AsBuiltReport.Chart)
 - Email us at support@asbuiltreport.com
 - Visit our website at [www.asbuiltreport.com](https://www.asbuiltreport.com)
 

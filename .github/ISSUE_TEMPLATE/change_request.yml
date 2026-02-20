@@ -15,7 +15,7 @@ body:
     id: additional-context
     attributes:
       label: Additional Context
-      description: This field is optional. You may provide additional context for the idea you wish to propose. You may wish to include links to any related [issues](https://github.com/AsBuiltReport/AsBuiltReport.Charts/issues) or other relevant information.
+      description: This field is optional. You may provide additional context for the idea you wish to propose. You may wish to include links to any related [issues](https://github.com/AsBuiltReport/AsBuiltReport.Chart/issues) or other relevant information.
   - type: checkboxes
     id: checklist
     attributes:
@@ -29,6 +29,6 @@ body:
             and referred to the [known issues](https://www.asbuiltreport.com/user-guide/known-issues/) before submitting this change request.
           required: true
         - label: >-
-            I have checked for previously opened & closed [issues](https://github.com/AsBuiltReport/AsBuiltReport.Charts/issues) before submitting this change request.
+            I have checked for previously opened & closed [issues](https://github.com/AsBuiltReport/AsBuiltReport.Chart/issues) before submitting this change request.
           required: true
 
