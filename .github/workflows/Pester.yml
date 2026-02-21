@@ -80,7 +80,7 @@ jobs:
                   Install-Module -Name Pester -MinimumVersion 5.0.0 -Repository PSGallery -Force -AllowClobber -Scope CurrentUser
 
             - name: List Dll files in the test directory
-              run: Get-ChildItem -Path .\AsBuiltReport.Chart\Src\Assemblies\Core\ -Recurse
+              run: Get-ChildItem -Path .\AsBuiltReport.Chart\Src\Assemblies\Core\mac-osx\arm -Recurse
               if: matrix.os == 'macos-latest'
 
             - name: Run Pester Tests
