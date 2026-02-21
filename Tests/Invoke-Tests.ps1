@@ -58,8 +58,6 @@ Write-Host "`nInstalling required modules..." -ForegroundColor Yellow
 
 $RequiredModules = @(
     @{ Name = 'Pester'; MinimumVersion = '5.0.0' }
-    @{ Name = 'PScribo'; MinimumVersion = '0.11.1' }
-    @{ Name = 'PSScriptAnalyzer'; MinimumVersion = '1.0.0' }
 )
 
 foreach ($Module in $RequiredModules) {
@@ -134,7 +132,7 @@ if ($CodeCoverage) {
 Write-Host "`nRunning Pester tests..." -ForegroundColor Yellow
 Write-Host '======================================' -ForegroundColor Cyan
 
-$TestResults = Invoke-Pester -Configuration $PesterConfiguration
+$TestResults = Invoke-Pester -Configuration $PesterConfiguration -Verbose -Debug
 
 # Display results
 Write-Host "`n======================================" -ForegroundColor Cyan

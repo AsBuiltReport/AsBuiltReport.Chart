@@ -1,69 +1,77 @@
 name: Publish PowerShell Module
 
 on:
-  release:
-    types: [published]
+    release:
+        types: [published]
 
 jobs:
-  publish-to-psgallery:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v6
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: '8.0.x'
-      - name: Restore dependencies
-        run: dotnet restore ./Sources
-      - name: Build the library for MacOS
-        run: dotnet publish ./Sources -c Release -r osx-x64
-      - name: Copy the library for MacOS
-        run: copy ./Sources/bin/Release/netstandard2.0/osx-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/osx-x64
-      - name: Build the library for Linux
-        run: dotnet publish ./Sources -c Release -r linux-x64
-      - name: Copy the library for Linux
-        run: copy ./Sources/bin/Release/netstandard2.0/linux-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/linux-x64
-      - name: Build the library for Windows
-        run: dotnet publish ./Sources -c Release -r win-x64
-      - name: Copy the library for Windows
-        run: copy ./Sources/bin/Release/netstandard2.0/win-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/windows-x64
-      - name: Run tests
-        run: dotnet test --no-build --verbosity normal ./Sources
-      - name: Set PSRepository to Trusted for PowerShell Gallery
-        shell: pwsh
-        run: |
-          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-      - name: Test Module Manifest
-        shell: pwsh
-        run: |
-          Test-ModuleManifest .\AsBuiltReport.Chart\AsBuiltReport.Chart.psd1
-      - name: Publish module to PowerShell Gallery
-        shell: pwsh
-        run: |
-          Publish-Module -Path .\AsBuiltReport.Chart\ -NuGetApiKey ${{ secrets.PSGALLERY_API_KEY }} -Verbose
-  tweet:
-    needs: publish-to-psgallery
-    runs-on: ubuntu-latest
-    steps:
-      - uses: Eomm/why-don-t-you-tweet@v2
-        # We don't want to tweet if the repository is not a public one
-        if: ${{ !github.event.repository.private }}
-        with:
-          # GitHub event payload
-          # https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#release
-          tweet-message: "[New Release] ${{ github.event.repository.name }} ${{ github.event.release.tag_name }}! Check out what's new! ${{ github.event.release.html_url }} #AsBuiltReport #PowerShell"
-        env:
-          TWITTER_CONSUMER_API_KEY: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
-          TWITTER_CONSUMER_API_SECRET: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}
-          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
-          TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
-  bsky-post:
-    needs: publish-to-psgallery
-    runs-on: ubuntu-latest
-    steps:
-      - uses: zentered/bluesky-post-action@v0.3.0
-        with:
-          post: "[New Release] ${{ github.event.repository.name }} ${{ github.event.release.tag_name }}! Check out what's new! ${{ github.event.release.html_url }} #AsBuiltReport #PowerShell"
-        env:
-          BSKY_IDENTIFIER: ${{ secrets.BSKY_IDENTIFIER }}
-          BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD }}
+    publish-to-psgallery:
+        runs-on: windows-latest
+        steps:
+            - uses: actions/checkout@v6
+            - name: Setup .NET
+              uses: actions/setup-dotnet@v5
+              with:
+                  dotnet-version: "8.0.x"
+            - name: Restore dependencies
+              run: dotnet restore ./Sources
+            - name: Build the library for MacOS X64
+              run: dotnet publish ./Sources -c Release -r osx-x64
+            - name: Copy the library for MacOS X64
+              run: copy ./Sources/bin/Release/netstandard2.0/osx-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/mac-osx/osx-x64
+            - name: Build the library for MacOS Arm64
+              run: dotnet publish ./Sources -c Release -r osx-arm64
+            - name: Copy the library for MacOS Arm64
+              run: copy ./Sources/bin/Release/netstandard2.0/osx-arm64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/mac-osx/osx-arm64
+            - name: Build the library for Linux
+              run: dotnet publish ./Sources -c Release -r linux-x64
+            - name: Copy the library for Linux
+              run: copy ./Sources/bin/Release/netstandard2.0/linux-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/linux-x64
+            - name: Build the library for Windows
+              run: dotnet publish ./Sources -c Release -r win-x64
+            - name: Copy the library for Windows
+              run: copy ./Sources/bin/Release/netstandard2.0/win-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/windows-x64
+            - name: Build the library for Windows PowerShell
+              run: dotnet publish ./Sources -c Release -r win-x64
+            - name: Copy the library for Windows PowerShell
+              run: copy ./Sources/bin/Release/netstandard2.0/win-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Desktop/windows-x64
+            - name: Run tests
+              run: dotnet test --no-build --verbosity normal ./Sources
+            - name: Set PSRepository to Trusted for PowerShell Gallery
+              shell: pwsh
+              run: |
+                  Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+            - name: Test Module Manifest
+              shell: pwsh
+              run: |
+                  Test-ModuleManifest .\AsBuiltReport.Chart\AsBuiltReport.Chart.psd1
+            - name: Publish module to PowerShell Gallery
+              shell: pwsh
+              run: |
+                  Publish-Module -Path .\AsBuiltReport.Chart\ -NuGetApiKey ${{ secrets.PSGALLERY_API_KEY }} -Verbose
+    tweet:
+        needs: publish-to-psgallery
+        runs-on: ubuntu-latest
+        steps:
+            - uses: Eomm/why-don-t-you-tweet@v2
+              # We don't want to tweet if the repository is not a public one
+              if: ${{ !github.event.repository.private }}
+              with:
+                  # GitHub event payload
+                  # https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#release
+                  tweet-message: "[New Release] ${{ github.event.repository.name }} ${{ github.event.release.tag_name }}! Check out what's new! ${{ github.event.release.html_url }} #AsBuiltReport #PowerShell"
+              env:
+                  TWITTER_CONSUMER_API_KEY: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
+                  TWITTER_CONSUMER_API_SECRET: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}
+                  TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+                  TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+    bsky-post:
+        needs: publish-to-psgallery
+        runs-on: ubuntu-latest
+        steps:
+            - uses: zentered/bluesky-post-action@v0.3.0
+              with:
+                  post: "[New Release] ${{ github.event.repository.name }} ${{ github.event.release.tag_name }}! Check out what's new! ${{ github.event.release.html_url }} #AsBuiltReport #PowerShell"
+              env:
+                  BSKY_IDENTIFIER: ${{ secrets.BSKY_IDENTIFIER }}
+                  BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD }}

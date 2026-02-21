@@ -95,4 +95,3 @@ body:
         - label: >-
             I have checked for previously opened & closed [issues](https://github.com/AsBuiltReport/AsBuiltReport.Chart/issues) before submitting this bug report.
           required: true
-
