@@ -58,8 +58,6 @@ Write-Host "`nInstalling required modules..." -ForegroundColor Yellow
 
 $RequiredModules = @(
     @{ Name = 'Pester'; MinimumVersion = '5.0.0' }
-    @{ Name = 'PScribo'; MinimumVersion = '0.11.1' }
-    @{ Name = 'PSScriptAnalyzer'; MinimumVersion = '1.0.0' }
 )
 
 foreach ($Module in $RequiredModules) {

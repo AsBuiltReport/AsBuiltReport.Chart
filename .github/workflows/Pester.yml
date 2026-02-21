@@ -98,13 +98,3 @@ jobs:
           name: test-results-${{ matrix.os }}-${{ matrix.shell }}
           path: Tests/testResults.xml
           retention-days: 30
-
-      - name: Upload code coverage to Codecov
-        if: matrix.os == 'windows-latest' && matrix.shell == 'pwsh'
-        uses: codecov/codecov-action@v5
-        with:
-          files: ./Tests/coverage.xml
-          flags: unit
-          name: codecov-${{ matrix.os }}-${{ matrix.shell }}
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
