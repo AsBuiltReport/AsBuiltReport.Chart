@@ -1,95 +1,99 @@
 name: Pester Tests
 
 on:
-  push:
-    branches:
-      - main
-      - dev
-      - master
-  pull_request:
-    branches:
-      - main
-      - dev
-      - master
-  workflow_dispatch:
+    push:
+        branches:
+            - main
+            - dev
+            - master
+    pull_request:
+        branches:
+            - main
+            - dev
+            - master
+    workflow_dispatch:
 
 jobs:
-  test:
-    name: Pester Tests - ${{ matrix.os }} - ${{ matrix.shell }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
-        shell: [pwsh]
-        include:
-          - os: windows-latest
-            shell: powershell
-        exclude:
-          - os: ubuntu-latest
-            shell: powershell
-          - os: macos-latest
-            shell: powershell
+    test:
+        name: Pester Tests - ${{ matrix.os }} - ${{ matrix.shell }}
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [windows-latest, ubuntu-latest, macos-latest]
+                shell: [pwsh]
+                include:
+                    - os: windows-latest
+                      shell: powershell
+                exclude:
+                    - os: ubuntu-latest
+                      shell: powershell
+                    - os: macos-latest
+                      shell: powershell
 
-    defaults:
-      run:
-        shell: ${{ matrix.shell }}
+        defaults:
+            run:
+                shell: ${{ matrix.shell }}
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: '8.0.x'
-      - name: Restore dependencies
-        run: dotnet restore ./Sources
-      - name: Build the library for MacOS
-        run: dotnet publish ./Sources -c Release -r osx-arm64
-        if: matrix.os == 'macos-latest'
-      - name: Copy the library for MacOS
-        run: copy ./Sources/bin/Release/netstandard2.0/osx-arm64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/mac-osx/arm
-        if: matrix.os == 'macos-latest'
-      - name: Build the library for Linux
-        run: dotnet publish ./Sources -c Release -r linux-x64
-        if: matrix.os == 'ubuntu-latest'
-      - name: Copy the library for Linux
-        run: copy ./Sources/bin/Release/netstandard2.0/linux-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/linux-x64
-        if: matrix.os == 'ubuntu-latest'
-      - name: Build the library for Windows
-        run: dotnet publish ./Sources -c Release -r win-x64
-        if: matrix.os == 'windows-latest' && matrix.shell == 'pwsh'
-      - name: Copy the library for Windows
-        run: copy ./Sources/bin/Release/netstandard2.0/win-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/windows-x64
-        if: matrix.os == 'windows-latest' && matrix.shell == 'pwsh'
-      - name: Build the library for Windows PowerShell
-        run: dotnet publish ./Sources -c Release -r win-x64
-        if: matrix.os == 'windows-latest' && matrix.shell == 'powershell'
-      - name: Copy the library for Windows PowerShell
-        run: copy ./Sources/bin/Release/netstandard2.0/win-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Desktop/windows-x64
-        if: matrix.os == 'windows-latest' && matrix.shell == 'powershell'
-      - name: Run tests
-        run: dotnet test --no-build --verbosity normal ./Sources
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+            - name: Setup .NET
+              uses: actions/setup-dotnet@v5
+              with:
+                  dotnet-version: "8.0.x"
+            - name: Restore dependencies
+              run: dotnet restore ./Sources
+            - name: Build the library for MacOS
+              run: dotnet publish ./Sources -c Release -r osx-arm64
+              if: matrix.os == 'macos-latest'
+            - name: Copy the library for MacOS
+              run: copy ./Sources/bin/Release/netstandard2.0/osx-arm64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/mac-osx/arm
+              if: matrix.os == 'macos-latest'
+            - name: Build the library for Linux
+              run: dotnet publish ./Sources -c Release -r linux-x64
+              if: matrix.os == 'ubuntu-latest'
+            - name: Copy the library for Linux
+              run: copy ./Sources/bin/Release/netstandard2.0/linux-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/linux-x64
+              if: matrix.os == 'ubuntu-latest'
+            - name: Build the library for Windows
+              run: dotnet publish ./Sources -c Release -r win-x64
+              if: matrix.os == 'windows-latest' && matrix.shell == 'pwsh'
+            - name: Copy the library for Windows
+              run: copy ./Sources/bin/Release/netstandard2.0/win-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Core/windows-x64
+              if: matrix.os == 'windows-latest' && matrix.shell == 'pwsh'
+            - name: Build the library for Windows PowerShell
+              run: dotnet publish ./Sources -c Release -r win-x64
+              if: matrix.os == 'windows-latest' && matrix.shell == 'powershell'
+            - name: Copy the library for Windows PowerShell
+              run: copy ./Sources/bin/Release/netstandard2.0/win-x64/publish/*.* ./AsBuiltReport.Chart/Src/Assemblies/Desktop/windows-x64
+              if: matrix.os == 'windows-latest' && matrix.shell == 'powershell'
+            - name: Run tests
+              run: dotnet test --no-build --verbosity normal ./Sources
 
-      - name: Set up PowerShell Gallery
-        run: |
-          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+            - name: Set up PowerShell Gallery
+              run: |
+                  Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 
-      - name: Install Pester
-        run: |
-          Install-Module -Name Pester -MinimumVersion 5.0.0 -Repository PSGallery -Force -AllowClobber -Scope CurrentUser
+            - name: Install Pester
+              run: |
+                  Install-Module -Name Pester -MinimumVersion 5.0.0 -Repository PSGallery -Force -AllowClobber -Scope CurrentUser
 
-      - name: Run Pester Tests
-        run: |
-          $CodeCoverageParam = @{}
-          $OutputFormatParam = @{ OutputFormat = 'NUnitXml' }
+            - name: List Dll files in the test directory
+              run: Get-ChildItem -Path .\AsBuiltReport.Chart\Src\Assemblies\Core\ -Recurse
+              if: matrix.os == 'macos-latest'
 
-          .\Tests\Invoke-Tests.ps1 @CodeCoverageParam @OutputFormatParam
+            - name: Run Pester Tests
+              run: |
+                  $CodeCoverageParam = @{}
+                  $OutputFormatParam = @{ OutputFormat = 'NUnitXml' }
 
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-${{ matrix.os }}-${{ matrix.shell }}
-          path: Tests/testResults.xml
-          retention-days: 30
+                  .\Tests\Invoke-Tests.ps1 @CodeCoverageParam @OutputFormatParam
+
+            - name: Upload test results
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: test-results-${{ matrix.os }}-${{ matrix.shell }}
+                  path: Tests/testResults.xml
+                  retention-days: 30

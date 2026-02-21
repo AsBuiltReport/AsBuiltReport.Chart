@@ -132,7 +132,7 @@ if ($CodeCoverage) {
 Write-Host "`nRunning Pester tests..." -ForegroundColor Yellow
 Write-Host '======================================' -ForegroundColor Cyan
 
-$TestResults = Invoke-Pester -Configuration $PesterConfiguration
+$TestResults = Invoke-Pester -Configuration $PesterConfiguration -Verbose -Debug
 
 # Display results
 Write-Host "`n======================================" -ForegroundColor Cyan
