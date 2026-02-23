@@ -64,7 +64,7 @@ The AsBuiltReport Chart As Built Report supports the following languages;
 
 ## :wrench: System Requirements
 <!-- ********** Update system requirements ********** -->
-PowerShell 7, and the following PowerShell modules are required for generating a AsBuiltReport Chart.
+PowerShell 5.1 or PowerShell 7, and the following PowerShell modules are required for generating a AsBuiltReport Chart.
 
 - [AsBuiltReport.Core Module](https://www.powershellgallery.com/packages/AsBuiltReport.Core/)
 
@@ -107,3 +107,4 @@ The **Options** schema allows certain options within the report to be toggled on
 
 ## :computer: Examples
 <!-- ********** Add some examples. Use other AsBuiltReport modules as a guide. ********** -->
+
