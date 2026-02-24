@@ -34,11 +34,7 @@
 <!-- ********** REMOVE THIS MESSAGE WHEN THE MODULE IS FUNCTIONAL ********** -->
 ## :exclamation: THIS ASBUILTREPORT MODULE IS CURRENTLY IN DEVELOPMENT AND MIGHT NOT YET BE FUNCTIONAL ❗
 
-AsBuiltReport.Chart is a PowerShell module which works in conjunction with [AsBuiltReport.Core](https://github.com/AsBuiltReport/AsBuiltReport.Core).
-
-[AsBuiltReport](https://github.com/AsBuiltReport/AsBuiltReport) is an open-sourced community project which utilises PowerShell to produce as-built documentation in multiple document formats for multiple vendors and technologies.
-
-Please refer to the AsBuiltReport [website](https://www.asbuiltreport.com) for more detailed information about this project.
+AsBuiltReport.Chart is a PowerShell module which provides a set of cmdlets for generating charts and visualizations in As Built Reports. This module is designed to work seamlessly with the AsBuiltReport.Core module, allowing users to create visually appealing and informative reports with ease.
 
 # :beginner: Getting Started
 
@@ -85,6 +81,31 @@ update-module AsBuiltReport.Chart -Force
 ```
 
 ## :computer: Examples
-<!-- ********** Add some examples. Use other AsBuiltReport modules as a guide. ********** -->
+Here are some examples to get you going.
+
+### Pie Chart Examples
+```powershell
+# Generate a Pie Chart with the title 'Test', values of 1 and 2, labels 'A' and 'B', and export the chart in PNG format. Enable the legend and set the width to 600 pixels, height to 400 pixels, title font size to 20, and label font size to 16.
+New-PieChart -Title 'Test' -Values @(1,2) -Labels @('A','B') -Format 'png' -EnableLegend -Width 600 -Height 400 -TitleFontSize 20 -LabelFontSize 16
+```
+![PieChart](./Samples/PieChart.png)
+
+### Bar Chart Examples
+```powershell
+# Generate a Bar Chart with the title 'Test', values of 1 and 2, labels 'A' and 'B', and export the chart in PNG format. Enable the legend and set the width to 600 pixels, height to 400 pixels, title font size to 20, and label font size to 16.
+New-BarChart -Title 'Test' -Values @(1,2) -Labels @('A','B') -Format 'png' -EnableLegend -Width 600 -Height 400 -TitleFontSize 20 -LabelFontSize 16 -AxesMarginsTop 1
+```
+![BarChart](./Samples/BarChart.png)
+
+### Stacked Bar Chart Examples
+```powershell
+# Generate a Stacked Bar Chart with the title 'Test', values of 1 and 2 for the first category and 3 and 4 for the second category, labels 'A' and 'B', legend categories 'Value1' and 'Value2', and export the chart in PNG format. Enable the legend, set the legend orientation to horizontal, align the legend to the upper center, set the width to 600 pixels, height to 400 pixels, title font size to 20, label font size to 16, and axes margins top to 1.
+New-StackedBarChart -Title 'Test' -Values @(@(1,2),@(3,4)) -Labels @('A','B') -LegendCategories @('Value1','Value2') -Format 'png' -EnableLegend -LegendOrientation Horizontal -LegendAlignment UpperCenter -Width 600 -Height 400 -TitleFontSize 20 -LabelFontSize 16 -AxesMarginsTop 1
+```
+![StackedBarChart](./Samples/StackedBarChart.png)
+
+## :x: Known Issues
+
+ - No known issues at this time.
 
 
