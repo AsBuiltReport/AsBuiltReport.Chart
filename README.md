@@ -69,8 +69,8 @@ PowerShell 5.1 or PowerShell 7, and the following PowerShell modules are require
 - [AsBuiltReport.Core Module](https://www.powershellgallery.com/packages/AsBuiltReport.Core/)
 
 ### :closed_lock_with_key: Required Privileges
-<!-- ********** Define required privileges ********** -->
-<!-- ********** Try to follow best practices to define least privileges ********** -->
+
+Local user privilege
 
 ## :package: Module Installation
 
@@ -84,27 +84,7 @@ install-module AsBuiltReport.Chart -Force
 update-module AsBuiltReport.Chart -Force
 ```
 
-### GitHub
-
-If you are unable to use the PowerShell Gallery, you can still install the module manually. Ensure you repeat the following steps for the [system requirements](https://github.com/AsBuiltReport/AsBuiltReport.Chart#wrench-system-requirements) also.
-
-1. Download the code package / [latest release](https://github.com/AsBuiltReport/AsBuiltReport.Chart/releases/latest) zip from GitHub
-2. Extract the zip file
-3. Copy the folder `AsBuiltReport.Chart` to a path that is set in `$env:PSModulePath`.
-4. Open a PowerShell terminal window and unblock the downloaded files with
-
-    ```powershell
-    $path = (Get-Module -Name AsBuiltReport.Chart -ListAvailable).ModuleBase; Unblock-File -Path $path\*.psd1; Unblock-File -Path $path\Src\Public\*.ps1; Unblock-File -Path $path\Src\Private\*.ps1
-    ```
-
-5. Close and reopen the PowerShell terminal window.
-
-_Note: You are not limited to installing the module to those example paths, you can add a new entry to the environment variable PSModulePath if you want to use another path._
-
-### Options
-
-The **Options** schema allows certain options within the report to be toggled on or off.
-
 ## :computer: Examples
 <!-- ********** Add some examples. Use other AsBuiltReport modules as a guide. ********** -->
+
 
