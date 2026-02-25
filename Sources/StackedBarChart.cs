@@ -85,6 +85,8 @@ namespace AsBuiltReportChart
 
                 // create bars
                 var bars = new List<ScottPlot.Bar>();
+                // Set a moderate bar width when there is only one element to prevent it from filling the entire chart area
+                double barSize = values.Count == 1 ? 0.5 : 0.8;
                 // assign values and colors to each bar
                 for (int x = 0; x < values.Count; x++)
                 {
@@ -101,6 +103,7 @@ namespace AsBuiltReportChart
                                 FillColor = colorPalette.GetColor(i),
                                 Label = $"{values[x][i]}",
                                 CenterLabel = true,
+                                Size = barSize,
                             });
                             nextBarBase += values[x][i];
                         }
