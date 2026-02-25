@@ -82,6 +82,10 @@ namespace AsBuiltReportChart
             // assign values and colors to each bar
             if (values.Count > 0 && values[0].Length > 1)
             {
+                  if (values .Count != categoryNames.Length)
+                {
+                    throw new ArgumentException("Error: Values and category names must be equal.");
+                }
                 for (int x = 0; x < values.Count; x++)
                 {
                     double nextBarBase = 0;
@@ -105,8 +109,10 @@ namespace AsBuiltReportChart
             }
             else
             {
-                // Set a moderate bar width when there is only one element to prevent it from filling the entire chart area
-                // double barSize = values.Count == 1 ? 5.0 : 8.0;
+                if (values.Count != categoryNames.Length)
+                {
+                    throw new ArgumentException("Error: Values and category names must be equal.");
+                }
                 double nextBarBase = 0;
                 for (int x = 0; x < values.Count; x++)
                 {
