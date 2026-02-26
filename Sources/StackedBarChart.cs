@@ -82,9 +82,13 @@ namespace AsBuiltReportChart
             // assign values and colors to each bar
             if (values.Count > 0 && values[0].Length > 1)
             {
-                  if (values .Count != categoryNames.Length)
+                if (values.Count != categoryNames.Length)
                 {
                     throw new ArgumentException("Error: Values and category names must be equal.");
+                }
+                if (values.Count != labels.Length)
+                {
+                    throw new ArgumentException("Error: Values and labels must be equal.");
                 }
                 for (int x = 0; x < values.Count; x++)
                 {
@@ -112,6 +116,10 @@ namespace AsBuiltReportChart
                 if (values.Count != categoryNames.Length)
                 {
                     throw new ArgumentException("Error: Values and category names must be equal.");
+                }
+                if (values[0].Length != labels.Length)
+                {
+                    throw new ArgumentException("Error: Values and labels must be equal.");
                 }
                 double nextBarBase = 0;
                 for (int x = 0; x < values.Count; x++)
