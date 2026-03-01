@@ -134,5 +134,45 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
         It 'Should throw error when Values is null or empty' {
             { New-SignalChart -Title 'Test' -Values $null -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw
         }
+        Context 'ONTAP-NAS day data (Scatter + DateTimeTicksBottom)' {
+            BeforeAll {
+                # Simulate ONTAP-NAS day data: 24 hourly data points for multiple NFS metrics
+                $baseDate = (Get-Date '2024-01-01').ToOADate()
+                $script:OntapXArr = [double[]](0..23 | ForEach-Object { $baseDate + ($_ / 24.0) })
+                $script:OntapNfsRead = [double[]]@(10.2, 12.5, 8.7, 6.3, 5.1, 7.4, 11.8, 15.6, 18.2, 20.1, 22.4, 19.8, 17.3, 16.5, 18.9, 21.2, 23.6, 20.8, 17.4, 14.2, 12.1, 10.5, 9.3, 8.8)
+                $script:OntapNfsWrite = [double[]]@(5.1, 6.2, 4.3, 3.1, 2.5, 3.7, 5.9, 7.8, 9.1, 10.0, 11.2, 9.9, 8.6, 8.2, 9.4, 10.6, 11.8, 10.4, 8.7, 7.1, 6.0, 5.2, 4.6, 4.4)
+            }
+            It 'Should run without error with ONTAP-NAS day data in scatter mode with DateTimeTicksBottom' {
+                {
+                    New-SignalChart `
+                        -Title 'ONTAP-NAS NFS Throughput (Day)' `
+                        -Values @($script:OntapNfsRead, $script:OntapNfsWrite) `
+                        -ScatterXValues @($script:OntapXArr, $script:OntapXArr) `
+                        -Labels @('NFS Read', 'NFS Write') `
+                        -LabelXAxis 'Time' `
+                        -LabelYAxis 'Throughput (MB/s)' `
+                        -DateTimeTicksBottom `
+                        -EnableLegend `
+                        -Format 'png' `
+                        -OutputFolderPath $TestDrive
+                } | Should -Not -Throw
+            }
+            It 'Should return a file path for ONTAP-NAS day data chart' {
+                $result = New-SignalChart `
+                    -Title 'ONTAP-NAS NFS Throughput (Day)' `
+                    -Values @($script:OntapNfsRead, $script:OntapNfsWrite) `
+                    -ScatterXValues @($script:OntapXArr, $script:OntapXArr) `
+                    -Labels @('NFS Read', 'NFS Write') `
+                    -LabelXAxis 'Time' `
+                    -LabelYAxis 'Throughput (MB/s)' `
+                    -DateTimeTicksBottom `
+                    -EnableLegend `
+                    -Format 'png' `
+                    -OutputFolderPath $TestDrive
+
+                $result | Should -BeOfType 'System.IO.FileSystemInfo'
+                Test-Path $result | Should -BeTrue
+            }
+        }
     }
 }
