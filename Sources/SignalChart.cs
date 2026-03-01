@@ -8,11 +8,27 @@ namespace AsBuiltReportChart
 {
     internal class SignalChart : Chart
     {
-        public object Chart(List<double[]> values, string[] labels, double xOffset = 0, double period = 1.0, bool dateTimeTicksBottom = false, string filename = "output", int width = 400, int height = 300)
+        public object Chart(List<double[]> values, string[] labels, double xOffset = 0, double period = 1.0, bool dateTimeTicksBottom = false, string filename = "output", int width = 400, int height = 300, List<double[]> xValues = null)
         {
             if (values == null || values.Count == 0)
             {
                 throw new ArgumentException("Error: Values cannot be null or empty.");
+            }
+
+            if (xValues != null)
+            {
+                if (xValues.Count != values.Count)
+                {
+                    throw new ArgumentException("Error: XValues and Values must have the same number of arrays.");
+                }
+
+                for (int i = 0; i < xValues.Count; i++)
+                {
+                    if (xValues[i].Length != values[i].Length)
+                    {
+                        throw new ArgumentException($"Error: XValues and Values at index {i} must have the same number of elements.");
+                    }
+                }
             }
 
             Plot myPlot = new Plot();
@@ -36,21 +52,40 @@ namespace AsBuiltReportChart
                 }
             }
 
-            // Add each signal line
+            // Add each signal or scatter line
             for (int i = 0; i < values.Count; i++)
             {
-                var sig = myPlot.Add.Signal(values[i]);
-                sig.Data.XOffset = xOffset;
-                sig.Data.Period = period;
-
-                if (colorPalette != null)
+                if (xValues != null)
                 {
-                    sig.Color = colorPalette.GetColor(i);
+                    // Scatter mode: explicit X and Y values
+                    var scatter = myPlot.Add.Scatter(xValues[i], values[i]);
+
+                    if (colorPalette != null)
+                    {
+                        scatter.Color = colorPalette.GetColor(i);
+                    }
+
+                    if (labels != null && i < labels.Length && EnableLegend)
+                    {
+                        scatter.LegendText = labels[i];
+                    }
                 }
-
-                if (labels != null && i < labels.Length && EnableLegend)
+                else
                 {
-                    sig.LegendText = labels[i];
+                    // Signal mode: Y values only with uniform X spacing
+                    var sig = myPlot.Add.Signal(values[i]);
+                    sig.Data.XOffset = xOffset;
+                    sig.Data.Period = period;
+
+                    if (colorPalette != null)
+                    {
+                        sig.Color = colorPalette.GetColor(i);
+                    }
+
+                    if (labels != null && i < labels.Length && EnableLegend)
+                    {
+                        sig.LegendText = labels[i];
+                    }
                 }
             }
 

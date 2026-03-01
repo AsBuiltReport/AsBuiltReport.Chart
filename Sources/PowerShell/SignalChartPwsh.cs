@@ -108,6 +108,9 @@ namespace AsBuiltReportChart.PowerShell
         [Parameter(Mandatory = false, HelpMessage = "X-axis offset for the signal data as an OADate value (use (Get-Date '2024-01-01').ToOADate() to convert from a DateTime).")]
         public double XOffset { get; set; } = 0;
 
+        [Parameter(Mandatory = false, HelpMessage = "List of double arrays representing the X values for each scatter line. When provided, scatter mode is used instead of signal mode. Use OADate values for DateTime X axes (e.g. (Get-Date '2024-01-01').ToOADate()).")]
+        public List<double[]> ScatterXValues { get; set; }
+
         [Parameter(Mandatory = false, HelpMessage = "Period (interval) between each data point. Defaults to 1.0.")]
         public double Period { get; set; } = 1.0;
 
@@ -218,7 +221,7 @@ namespace AsBuiltReportChart.PowerShell
 
                 Chart.Format = Format;
                 SignalChart mySignalChart = new SignalChart();
-                WriteObject(mySignalChart.Chart(Values, Labels, XOffset, Period, DateTimeTicksBottom, Filename, Width, Height));
+                WriteObject(mySignalChart.Chart(Values, Labels, XOffset, Period, DateTimeTicksBottom, Filename, Width, Height, ScatterXValues));
             }
             else
             {
