@@ -99,6 +99,35 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
             $xOffset = (Get-Date '2024-01-01').ToOADate()
             { New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3)) -XOffset $xOffset -Period 1.0 -DateTimeTicksBottom -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
         }
+        It 'Should run without error in scatter mode with explicit X values' {
+            $xValues = @(,[double[]]@(1.0, 2.0, 3.0, 4.0))
+            { New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3, 4)) -ScatterXValues $xValues -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+        }
+        It 'Should return a file path as output in scatter mode' {
+            $xValues = @(,[double[]]@(1.0, 2.0, 3.0, 4.0))
+            $result = New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3, 4)) -ScatterXValues $xValues -Format 'png' -OutputFolderPath $TestDrive
+            $result | Should -BeOfType 'System.IO.FileSystemInfo'
+            Test-Path $result | Should -BeTrue
+        }
+        It 'Should run without error in scatter mode with DateTime X values' {
+            $startDate = (Get-Date '2024-01-01').ToOADate()
+            {
+                $xArr = [double[]]@($startDate, ($startDate + 1.0), ($startDate + 2.0))
+                New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3)) -ScatterXValues @(,$xArr) -DateTimeTicksBottom -Format 'png' -OutputFolderPath $TestDrive
+            } | Should -Not -Throw
+        }
+        It 'Should run without error in scatter mode with multiple lines' {
+            $xValues = @(@(1.0, 2.0, 3.0), @(1.0, 2.0, 3.0))
+            { New-SignalChart -Title 'Test' -Values @(@(1, 2, 3), @(4, 5, 6)) -ScatterXValues $xValues -Labels @('Line1', 'Line2') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+        }
+        It 'Should throw error when ScatterXValues count does not match Values count' {
+            $xValues = @(,[double[]]@(1.0, 2.0, 3.0))
+            { New-SignalChart -Title 'Test' -Values @(@(1, 2, 3), @(4, 5, 6)) -ScatterXValues $xValues -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw -ExpectedMessage "Error: XValues and Values must have the same number of arrays."
+        }
+        It 'Should throw error when XValues elements count does not match Values elements count' {
+            $xValues = @(,[double[]]@(1.0, 2.0))
+            { New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3)) -ScatterXValues $xValues -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw -ExpectedMessage "Error: XValues and Values at index 0 must have the same number of elements."
+        }
         It 'Should throw error for missing mandatory parameters' {
             { New-SignalChart } | Should -Throw
         }
