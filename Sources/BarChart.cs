@@ -187,8 +187,20 @@ namespace AsBuiltReportChart
                 // Set margins settings
                 myPlot.Axes.Margins(left: AxesMarginsLeft, right: AxesMarginsRight, bottom: AxesMarginsDown, top: AxesMarginsTop);
 
-                // Set filepath
+                // Set axis limits if values are empty or contain only one value to prevent auto-scaling issues
+                if (values.Length == 1)
+                {
+                    if (AreaOrientation == Orientations.Horizontal)
+                    {
+                        myPlot.Axes.SetLimits(0, 0, -2, 2);
+                    }
+                    else
+                    {
+                        myPlot.Axes.SetLimits(-2, 2, 0, 0);
+                    }
+                }
 
+                // Set filepath
                 string Filepath = _outputFolderPath ?? System.IO.Directory.GetCurrentDirectory();
 
                 // Save Plot
