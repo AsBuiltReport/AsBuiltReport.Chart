@@ -54,7 +54,7 @@ This report is compatible with the following PowerShell versions;
 
 ## 🗺️ Language Support
 <!-- ********** Update supported languages ********** -->
-The AsBuiltReport Chart As Built Report supports the following languages;
+The AsBuiltReport Chart supports the following languages;
 
 - English (US) (Default)
 
@@ -107,6 +107,7 @@ New-StackedBarChart -Title 'Test' -Values @(@(1,2),@(3,4)) -Labels @('A','B') -L
 ## :x: Known Issues
 
  - No known issues at this time.
+
 
 
 
