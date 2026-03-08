@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add Signal chart support
+- Add support for setting the background color of the chart
 
 ## [0.2.0] - 2026-02-20
 
@@ -27,3 +28,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 - Initial release of AsBuiltReport Chart, providing basic charting capabilities for AsBuiltReport data visualization
+
