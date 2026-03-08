@@ -98,6 +98,16 @@ namespace AsBuiltReportChart
                 // Set margins settings
                 myPlot.Axes.Margins(left: AxesMarginsLeft, right: AxesMarginsRight, bottom: AxesMarginsDown, top: AxesMarginsTop);
 
+                // Set background colors
+                if (FigureBackgroundColor.HasValue)
+                {
+                    myPlot.FigureBackground.Color = GetDrawingColor(FigureBackgroundColor.Value);
+                }
+                if (DataBackgroundColor.HasValue)
+                {
+                    myPlot.DataBackground.Color = GetDrawingColor(DataBackgroundColor.Value);
+                }
+
                 // Set filetpath to save
                 string Filepath = _outputFolderPath ?? Directory.GetCurrentDirectory();
 

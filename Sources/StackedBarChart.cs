@@ -248,13 +248,16 @@ namespace AsBuiltReportChart
             }
 
             // Set margins settings
-            if (AreaOrientation == Orientations.Horizontal)
+            myPlot.Axes.Margins(left: AxesMarginsLeft, right: AxesMarginsRight, bottom: AxesMarginsDown, top: AxesMarginsTop);
+
+            // Set background colors
+            if (FigureBackgroundColor.HasValue)
             {
-                myPlot.Axes.Margins(left: AxesMarginsLeft, right: AxesMarginsRight, bottom: AxesMarginsDown, top: AxesMarginsTop);
+                myPlot.FigureBackground.Color = GetDrawingColor(FigureBackgroundColor.Value);
             }
-            else
+            if (DataBackgroundColor.HasValue)
             {
-                myPlot.Axes.Margins(left: AxesMarginsLeft, right: AxesMarginsRight, bottom: AxesMarginsDown, top: AxesMarginsTop);
+                myPlot.DataBackground.Color = GetDrawingColor(DataBackgroundColor.Value);
             }
 
             // Set axis limits if values are empty or contain only one value to prevent auto-scaling issues

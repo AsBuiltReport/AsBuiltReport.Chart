@@ -1,5 +1,5 @@
-- [ ] Add option to set background color of the chart area
-  - [ ] https://scottplot.net/cookbook/5/Styling/BackgroundColors/
+- [x] Add option to set background color of the chart area
+  - [x] https://scottplot.net/cookbook/5/Styling/BackgroundColors/
 
 ```ScottPlot.Plot myPlot = new();
 // setup a plot with sample data
