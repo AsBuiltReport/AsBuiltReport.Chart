@@ -187,6 +187,16 @@ namespace AsBuiltReportChart
                 // Set margins settings
                 myPlot.Axes.Margins(left: AxesMarginsLeft, right: AxesMarginsRight, bottom: AxesMarginsDown, top: AxesMarginsTop);
 
+                // Set background colors
+                if (FigureBackgroundColor.HasValue)
+                {
+                    myPlot.FigureBackground.Color = GetDrawingColor(FigureBackgroundColor.Value);
+                }
+                if (DataBackgroundColor.HasValue)
+                {
+                    myPlot.DataBackground.Color = GetDrawingColor(DataBackgroundColor.Value);
+                }
+
                 // Set axis limits if values are empty or contain only one value to prevent auto-scaling issues
                 if (values.Length == 1)
                 {

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using AsBuiltReportChart.Enums;
 
@@ -101,6 +102,7 @@ namespace AsBuiltReportChart
             { ColorPalettes.Aurora, new ScottPlot.Palettes.Aurora() },
             { ColorPalettes.Building, new ScottPlot.Palettes.Building() },
             { ColorPalettes.ColorblindFriendly, new ScottPlot.Palettes.ColorblindFriendly() },
+            { ColorPalettes.ColorblindFriendlyDark, new ScottPlot.Palettes.ColorblindFriendlyDark() },
             { ColorPalettes.Dark, new ScottPlot.Palettes.Dark() },
             { ColorPalettes.DarkPastel, new ScottPlot.Palettes.DarkPastel() },
             { ColorPalettes.Frost, new ScottPlot.Palettes.Frost() },
@@ -138,7 +140,7 @@ namespace AsBuiltReportChart
         internal static string[] _customColorPalette;
         public static string[] CustomColorPalette
         {
-            get => _customColorPalette ?? new string[0];
+            get => _customColorPalette ?? Array.Empty<string>();
             set
             {
                 if (value != null && value.Length > 0)
@@ -196,11 +198,10 @@ namespace AsBuiltReportChart
         public static bool IsValidHexColor(string hexCode)
         {
             // Regex for #RGB, #RRGGBB, #RGBA, or #RRGGBBAA formats (case-insensitive)
-            var regex = MyRegex();
-            return regex.IsMatch(hexCode);
+            return HexColorRegex.IsMatch(hexCode);
         }
 
-        private static Regex MyRegex() => new Regex("^#([A-Fa-f0-9]{3,4}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$");
+        private static readonly Regex HexColorRegex = new Regex("^#([A-Fa-f0-9]{3,4}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$", RegexOptions.Compiled);
 
         internal static readonly IReadOnlyDictionary<BorderStyles, LinePattern> LegendBorderStyleMap = new Dictionary<BorderStyles, LinePattern>()
     {
@@ -319,6 +320,10 @@ namespace AsBuiltReportChart
             }
         }
 
+        // Chart background color settings (All Charts)
+        public static BasicColors? FigureBackgroundColor { get; set; }
+        public static BasicColors? DataBackgroundColor { get; set; }
+
         public static Color GetDrawingColor(BasicColors color)
         {
             return ColorMap[color];
@@ -326,8 +331,10 @@ namespace AsBuiltReportChart
         public static string GenerateToken(Byte length)
         {
             var bytes = new byte[length];
-            var rnd = new Random();
-            rnd.NextBytes(bytes);
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(bytes);
+            }
             return Convert.ToBase64String(bytes).Replace("=", "").Replace("+", "").Replace("/", "");
         }
         public static object SaveInFormat(Plot plot, int width, int height, string filepath, string filename, Formats Format)
@@ -400,16 +407,7 @@ namespace AsBuiltReportChart
                         throw new ArgumentException("Error: Unable to Export Chart Exception");
                     }
                 default:
-                    plot.SavePng(Path.Combine(filepath, $"{filename}.png"), width, height);
-                    if (File.Exists(Path.Combine(filepath, $"{filename}.png")))
-                    {
-                        FileInfo fileInfo = new FileInfo(Path.Combine(filepath, $"{filename}.png"));
-                        return fileInfo;
-                    }
-                    else
-                    {
-                        throw new ArgumentException("Error: Unable to Export Chart Exception");
-                    }
+                    throw new ArgumentException($"Error: Unsupported format '{Format}'.");
             }
         }
     }

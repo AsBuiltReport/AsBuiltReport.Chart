@@ -125,6 +125,12 @@ namespace AsBuiltReportChart.PowerShell
         [Parameter(Mandatory = false, HelpMessage = "Set the right margin for the chart area axes.")]
         public double AxesMarginsRight { get; set; } = 0.05;
 
+        [Parameter(Mandatory = false, HelpMessage = "Background color of the entire figure (canvas).")]
+        public BasicColors? FigureBackgroundColor { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Background color of the data area inside the axes.")]
+        public BasicColors? DataBackgroundColor { get; set; }
+
         // Set chart Size WxH
         [Parameter(Mandatory = false, HelpMessage = "Set the width of the chart in pixels.")]
         public int Width { get; set; } = 400;
@@ -212,6 +218,10 @@ namespace AsBuiltReportChart.PowerShell
                 Chart.AxesMarginsDown = AxesMarginsDown;
                 Chart.AxesMarginsLeft = AxesMarginsLeft;
                 Chart.AxesMarginsRight = AxesMarginsRight;
+
+                // Background color settings
+                Chart.FigureBackgroundColor = FigureBackgroundColor;
+                Chart.DataBackgroundColor = DataBackgroundColor;
 
                 // Set file directory save path
                 Chart.OutputFolderPath = OutputFolderPath;
