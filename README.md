@@ -120,6 +120,40 @@ All examples in the latest release of AsBuiltReport.Chart can be found in the ta
 | [Example8](./Examples/Example08.ps1) | Signal Chart with DateTime X-Axis (Time-Series Data) |
 | [Example9](./Examples/Example09.ps1) | Signal Chart with Multiple Lines                     |
 
+## :watermark: Watermark Support
+
+All chart types support an optional watermark that overlays semi-transparent text in the center of the chart. The watermark is **disabled by default** and is activated only when the `-EnableWatermark` switch is supplied.
+
+### Watermark Parameters
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `EnableWatermark` | Switch | (off) | Enables the watermark overlay. |
+| `WatermarkText` | String | `AsBuiltReport` | Text to display as the watermark. |
+| `WatermarkFontName` | String | `Arial` | Font family for the watermark text. |
+| `WatermarkFontSize` | Int | `24` | Font size (points) for the watermark text. |
+| `WatermarkColor` | BasicColors | `Gray` | Color of the watermark text. |
+| `WatermarkOpacity` | Double | `0.3` | Opacity (0.0–1.0) of the watermark. Lower values are more transparent. |
+
+### Watermark Examples
+
+```powershell
+# Pie chart with default watermark (gray "AsBuiltReport" at 30% opacity)
+New-PieChart -Title 'Sales' -Values @(10, 20, 30) -Labels @('A', 'B', 'C') -Format 'png' -EnableWatermark
+
+# Bar chart with a custom watermark text, color, and opacity
+New-BarChart -Title 'Revenue' -Values @(100, 200, 150) -Labels @('Q1', 'Q2', 'Q3') -Format 'png' `
+    -EnableWatermark -WatermarkText 'CONFIDENTIAL' -WatermarkColor Red -WatermarkOpacity 0.2
+
+# Stacked bar chart with a larger watermark font
+New-StackedBarChart -Title 'Budget' -Values @(@(1,2),@(3,4)) -Labels @('A','B') -LegendCategories @('X','Y') -Format 'png' `
+    -EnableWatermark -WatermarkFontSize 36 -WatermarkText 'DRAFT'
+
+# Signal chart with a custom font and opacity
+New-SignalChart -Title 'Throughput' -Values @(,[double[]]@(1,2,3,4,5)) -Format 'png' `
+    -EnableWatermark -WatermarkFontName 'Arial' -WatermarkOpacity 0.5
+```
+
 ## :x: Known Issues
 
  - No known issues at this time.
