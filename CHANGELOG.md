@@ -20,6 +20,7 @@ Update module version to 0.3.0
 ### Fixed
 
 - Fix issue with the stacked chart not rendering correctly when using certain data sets
+- Fix pester test to properly validate the functionality of the module
 
 ## [0.2.0] - 2026-02-20
 
