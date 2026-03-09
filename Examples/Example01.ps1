@@ -45,7 +45,7 @@ $Labels      = @('Powered On', 'Powered Off', 'Suspended')
     -OutputFolderPath   : Directory where the generated chart file will be saved.
     -Width              : Width of the chart image in pixels.
     -Height             : Height of the chart image in pixels.
-    -ColorPalette       : Predefined color palette (e.g. Category20, Pastel
+    -ColorPalette       : Predefined color palette (e.g. Category20, Pastel).
     -Filename           : Name of the output file (without extension).
 #>
 
