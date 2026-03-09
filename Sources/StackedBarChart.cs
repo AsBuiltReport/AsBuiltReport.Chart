@@ -80,71 +80,39 @@ namespace AsBuiltReportChart
             // create bars
             var bars = new List<ScottPlot.Bar>();
             // assign values and colors to each bar
-            if (values.Count > 0 && values[0].Length > 1)
+            // Validate that values.Length matches labels.Length
+            // This validation is necessary to ensure that each set of values corresponds to a label, which is crucial for accurate representation in the stacked bar chart. If the lengths do not match, it indicates a mismatch in the data structure, leading to potential errors in plotting and misinterpretation of the chart.
+            if (values.Count != labels.Length)
             {
-                // Validate that values.Length matches labels.Length
-                // This validation is necessary to ensure that each set of values corresponds to a label, which is crucial for accurate representation in the stacked bar chart. If the lengths do not match, it indicates a mismatch in the data structure, leading to potential errors in plotting and misinterpretation of the chart.
-                if (values.Count != labels.Length)
+                throw new ArgumentException("Error: Value sets and Label length must be equal.");
+            }
+            // Validate that each set of values has the same length as category names
+            // This validation ensures that each category in the stacked bar chart has a corresponding value for each label. If the lengths do not match, it indicates an inconsistency in the data structure, which can lead to errors in plotting and misrepresentation of the chart. Each set of values must align with the category names to accurately reflect the data in the stacked bar chart.
+            foreach (var valueSet in values)
+            {
+                if (valueSet.Length != categoryNames.Length)
                 {
-                    throw new ArgumentException("Error: Value sets and Label length must be equal.");
-                }
-                // Validate that each set of values has the same length as category names
-                // This validation ensures that each category in the stacked bar chart has a corresponding value for each label. If the lengths do not match, it indicates an inconsistency in the data structure, which can lead to errors in plotting and misrepresentation of the chart. Each set of values must align with the category names to accurately reflect the data in the stacked bar chart.
-                foreach (var valueSet in values)
-                {
-                    if (valueSet.Length != categoryNames.Length)
-                    {
-                        throw new ArgumentException("Error: Each set of values must have the same length as category names.");
-                    }
-                }
-
-                for (int x = 0; x < values.Count; x++)
-                {
-                    double nextBarBase = 0;
-                    for (int i = 0; i < values[x].Length; i++)
-                    {
-                        if (colorPalette != null)
-                        {
-                            bars.Add(new ScottPlot.Bar
-                            {
-                                Position = x,
-                                Value = nextBarBase + values[x][i],
-                                ValueBase = nextBarBase,
-                                FillColor = colorPalette.GetColor(i),
-                                Label = $"{values[x][i]}",
-                                CenterLabel = true,
-                            });
-                            nextBarBase += values[x][i];
-                        }
-                    }
+                    throw new ArgumentException("Error: Each set of values must have the same length as category names.");
                 }
             }
-            else
-            {
-                if (values.Count != categoryNames.Length)
-                {
-                    throw new ArgumentException("Error: Values and category names must be equal.");
-                }
-                if (values[0].Length != labels.Length)
-                {
-                    throw new ArgumentException("Error: Values and labels must be equal.");
-                }
 
+            for (int x = 0; x < values.Count; x++)
+            {
                 double nextBarBase = 0;
-                for (int x = 0; x < values.Count; x++)
+                for (int i = 0; i < values[x].Length; i++)
                 {
                     if (colorPalette != null)
                     {
                         bars.Add(new ScottPlot.Bar
                         {
-                            Position = 0,
-                            Value = nextBarBase + values[x][0],
+                            Position = x,
+                            Value = nextBarBase + values[x][i],
                             ValueBase = nextBarBase,
-                            FillColor = colorPalette.GetColor(x),
-                            Label = $"{values[x][0]}",
+                            FillColor = colorPalette.GetColor(i),
+                            Label = $"{values[x][i]}",
                             CenterLabel = true,
                         });
-                        nextBarBase += values[x][0];
+                        nextBarBase += values[x][i];
                     }
                 }
             }
@@ -269,7 +237,7 @@ namespace AsBuiltReportChart
             }
 
             // Set axis limits if values are empty or contain only one value to prevent auto-scaling issues
-            if (!(values.Count > 0 && values[0].Length > 1))
+            if (values.Count == 1)  
             {
                 if (AreaOrientation == Orientations.Horizontal)
                 {
