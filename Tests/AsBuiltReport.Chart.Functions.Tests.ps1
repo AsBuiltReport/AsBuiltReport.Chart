@@ -68,10 +68,10 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
             { New-StackedBarChart } | Should -Throw
         }
         It 'Should throw error for mismatched Values and Labels' {
-            { New-StackedBarChart -Title 'Test' -Values @(@(1, 2), @(3, 4)) -Labels @('A') -LegendCategories @('X', 'Y') -OutputFolderPath $TestDrive -Format 'png' } | Should -Throw -ExpectedMessage "Error: Values and labels must be equal."
+            { New-StackedBarChart -Title 'Test' -Values @(@(1, 2), @(3, 4)) -Labels @('A') -LegendCategories @('X', 'Y') -OutputFolderPath $TestDrive -Format 'png' } | Should -Throw -ExpectedMessage "Error: Value sets and Label length must be equal."
         }
         It 'Should throw error for mismatched Values and LegendCategories' {
-            { New-StackedBarChart -Title 'Test' -Values @(@(1, 2), @(3, 4)) -Labels @('A', 'B') -LegendCategories @('X') -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw -ExpectedMessage "Error: Values and category names must be equal."
+            { New-StackedBarChart -Title 'Test' -Values @(@(1, 2), @(3, 4)) -Labels @('A', 'B') -LegendCategories @('X') -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw -ExpectedMessage "Error: Each set of values must have the same length as category names."
         }
         It 'Should run without error with a single element (single-bar chart)' {
             { New-StackedBarChart -Title 'Test' -Values @(,[double[]]@(1, 2)) -Labels @('A') -LegendCategories @('X', 'Y') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw

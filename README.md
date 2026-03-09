@@ -104,6 +104,22 @@ New-StackedBarChart -Title 'Test' -Values @(@(1,2),@(3,4)) -Labels @('A','B') -L
 ```
 ![StackedBarChart](./Samples/StackedBarChart.png)
 
+### :blue_book: Example Index
+
+All examples in the latest release of AsBuiltReport.Chart can be found in the table below.
+
+| Name                                 | Description                                          |
+| ------------------------------------ | ---------------------------------------------------- |
+| [Example1](./Examples/Example01.ps1) | Basic Pie Chart                                      |
+| [Example2](./Examples/Example02.ps1) | Pie Chart with Legend, Custom Colors and Border      |
+| [Example3](./Examples/Example03.ps1) | Basic Bar Chart                                      |
+| [Example4](./Examples/Example04.ps1) | Bar Chart with Advanced Options                      |
+| [Example5](./Examples/Example05.ps1) | Basic Stacked Bar Chart                              |
+| [Example6](./Examples/Example06.ps1) | Stacked Bar Chart with Advanced Options              |
+| [Example7](./Examples/Example07.ps1) | Basic Signal Chart (Line Chart)                      |
+| [Example8](./Examples/Example08.ps1) | Signal Chart with DateTime X-Axis (Time-Series Data) |
+| [Example9](./Examples/Example09.ps1) | Signal Chart with Multiple Lines                     |
+
 ## :x: Known Issues
 
  - No known issues at this time.
