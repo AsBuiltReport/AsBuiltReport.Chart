@@ -11,10 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add Signal chart support
 - Add support for setting the background color of the chart
+- Add documentation example on how to use the modules
 
 ### Changed
 
 Update module version to 0.3.0
+
+### Fixed
+
+- Fix issue with the stacked chart not rendering correctly when using certain data sets
 
 ## [0.2.0] - 2026-02-20
 
