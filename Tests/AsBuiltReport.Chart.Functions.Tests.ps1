@@ -251,4 +251,48 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
             }
         }
     }
+
+    Context 'Output format file extensions' {
+        It 'New-PieChart with Format jpg should produce a .jpg file' {
+            $result = New-PieChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'jpg' -OutputFolderPath $TestDrive
+            $result.Extension | Should -Be '.jpg'
+            Test-Path $result | Should -BeTrue
+        }
+        It 'New-PieChart with Format jpeg should produce a .jpeg file' {
+            $result = New-PieChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'jpeg' -OutputFolderPath $TestDrive
+            $result.Extension | Should -Be '.jpeg'
+            Test-Path $result | Should -BeTrue
+        }
+        It 'New-BarChart with Format jpg should produce a .jpg file' {
+            $result = New-BarChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'jpg' -OutputFolderPath $TestDrive
+            $result.Extension | Should -Be '.jpg'
+            Test-Path $result | Should -BeTrue
+        }
+        It 'New-BarChart with Format jpeg should produce a .jpeg file' {
+            $result = New-BarChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'jpeg' -OutputFolderPath $TestDrive
+            $result.Extension | Should -Be '.jpeg'
+            Test-Path $result | Should -BeTrue
+        }
+    }
+
+    Context 'State isolation between cmdlet calls' {
+        It 'EnableLegend should not persist from one New-PieChart call to the next' {
+            # First call with legend enabled
+            New-PieChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive -EnableLegend | Out-Null
+            # Second call without legend - should not throw and should succeed
+            { New-PieChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+        }
+        It 'EnableChartBorder should not persist from one New-BarChart call to the next' {
+            New-BarChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive -EnableChartBorder | Out-Null
+            { New-BarChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+        }
+        It 'EnableLegend should not persist from New-StackedBarChart to New-BarChart' {
+            New-StackedBarChart -Title 'Test' -Values @(@(1, 2), @(3, 4)) -Labels @('A', 'B') -LegendCategories @('X', 'Y') -Format 'png' -OutputFolderPath $TestDrive -EnableLegend | Out-Null
+            { New-BarChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+        }
+        It 'EnableWatermark should not persist from one New-SignalChart call to the next' {
+            New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3)) -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark | Out-Null
+            { New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3)) -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+        }
+    }
 }

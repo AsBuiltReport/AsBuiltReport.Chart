@@ -386,6 +386,57 @@ namespace AsBuiltReportChart
         {
             return ColorMap[color];
         }
+
+        internal static void Reset()
+        {
+            Format = Formats.png;
+            Title = null;
+            TitleFontBold = false;
+            TitleFontSize = 14;
+            TitleFontColor = BasicColors.Black;
+            FontName = "Arial";
+            LabelFontSize = 14;
+            LabelFontColor = BasicColors.Black;
+            LabelBold = false;
+            LabelYAxis = "Count";
+            LabelXAxis = "Values";
+            _labelDistance = 0.6;
+            AreaOrientation = Orientations.Vertical;
+            _areaExplodeFraction = 0;
+            EnableLegend = false;
+            LegendFontSize = 12;
+            LegendFontColor = BasicColors.Black;
+            LegendBold = false;
+            LegendBorderStyle = BorderStyles.Solid;
+            LegendBorderSize = 1;
+            LegendBorderColor = BasicColors.Black;
+            LegendOrientation = Orientations.Vertical;
+            LegendAlignment = Alignments.LowerRight;
+            EnableChartBorder = false;
+            ChartBorderStyle = BorderStyles.Solid;
+            ChartBorderSize = 1;
+            ChartBorderColor = BasicColors.Black;
+            colorPalette = ColorPaletteMap[ColorPalettes.Category10];
+            InvertCustomColorPalette = false;
+            _customColorPalette = null;
+            EnableCustomColorPalette = false;
+            _outputFolderPath = null;
+            _axesMarginsTop = 0.07;
+            _axesMarginsDown = 0.07;
+            _axesMarginsLeft = 0.05;
+            _axesMarginsRight = 0.05;
+            FigureBackgroundColor = null;
+            DataBackgroundColor = null;
+            EnableWatermark = false;
+            WatermarkText = "Confidential";
+            WatermarkAlignment = Alignments.MiddleCenter;
+            WatermarkRotation = 0;
+            WatermarkFontName = "Arial";
+            WatermarkFontSize = 24;
+            WatermarkColor = BasicColors.Gray;
+            _watermarkOpacity = 0.3;
+        }
+
         public static string GenerateToken(Byte length)
         {
             var bytes = new byte[length];
@@ -411,10 +462,10 @@ namespace AsBuiltReportChart
                         throw new ArgumentException("Error: Unable to Export Chart Exception");
                     }
                 case Formats.jpg:
-                    plot.SaveJpeg(Path.Combine(filepath, $"{filename}.jpeg"), width, height);
-                    if (File.Exists(Path.Combine(filepath, $"{filename}.jpeg")))
+                    plot.SaveJpeg(Path.Combine(filepath, $"{filename}.jpg"), width, height);
+                    if (File.Exists(Path.Combine(filepath, $"{filename}.jpg")))
                     {
-                        FileInfo fileInfo = new FileInfo(Path.Combine(filepath, $"{filename}.jpeg"));
+                        FileInfo fileInfo = new FileInfo(Path.Combine(filepath, $"{filename}.jpg"));
                         return fileInfo;
                     }
                     else
@@ -422,10 +473,10 @@ namespace AsBuiltReportChart
                         throw new ArgumentException("Error: Unable to Export Chart Exception");
                     }
                 case Formats.jpeg:
-                    plot.SaveJpeg(Path.Combine(filepath, $"{filename}.jpg"), width, height);
-                    if (File.Exists(Path.Combine(filepath, $"{filename}.jpg")))
+                    plot.SaveJpeg(Path.Combine(filepath, $"{filename}.jpeg"), width, height);
+                    if (File.Exists(Path.Combine(filepath, $"{filename}.jpeg")))
                     {
-                        FileInfo fileInfo = new FileInfo(Path.Combine(filepath, $"{filename}.jpg"));
+                        FileInfo fileInfo = new FileInfo(Path.Combine(filepath, $"{filename}.jpeg"));
                         return fileInfo;
                     }
                     else
