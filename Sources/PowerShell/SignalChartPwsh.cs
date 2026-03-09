@@ -136,6 +136,25 @@ namespace AsBuiltReportChart.PowerShell
         [Parameter(Mandatory = false, HelpMessage = "Background color of the data area inside the axes.")]
         public BasicColors? DataBackgroundColor { get; set; }
 
+        // Watermark settings
+        [Parameter(Mandatory = false, HelpMessage = "Enable a watermark on the chart.")]
+        public SwitchParameter EnableWatermark { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Text to display as the watermark. Defaults to 'AsBuiltReport'.")]
+        public string WatermarkText { get; set; } = "AsBuiltReport";
+
+        [Parameter(Mandatory = false, HelpMessage = "Font name for the watermark text.")]
+        public string WatermarkFontName { get; set; } = "Arial";
+
+        [Parameter(Mandatory = false, HelpMessage = "Font size for the watermark text in points. Defaults to 24.")]
+        public int WatermarkFontSize { get; set; } = 24;
+
+        [Parameter(Mandatory = false, HelpMessage = "Color of the watermark text.")]
+        public BasicColors WatermarkColor { get; set; } = BasicColors.Gray;
+
+        [Parameter(Mandatory = false, HelpMessage = "Opacity of the watermark (0.0 fully transparent to 1.0 fully opaque). Defaults to 0.3.")]
+        public double WatermarkOpacity { get; set; } = 0.3;
+
         // Set chart Size WxH
         [Parameter(Mandatory = false, HelpMessage = "Width of the output chart in pixels. Defaults to 400.")]
         public int Width { get; set; } = 400;
@@ -225,6 +244,14 @@ namespace AsBuiltReportChart.PowerShell
                 // Background color settings
                 Chart.FigureBackgroundColor = FigureBackgroundColor;
                 Chart.DataBackgroundColor = DataBackgroundColor;
+
+                // Watermark settings
+                Chart.EnableWatermark = EnableWatermark;
+                Chart.WatermarkText = WatermarkText;
+                Chart.WatermarkFontName = WatermarkFontName;
+                Chart.WatermarkFontSize = WatermarkFontSize;
+                Chart.WatermarkColor = WatermarkColor;
+                Chart.WatermarkOpacity = WatermarkOpacity;
 
                 // Set file directory save path
                 Chart.OutputFolderPath = OutputFolderPath;

@@ -210,6 +210,9 @@ namespace AsBuiltReportChart
                     }
                 }
 
+                // Apply watermark if enabled
+                ApplyWatermark(myPlot);
+
                 // Set filepath
                 string Filepath = _outputFolderPath ?? System.IO.Directory.GetCurrentDirectory();
 

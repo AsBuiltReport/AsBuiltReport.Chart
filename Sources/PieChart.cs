@@ -108,6 +108,9 @@ namespace AsBuiltReportChart
                     myPlot.DataBackground.Color = GetDrawingColor(DataBackgroundColor.Value);
                 }
 
+                // Apply watermark if enabled
+                ApplyWatermark(myPlot);
+
                 // Set filetpath to save
                 string Filepath = _outputFolderPath ?? Directory.GetCurrentDirectory();
 

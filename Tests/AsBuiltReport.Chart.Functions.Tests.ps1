@@ -175,4 +175,80 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
             }
         }
     }
+
+    Context 'Watermark support' {
+        Context 'New-PieChart with watermark' {
+            It 'Should run without error with watermark enabled using defaults' {
+                { New-PieChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark } | Should -Not -Throw
+            }
+            It 'Should return a file when watermark is enabled' {
+                $result = New-PieChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark
+                $result | Should -BeOfType 'System.IO.FileSystemInfo'
+                Test-Path $result | Should -BeTrue
+            }
+            It 'Should run without error with custom watermark text and color' {
+                { New-PieChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark -WatermarkText 'Confidential' -WatermarkColor Red } | Should -Not -Throw
+            }
+            It 'Should run without error with custom watermark font and size' {
+                { New-PieChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark -WatermarkFontSize 36 -WatermarkFontName 'Arial' } | Should -Not -Throw
+            }
+            It 'Should run without error with custom watermark opacity' {
+                { New-PieChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark -WatermarkOpacity 0.5 } | Should -Not -Throw
+            }
+            It 'Should run without error without watermark (disabled by default)' {
+                { New-PieChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+            }
+        }
+
+        Context 'New-BarChart with watermark' {
+            It 'Should run without error with watermark enabled using defaults' {
+                { New-BarChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark } | Should -Not -Throw
+            }
+            It 'Should return a file when watermark is enabled' {
+                $result = New-BarChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark
+                $result | Should -BeOfType 'System.IO.FileSystemInfo'
+                Test-Path $result | Should -BeTrue
+            }
+            It 'Should run without error with custom watermark color and opacity' {
+                { New-BarChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark -WatermarkColor Blue -WatermarkOpacity 0.2 } | Should -Not -Throw
+            }
+            It 'Should run without error without watermark (disabled by default)' {
+                { New-BarChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+            }
+        }
+
+        Context 'New-StackedBarChart with watermark' {
+            It 'Should run without error with watermark enabled using defaults' {
+                { New-StackedBarChart -Title 'Test' -Values @(@(1, 2), @(3, 4)) -Labels @('A', 'B') -LegendCategories @('X', 'Y') -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark } | Should -Not -Throw
+            }
+            It 'Should return a file when watermark is enabled' {
+                $result = New-StackedBarChart -Title 'Test' -Values @(@(1, 2), @(3, 4)) -Labels @('A', 'B') -LegendCategories @('X', 'Y') -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark
+                $result | Should -BeOfType 'System.IO.FileSystemInfo'
+                Test-Path $result | Should -BeTrue
+            }
+            It 'Should run without error with custom watermark font and size' {
+                { New-StackedBarChart -Title 'Test' -Values @(@(1, 2), @(3, 4)) -Labels @('A', 'B') -LegendCategories @('X', 'Y') -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark -WatermarkFontSize 18 -WatermarkText 'Draft' } | Should -Not -Throw
+            }
+            It 'Should run without error without watermark (disabled by default)' {
+                { New-StackedBarChart -Title 'Test' -Values @(@(1, 2), @(3, 4)) -Labels @('A', 'B') -LegendCategories @('X', 'Y') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+            }
+        }
+
+        Context 'New-SignalChart with watermark' {
+            It 'Should run without error with watermark enabled using defaults' {
+                { New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3, 4)) -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark } | Should -Not -Throw
+            }
+            It 'Should return a file when watermark is enabled' {
+                $result = New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3, 4)) -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark
+                $result | Should -BeOfType 'System.IO.FileSystemInfo'
+                Test-Path $result | Should -BeTrue
+            }
+            It 'Should run without error with custom watermark color and opacity' {
+                { New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3, 4)) -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark -WatermarkColor Green -WatermarkOpacity 0.4 } | Should -Not -Throw
+            }
+            It 'Should run without error without watermark (disabled by default)' {
+                { New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3, 4)) -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+            }
+        }
+    }
 }

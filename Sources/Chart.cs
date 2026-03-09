@@ -324,6 +324,44 @@ namespace AsBuiltReportChart
         public static BasicColors? FigureBackgroundColor { get; set; }
         public static BasicColors? DataBackgroundColor { get; set; }
 
+        // Watermark settings (All Charts)
+        public static bool EnableWatermark { get; set; }
+        public static string WatermarkText { get; set; } = "AsBuiltReport";
+        public static string WatermarkFontName { get; set; } = "Arial";
+        public static int WatermarkFontSize { get; set; } = 24;
+        public static BasicColors WatermarkColor { get; set; } = BasicColors.Gray;
+
+        internal static double _watermarkOpacity = 0.3;
+        public static double WatermarkOpacity
+        {
+            get { return _watermarkOpacity; }
+            set
+            {
+                if (value >= 0.0 && value <= 1.0)
+                {
+                    _watermarkOpacity = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Error: WatermarkOpacity value range must be from 0.0 to 1.0.");
+                }
+            }
+        }
+
+        internal static void ApplyWatermark(Plot plot)
+        {
+            if (!EnableWatermark || string.IsNullOrEmpty(WatermarkText))
+                return;
+
+            var annotation = plot.Add.Annotation(WatermarkText, Alignment.MiddleCenter);
+            annotation.LabelFontColor = ColorMap[WatermarkColor].WithOpacity(WatermarkOpacity);
+            annotation.LabelFontSize = WatermarkFontSize;
+            annotation.LabelFontName = WatermarkFontName;
+            annotation.LabelBackgroundColor = Colors.Transparent;
+            annotation.LabelBorderColor = Colors.Transparent;
+            annotation.LabelBorderWidth = 0;
+        }
+
         public static Color GetDrawingColor(BasicColors color)
         {
             return ColorMap[color];
