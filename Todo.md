@@ -1,6 +1,6 @@
-- [] Add watermark support to charts
-  - [] Watermark should be configurable with parameters for text, font, size, color, and opacity
-  - [] Watermark should be applied to all chart types (bar, line, pie, etc.)
-  - [] Ensure watermark does not interfere with chart readability
-  - [] Update documentation with instructions on how to use watermark feature
-  - [] Add unit tests to verify watermark functionality across different chart types and configurations
+- [ ] Add watermark support to charts
+  - [ ] Watermark should be configurable with parameters for text, font, size, color, and opacity
+  - [ ] Watermark should be applied to all chart types (bar, line, pie, etc.)
+  - [ ] Ensure watermark does not interfere with chart readability
+  - [ ] Update documentation with instructions on how to use watermark feature
+  - [ ] Add unit tests to verify watermark functionality across different chart types and configurations
