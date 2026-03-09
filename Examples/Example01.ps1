@@ -52,4 +52,6 @@ New-PieChart `
     -Labels $Labels `
     -Format $Format `
     -OutputFolderPath $OutputFolderPath `
+    -Width 600 `
+    -Height 400 `
     -Filename 'Example01-PieChart'

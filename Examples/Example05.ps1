@@ -42,14 +42,12 @@ $OutputFolderPath = Resolve-Path $Path
     - Bar 4 = datastore-04: 300 GB Used, 700 GB Free
 #>
 
-$ChartTitle       = 'Datastore Capacity (GB)'
-$Labels           = @('datastore-01', 'datastore-02', 'datastore-03', 'datastore-04')
+$ChartTitle = 'Datastore Capacity (GB)'
+$Labels = @('datastore-01', 'datastore-02', 'datastore-03', 'datastore-04')
 $LegendCategories = @('Used Space', 'Free Space')
 
 # Each inner array represents one category's values across all bars.
-$UsedSpace = [double[]]@(800, 600, 1500, 300)
-$FreeSpace = [double[]]@(200, 400, 500, 700)
-$Values    = @($UsedSpace, $FreeSpace)
+$Values = @(@(800, 200), @(600, 400), @(1500, 500), @(300, 700))
 
 <#
     The New-StackedBarChart cmdlet generates the Stacked Bar Chart image.
@@ -63,6 +61,9 @@ $Values    = @($UsedSpace, $FreeSpace)
     -LabelYAxis         : Label for the Y-axis.
     -Format             : Output file format (e.g. png, jpg, svg).
     -OutputFolderPath   : Directory where the generated chart file will be saved.
+    -Width              : Width of the output image in pixels.
+    -Height             : Height of the output image in pixels.
+    -AreaOrientation    : Orientation of the bars (Horizontal or Vertical).
     -Filename           : Name of the output file (without extension).
 #>
 
@@ -76,4 +77,7 @@ New-StackedBarChart `
     -LabelYAxis 'Capacity (GB)' `
     -Format $Format `
     -OutputFolderPath $OutputFolderPath `
+    -Width 700 `
+    -Height 450 `
+    -AreaOrientation Horizontal `
     -Filename 'Example05-StackedBarChart'

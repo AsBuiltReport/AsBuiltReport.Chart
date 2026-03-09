@@ -56,4 +56,6 @@ New-BarChart `
     -LabelYAxis 'CPU (%)' `
     -Format $Format `
     -OutputFolderPath $OutputFolderPath `
+    -Width 600 `
+    -Height 600 `
     -Filename 'Example03-BarChart'

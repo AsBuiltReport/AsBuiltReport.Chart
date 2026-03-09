@@ -84,7 +84,7 @@ New-BarChart `
     -LabelXAxis 'Memory (%)' `
     -LabelYAxis 'Server' `
     -AreaOrientation Horizontal `
-    -AxesMarginsTop 1 `
+    -AxesMarginsTop 0.15 `
     -EnableChartBorder `
     -ChartBorderColor Black `
     -EnableCustomColorPalette `

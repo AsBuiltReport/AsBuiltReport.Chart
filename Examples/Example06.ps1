@@ -44,15 +44,18 @@ $OutputFolderPath = Resolve-Path $Path
     In this example each bar represents a network adapter, and each stack segment is a traffic type.
 #>
 
-$ChartTitle       = 'Network Adapter Traffic (Mbps)'
-$Labels           = @('vmnic0', 'vmnic1', 'vmnic2', 'vmnic3')
+$ChartTitle = 'Network Adapter Traffic (Mbps)'
+$Labels = @('vmnic0', 'vmnic1', 'vmnic2', 'vmnic3')
 $LegendCategories = @('Inbound', 'Outbound', 'Dropped')
 
-# Each inner array represents one traffic category across all adapters.
-$Inbound  = [double[]]@(450, 320, 280, 510)
-$Outbound = [double[]]@(380, 290, 210, 460)
-$Dropped  = [double[]]@(15, 5, 30, 8)
-$Values   = @($Inbound, $Outbound, $Dropped)
+# Values are organized by category (stack segment), so each inner array corresponds to one category across all bars.
+# Example values for Inbound, Outbound, and Dropped traffic for each network adapter:
+# - vmnic0: 450 Mbps Inbound, 320 Mbps Outbound, 280 Mbps Dropped
+$vmnic0 = [double[]]@(450, 320, 280)
+$vmnic1 = [double[]]@(380, 290, 210)
+$vmnic2 = [double[]]@(150, 50, 300)
+$vmnic3 = [double[]]@(200, 320, 300)
+$Values = @($vmnic0, $vmnic1, $vmnic2, $vmnic3)
 
 <#
     A custom hex color palette can be used to match corporate branding or improve readability.

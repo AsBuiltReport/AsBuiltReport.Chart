@@ -41,8 +41,8 @@ $OutputFolderPath = Resolve-Path $Path
 #>
 
 $ChartTitle = 'CPU Utilization - Last 24 Hours (%)'
-$CpuData    = [double[]]@(12, 18, 15, 10, 8, 11, 25, 42, 65, 71, 68, 72, 74, 70, 66, 63, 58, 55, 48, 40, 35, 28, 22, 16)
-$Values     = @(,$CpuData)
+$CpuData = [double[]]@(12, 18, 15, 10, 8, 11, 25, 42, 65, 71, 68, 72, 74, 70, 66, 63, 58, 55, 48, 40, 35, 28, 22, 16)
+$Values = @(, $CpuData)
 
 <#
     The New-SignalChart cmdlet generates the Signal Chart image.
@@ -63,4 +63,6 @@ New-SignalChart `
     -LabelYAxis 'CPU (%)' `
     -Format $Format `
     -OutputFolderPath $OutputFolderPath `
+    -Width 700 `
+    -Height 450 `
     -Filename 'Example07-SignalChart'
