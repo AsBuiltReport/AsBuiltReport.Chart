@@ -254,6 +254,19 @@ namespace AsBuiltReportChart
         { BasicColors.DarkGreen,  Colors.DarkGreen },
     };
 
+        internal static readonly IReadOnlyDictionary<Alignments, Alignment> WatermarkAlignmentMap = new Dictionary<Alignments, Alignment>()
+    {
+        {Alignments.LowerCenter, Alignment.LowerCenter},
+        {Alignments.LowerLeft,Alignment.LowerLeft},
+        {Alignments.LowerRight, Alignment.LowerRight},
+        {Alignments.MiddleCenter,Alignment.MiddleCenter},
+        {Alignments.MiddleLeft, Alignment.MiddleLeft},
+        {Alignments.MiddleRight,Alignment.MiddleRight},
+        {Alignments.UpperCenter,Alignment.UpperCenter},
+        {Alignments.UpperLeft,Alignment.UpperLeft},
+        {Alignments.UpperRight, Alignment.UpperRight},
+    };
+
         // Set area axes margins
         internal static double _axesMarginsTop = 0.07;
         public static double AxesMarginsTop
@@ -326,7 +339,12 @@ namespace AsBuiltReportChart
 
         // Watermark settings (All Charts)
         public static bool EnableWatermark { get; set; }
-        public static string WatermarkText { get; set; } = "AsBuiltReport";
+        public static string WatermarkText { get; set; } = "Confidential";
+
+        public static Alignments WatermarkAlignment { get; set; } = Alignments.MiddleCenter;
+
+        public static float WatermarkRotation { get; set; } = 0;
+
         public static string WatermarkFontName { get; set; } = "Arial";
         public static int WatermarkFontSize { get; set; } = 24;
         public static BasicColors WatermarkColor { get; set; } = BasicColors.Gray;
@@ -353,13 +371,15 @@ namespace AsBuiltReportChart
             if (!EnableWatermark || string.IsNullOrEmpty(WatermarkText))
                 return;
 
-            var annotation = plot.Add.Annotation(WatermarkText, Alignment.MiddleCenter);
+            var annotation = plot.Add.Annotation(WatermarkText, WatermarkAlignmentMap[WatermarkAlignment]);
             annotation.LabelFontColor = ColorMap[WatermarkColor].WithOpacity(WatermarkOpacity);
             annotation.LabelFontSize = WatermarkFontSize;
             annotation.LabelFontName = WatermarkFontName;
             annotation.LabelBackgroundColor = Colors.Transparent;
             annotation.LabelBorderColor = Colors.Transparent;
             annotation.LabelBorderWidth = 0;
+            annotation.LabelShadowColor = Colors.Transparent;
+            annotation.LabelRotation = WatermarkRotation;
         }
 
         public static Color GetDrawingColor(BasicColors color)

@@ -135,8 +135,11 @@ namespace AsBuiltReportChart.PowerShell
         [Parameter(Mandatory = false, HelpMessage = "Enable a watermark on the chart.")]
         public SwitchParameter EnableWatermark { get; set; }
 
-        [Parameter(Mandatory = false, HelpMessage = "Text to display as the watermark. Defaults to 'AsBuiltReport'.")]
-        public string WatermarkText { get; set; } = "AsBuiltReport";
+        [Parameter(Mandatory = false, HelpMessage = "Text to display as the watermark. Defaults to 'Confidential'.")]
+        public string WatermarkText { get; set; } = "Confidential";
+
+        [Parameter(Mandatory = false, HelpMessage = "Alignment of the watermark text. Defaults to 'MiddleCenter'.")]
+        public Enums.Alignments WatermarkAlignment { get; set; } = Enums.Alignments.MiddleCenter;
 
         [Parameter(Mandatory = false, HelpMessage = "Font name for the watermark text.")]
         public string WatermarkFontName { get; set; } = "Arial";
@@ -149,6 +152,9 @@ namespace AsBuiltReportChart.PowerShell
 
         [Parameter(Mandatory = false, HelpMessage = "Opacity of the watermark (0.0 fully transparent to 1.0 fully opaque). Defaults to 0.3.")]
         public double WatermarkOpacity { get; set; } = 0.3;
+
+        [Parameter(Mandatory = false, HelpMessage = "Rotation angle of the watermark text in degrees. Defaults to 0.")]
+        public float WatermarkRotation { get; set; } = 0;
 
         // Set chart Size WxH
         [Parameter(Mandatory = false, HelpMessage = "Set the width of the chart in pixels.")]
@@ -245,10 +251,12 @@ namespace AsBuiltReportChart.PowerShell
                 // Watermark settings
                 Chart.EnableWatermark = EnableWatermark;
                 Chart.WatermarkText = WatermarkText;
+                Chart.WatermarkAlignment = WatermarkAlignment;
                 Chart.WatermarkFontName = WatermarkFontName;
                 Chart.WatermarkFontSize = WatermarkFontSize;
                 Chart.WatermarkColor = WatermarkColor;
                 Chart.WatermarkOpacity = WatermarkOpacity;
+                Chart.WatermarkRotation = WatermarkRotation;
 
                 // Set file directory save path
                 Chart.OutputFolderPath = OutputFolderPath;
