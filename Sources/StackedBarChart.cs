@@ -20,7 +20,7 @@ namespace AsBuiltReportChart
                 }
                 else
                 {
-                    throw new Exception("CustomColorPalette is empty. Please provide valid color values.");
+                    throw new InvalidOperationException("CustomColorPalette is empty. Please provide valid color values.");
                 }
             }
             else

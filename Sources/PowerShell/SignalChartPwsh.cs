@@ -174,6 +174,7 @@ namespace AsBuiltReportChart.PowerShell
 
         protected override void ProcessRecord()
         {
+            Chart.Reset();
             if (Values != null)
             {
                 if (EnableLegend)
@@ -214,7 +215,7 @@ namespace AsBuiltReportChart.PowerShell
                     }
                     else
                     {
-                        throw new Exception("EnableCustomColorPalette requires CustomColorPalette to be set.");
+                        throw new InvalidOperationException("EnableCustomColorPalette requires CustomColorPalette to be set.");
                     }
                 }
                 else

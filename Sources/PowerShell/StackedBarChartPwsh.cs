@@ -21,7 +21,7 @@ namespace AsBuiltReportChart.PowerShell
         [Parameter(Mandatory = true, HelpMessage = "Provide an array of strings for the labels of each bar in the chart.")]
         public string[] Labels { get; set; }
 
-        [Parameter(Mandatory = true, HelpMessage = "Povide an array of strings for the legend categories in the chart.")]
+        [Parameter(Mandatory = true, HelpMessage = "Provide an array of strings for the legend categories in the chart.")]
         public string[] LegendCategories { get; set; }
 
         // Title settings
@@ -169,6 +169,7 @@ namespace AsBuiltReportChart.PowerShell
 
         protected override void ProcessRecord()
         {
+            Chart.Reset();
             if (Values != null && Labels != null && LegendCategories != null)
             {
 
@@ -208,7 +209,7 @@ namespace AsBuiltReportChart.PowerShell
                     }
                     else
                     {
-                        throw new Exception("EnableCustomColorPalette requires CustomColorPalette to be set.");
+                        throw new InvalidOperationException("EnableCustomColorPalette requires CustomColorPalette to be set.");
                     }
                 }
                 else
