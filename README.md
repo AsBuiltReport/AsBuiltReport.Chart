@@ -120,7 +120,7 @@ All examples in the latest release of AsBuiltReport.Chart can be found in the ta
 | [Example8](./Examples/Example08.ps1) | Signal Chart with DateTime X-Axis (Time-Series Data) |
 | [Example9](./Examples/Example09.ps1) | Signal Chart with Multiple Lines                     |
 
-## :watermark: Watermark Support
+## Watermark Support
 
 All chart types support an optional watermark that overlays semi-transparent text in the center of the chart. The watermark is **disabled by default** and is activated only when the `-EnableWatermark` switch is supplied.
 
@@ -157,6 +157,7 @@ New-SignalChart -Title 'Throughput' -Values @(,[double[]]@(1,2,3,4,5)) -Format '
 ## :x: Known Issues
 
  - No known issues at this time.
+
 
 
 
