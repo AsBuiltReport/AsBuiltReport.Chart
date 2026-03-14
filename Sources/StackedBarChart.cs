@@ -239,19 +239,45 @@ namespace AsBuiltReportChart
             // Set axis limits if there is only one value to prevent auto-scaling issues
             if (values.Count == 1)
             {
-                // Compute the stacked total for the single bar
-                double stackedTotal = 0;
-                if (values[0] != null)
+                // Compute cumulative sums for the single stacked bar to capture negative and positive extents
+                double cumulative = 0;
+                double minSum = 0;
+                double maxSum = 0;
+
+                if (values[0] != null && values[0].Length > 0)
                 {
                     foreach (double v in values[0])
                     {
-                        stackedTotal += v;
+                        cumulative += v;
+                        if (cumulative < minSum)
+                        {
+                            minSum = cumulative;
+                        }
+                        if (cumulative > maxSum)
+                        {
+                            maxSum = cumulative;
+                        }
                     }
                 }
 
-                // Ensure a non-zero span even if stackedTotal is zero or negative
-                double paddingFraction = 0.1;
-                double effectiveTotal = stackedTotal > 0 ? stackedTotal * (1 + paddingFraction) : 1.0;
+                // Ensure that zero is included in the value axis and add padding
+                double minVal = Math.Min(0, minSum);
+                double maxVal = Math.Max(0, maxSum);
+
+                if (minVal == maxVal)
+                {
+                    // Degenerate case: all segments sum to the same value (including all zero)
+                    double pad = (minVal == 0) ? 1.0 : Math.Abs(minVal) * 0.1;
+                    minVal -= pad;
+                    maxVal += pad;
+                }
+                else
+                {
+                    double range = maxVal - minVal;
+                    double pad = range * 0.1;
+                    minVal -= pad;
+                    maxVal += pad;
+                }
 
                 double xMin, xMax, yMin, yMax;
                 double barIndex = 0; // single bar at index 0
@@ -259,8 +285,8 @@ namespace AsBuiltReportChart
                 if (AreaOrientation == Orientations.Horizontal)
                 {
                     // Horizontal bars: X is value, Y is category (bar index)
-                    xMin = 0;
-                    xMax = effectiveTotal;
+                    xMin = minVal;
+                    xMax = maxVal;
                     yMin = barIndex - 0.5;
                     yMax = barIndex + 0.5;
                 }
@@ -269,8 +295,8 @@ namespace AsBuiltReportChart
                     // Vertical bars: X is category (bar index), Y is value
                     xMin = barIndex - 0.5;
                     xMax = barIndex + 0.5;
-                    yMin = 0;
-                    yMax = effectiveTotal;
+                    yMin = minVal;
+                    yMax = maxVal;
                 }
 
                 myPlot.Axes.SetLimits(xMin, xMax, yMin, yMax);
