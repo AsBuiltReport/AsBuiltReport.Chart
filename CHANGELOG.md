@@ -15,7 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-Update module version to 0.3.0
+- Update module version to 0.3.0
+- Restored the PowerShell module publishing workflow and added Twitter and Bluesky posting steps.
+
 
 ### Fixed
 
