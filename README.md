@@ -129,7 +129,7 @@ All chart types support an optional watermark that overlays semi-transparent tex
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `EnableWatermark` | Switch | (off) | Enables the watermark overlay. |
-| `WatermarkText` | String | `AsBuiltReport` | Text to display as the watermark. |
+| `WatermarkText` | String | `Confidential` | Text to display as the watermark. |
 | `WatermarkFontName` | String | `Arial` | Font family for the watermark text. |
 | `WatermarkFontSize` | Int | `24` | Font size (points) for the watermark text. |
 | `WatermarkColor` | BasicColors | `Gray` | Color of the watermark text. |
@@ -138,7 +138,7 @@ All chart types support an optional watermark that overlays semi-transparent tex
 ### Watermark Examples
 
 ```powershell
-# Pie chart with default watermark (gray "AsBuiltReport" at 30% opacity)
+# Pie chart with default watermark (gray "Confidential" at 30% opacity)
 New-PieChart -Title 'Sales' -Values @(10, 20, 30) -Labels @('A', 'B', 'C') -Format 'png' -EnableWatermark
 
 # Bar chart with a custom watermark text, color, and opacity
