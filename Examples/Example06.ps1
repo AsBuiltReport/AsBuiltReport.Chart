@@ -15,7 +15,7 @@
 
 [CmdletBinding()]
 param (
-    [System.IO.FileInfo] $Path = (Get-Location).Path,
+    [System.IO.DirectoryInfo] $Path = (Get-Location).Path,
     [string] $Format = 'png'
 )
 
