@@ -99,7 +99,7 @@ New-BarChart -Title 'Test' -Values @(1,2) -Labels @('A','B') -Format 'png' -Enab
 
 ### Stacked Bar Chart
 ```powershell
-# Generate a Stacked Bar Chart with the title 'Test', values of 1 and 2 for the first category and 3 and 4 for the second category, labels 'A' and 'B', legend categories 'Value1' and 'Value2', and export the chart in PNG format. Enable the legend, set the legend orientation to horizontal, align the legend to the upper center, set the width to 600 pixels, height to 400 pixels, title font size to 20, label font size to 16, and axes margins top to 1.
+# Generate a Stacked Bar Chart with the title 'Test', values @(1,2) for bar 'A' and @(3,4) for bar 'B' (one inner -Values array per bar matching -Labels), legend categories 'Value1' and 'Value2' for the stacked segments, and export the chart in PNG format. Enable the legend, set the legend orientation to horizontal, align the legend to the upper center, set the width to 600 pixels, height to 400 pixels, title font size to 20, label font size to 16, and axes margins top to 1.
 New-StackedBarChart -Title 'Test' -Values @(@(1,2),@(3,4)) -Labels @('A','B') -LegendCategories @('Value1','Value2') -Format 'png' -EnableLegend -LegendOrientation Horizontal -LegendAlignment UpperCenter -Width 600 -Height 400 -TitleFontSize 20 -LabelFontSize 16 -AxesMarginsTop 1
 ```
 ![StackedBarChart](./Samples/StackedBarChart.png)
