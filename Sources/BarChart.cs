@@ -200,13 +200,24 @@ namespace AsBuiltReportChart
                 // Set axis limits if values are empty or contain only one value to prevent auto-scaling issues
                 if (values.Length == 1)
                 {
+                    double singleValue = values[0];
+                    double padding = Math.Abs(singleValue) * 0.1;
+                    if (padding == 0)
+                        padding = 1;
+
                     if (AreaOrientation == Orientations.Horizontal)
                     {
-                        myPlot.Axes.SetLimits(0, 0, -2, 2);
+                        // Value is on the X-axis for horizontal orientation
+                        double xMin = Math.Min(0, singleValue) - padding;
+                        double xMax = Math.Max(0, singleValue) + padding;
+                        myPlot.Axes.SetLimits(xMin, xMax, -2, 2);
                     }
                     else
                     {
-                        myPlot.Axes.SetLimits(-2, 2, 0, 0);
+                        // Value is on the Y-axis for vertical orientation
+                        double yMin = Math.Min(0, singleValue) - padding;
+                        double yMax = Math.Max(0, singleValue) + padding;
+                        myPlot.Axes.SetLimits(-2, 2, yMin, yMax);
                     }
                 }
 
