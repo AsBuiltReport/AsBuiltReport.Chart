@@ -236,17 +236,44 @@ namespace AsBuiltReportChart
                 myPlot.DataBackground.Color = GetDrawingColor(DataBackgroundColor.Value);
             }
 
-            // Set axis limits if values are empty or contain only one value to prevent auto-scaling issues
-            if (values.Count == 1)  
+            // Set axis limits if there is only one value to prevent auto-scaling issues
+            if (values.Count == 1)
             {
+                // Compute the stacked total for the single bar
+                double stackedTotal = 0;
+                if (values[0] != null)
+                {
+                    foreach (double v in values[0])
+                    {
+                        stackedTotal += v;
+                    }
+                }
+
+                // Ensure a non-zero span even if stackedTotal is zero or negative
+                double paddingFraction = 0.1;
+                double effectiveTotal = stackedTotal > 0 ? stackedTotal * (1 + paddingFraction) : 1.0;
+
+                double xMin, xMax, yMin, yMax;
+                double barIndex = 0; // single bar at index 0
+
                 if (AreaOrientation == Orientations.Horizontal)
                 {
-                    myPlot.Axes.SetLimits(0, 0, -2, 2);
+                    // Horizontal bars: X is value, Y is category (bar index)
+                    xMin = 0;
+                    xMax = effectiveTotal;
+                    yMin = barIndex - 0.5;
+                    yMax = barIndex + 0.5;
                 }
                 else
                 {
-                    myPlot.Axes.SetLimits(-2, 2, 0, 0);
+                    // Vertical bars: X is category (bar index), Y is value
+                    xMin = barIndex - 0.5;
+                    xMax = barIndex + 0.5;
+                    yMin = 0;
+                    yMax = effectiveTotal;
                 }
+
+                myPlot.Axes.SetLimits(xMin, xMax, yMin, yMax);
             }
 
             // Apply watermark if enabled
