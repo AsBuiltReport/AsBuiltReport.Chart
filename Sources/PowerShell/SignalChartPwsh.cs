@@ -272,10 +272,10 @@ namespace AsBuiltReportChart.PowerShell
             else
             {
                 ThrowTerminatingError(new ErrorRecord(
-                    new ArgumentException("Values parameter cannot be null or empty."),
+                    new ArgumentNullException(nameof(Values), "Values parameter cannot be null or empty."),
                     "ValuesNullOrEmpty",
                     ErrorCategory.InvalidArgument,
-                    null));
+                    nameof(Values)));
             }
         }
     }
