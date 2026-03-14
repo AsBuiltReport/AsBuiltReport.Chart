@@ -1,20 +1,21 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Management.Automation;
 
 namespace AsBuiltReportChart.PowerShell
 {
-    [Cmdlet(VerbsCommon.New, "BarChart")]
-    public class NewBarChartCommand : Cmdlet
+    [Cmdlet(VerbsCommon.New, "SignalChart")]
+    public class NewSignalChartCommand : Cmdlet
     {
         // Declare the parameters for the cmdlet.
         [Parameter(Mandatory = false, HelpMessage = "Output filename for the chart. If not specified, a random token will be generated.")]
         public string Filename { get; set; } = Chart.GenerateToken(8);
 
-        [Parameter(Mandatory = true, HelpMessage = "Array of numeric values to display in the bar chart.")]
-        public double[] Values { get; set; }
+        [Parameter(Mandatory = true, HelpMessage = "List of double arrays representing each signal line to plot.")]
+        public List<double[]> Values { get; set; }
 
-        [Parameter(Mandatory = true, HelpMessage = "Array of labels for each bar in the chart.")]
+        [Parameter(Mandatory = false, HelpMessage = "Array of labels for each signal line (used in the legend).")]
         public string[] Labels { get; set; }
 
         // Title settings
@@ -81,7 +82,7 @@ namespace AsBuiltReportChart.PowerShell
         [Parameter(Mandatory = false, HelpMessage = "Invert the custom color palette.")]
         public SwitchParameter InvertCustomColorPalette { get; set; }
 
-        [Parameter(Mandatory = false, HelpMessage = "Array of custom hex color codes for the chart bars.")]
+        [Parameter(Mandatory = false, HelpMessage = "Array of custom hex color codes for the signal lines.")]
         public string[] CustomColorPalette { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "Font name to use for all text in the chart.")]
@@ -97,28 +98,36 @@ namespace AsBuiltReportChart.PowerShell
         [Parameter(Mandatory = false, HelpMessage = "Make axis label fonts bold.")]
         public SwitchParameter LabelBold { get; set; }
 
-        // Set font for the X and Y axis labels (Bar Chart)
         [Parameter(Mandatory = false, HelpMessage = "Label text for the Y-axis.")]
         public string LabelYAxis { get; set; } = "Count";
 
         [Parameter(Mandatory = false, HelpMessage = "Label text for the X-axis.")]
         public string LabelXAxis { get; set; } = "Values";
 
-        // this set the orientation chart area  (Bar Chart)
-        [Parameter(Mandatory = false, HelpMessage = "Orientation of the chart area (Horizontal or Vertical).")]
-        public Enums.Orientations AreaOrientation { get; set; } = Enums.Orientations.Vertical;
+        // Signal-specific settings
+        [Parameter(Mandatory = false, HelpMessage = "X-axis offset for the signal data as an OADate value (use (Get-Date '2024-01-01').ToOADate() to convert from a DateTime).")]
+        public double XOffset { get; set; } = 0;
 
-        // this set the area axes margins  (Bar Chart)
-        [Parameter(Mandatory = false, HelpMessage = "Top margin for the chart area as a percentage (0-1).")]
+        [Parameter(Mandatory = false, HelpMessage = "List of double arrays representing the X values for each scatter line. When provided, scatter mode is used instead of signal mode. Use OADate values for DateTime X axes (e.g. (Get-Date '2024-01-01').ToOADate()).")]
+        public List<double[]> ScatterXValues { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Period (interval) between each data point. Defaults to 1.0.")]
+        public double Period { get; set; } = 1.0;
+
+        [Parameter(Mandatory = false, HelpMessage = "Display DateTime ticks on the bottom X axis.")]
+        public SwitchParameter DateTimeTicksBottom { get; set; }
+
+        // Axes margins
+        [Parameter(Mandatory = false, HelpMessage = "Top margin for the chart area as a fraction (0-1).")]
         public double AxesMarginsTop { get; set; } = 0.05;
 
-        [Parameter(Mandatory = false, HelpMessage = "Bottom margin for the chart area as a percentage (0-1).")]
+        [Parameter(Mandatory = false, HelpMessage = "Bottom margin for the chart area as a fraction (0-1).")]
         public double AxesMarginsDown { get; set; } = 0.05;
 
-        [Parameter(Mandatory = false, HelpMessage = "Left margin for the chart area as a percentage (0-1).")]
+        [Parameter(Mandatory = false, HelpMessage = "Left margin for the chart area as a fraction (0-1).")]
         public double AxesMarginsLeft { get; set; } = 0.05;
 
-        [Parameter(Mandatory = false, HelpMessage = "Right margin for the chart area as a percentage (0-1).")]
+        [Parameter(Mandatory = false, HelpMessage = "Right margin for the chart area as a fraction (0-1).")]
         public double AxesMarginsRight { get; set; } = 0.05;
 
         [Parameter(Mandatory = false, HelpMessage = "Background color of the entire figure (canvas).")]
@@ -166,9 +175,8 @@ namespace AsBuiltReportChart.PowerShell
         protected override void ProcessRecord()
         {
             Chart.Reset();
-            if (Values != null && Labels != null)
+            if (Values != null)
             {
-
                 if (EnableLegend)
                 {
                     Chart.EnableLegend = EnableLegend;
@@ -194,6 +202,7 @@ namespace AsBuiltReportChart.PowerShell
                     Chart.ChartBorderSize = ChartBorderSize;
                     Chart.ChartBorderStyle = ChartBorderStyle;
                 }
+
                 // Color palette settings
                 if (EnableCustomColorPalette)
                 {
@@ -233,10 +242,7 @@ namespace AsBuiltReportChart.PowerShell
                 Chart.LabelXAxis = LabelXAxis;
                 Chart.LabelYAxis = LabelYAxis;
 
-                // this set the orientation chart area  (Bar Chart)
-                Chart.AreaOrientation = AreaOrientation;
-
-                // this set the area axes margins  (Bar Chart)
+                // Axes margins
                 Chart.AxesMarginsTop = AxesMarginsTop;
                 Chart.AxesMarginsDown = AxesMarginsDown;
                 Chart.AxesMarginsLeft = AxesMarginsLeft;
@@ -248,8 +254,8 @@ namespace AsBuiltReportChart.PowerShell
 
                 // Watermark settings
                 Chart.EnableWatermark = EnableWatermark;
-                Chart.WatermarkAlignment = WatermarkAlignment;
                 Chart.WatermarkText = WatermarkText;
+                Chart.WatermarkAlignment = WatermarkAlignment;
                 Chart.WatermarkFontName = WatermarkFontName;
                 Chart.WatermarkFontSize = WatermarkFontSize;
                 Chart.WatermarkColor = WatermarkColor;
@@ -260,12 +266,16 @@ namespace AsBuiltReportChart.PowerShell
                 Chart.OutputFolderPath = OutputFolderPath;
 
                 Chart.Format = Format;
-                Bar myBar = new Bar();
-                WriteObject(myBar.Chart(Values, Labels, Filename, Width, Height));
+                SignalChart mySignalChart = new SignalChart();
+                WriteObject(mySignalChart.Chart(Values, Labels, XOffset, Period, DateTimeTicksBottom, Filename, Width, Height, ScatterXValues));
             }
             else
             {
-                WriteObject("Please provide both Values and Labels parameters.");
+                ThrowTerminatingError(new ErrorRecord(
+                    new ArgumentNullException(nameof(Values), "Values parameter cannot be null or empty."),
+                    "ValuesNullOrEmpty",
+                    ErrorCategory.InvalidArgument,
+                    nameof(Values)));
             }
         }
     }

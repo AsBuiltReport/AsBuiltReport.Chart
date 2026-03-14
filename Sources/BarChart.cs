@@ -22,7 +22,7 @@ namespace AsBuiltReportChart
                     }
                     else
                     {
-                        throw new Exception("CustomColorPalette is empty. Please provide valid color values.");
+                        throw new InvalidOperationException("CustomColorPalette is empty. Please provide valid color values.");
                     }
                 }
                 else
@@ -187,8 +187,46 @@ namespace AsBuiltReportChart
                 // Set margins settings
                 myPlot.Axes.Margins(left: AxesMarginsLeft, right: AxesMarginsRight, bottom: AxesMarginsDown, top: AxesMarginsTop);
 
-                // Set filepath
+                // Set background colors
+                if (FigureBackgroundColor.HasValue)
+                {
+                    myPlot.FigureBackground.Color = GetDrawingColor(FigureBackgroundColor.Value);
+                }
+                if (DataBackgroundColor.HasValue)
+                {
+                    myPlot.DataBackground.Color = GetDrawingColor(DataBackgroundColor.Value);
+                }
 
+                // Set axis limits if values are empty or contain only one value to prevent auto-scaling issues
+                if (values.Length == 1)
+                {
+                    double singleValue = values[0];
+                    double padding = Math.Abs(singleValue) * 0.1;
+                    if (padding == 0)
+                        padding = 1;
+
+                    if (AreaOrientation == Orientations.Horizontal)
+                    {
+                        // Value is on the X-axis for horizontal orientation
+                        double xMin = Math.Min(0, singleValue) - padding;
+                        double xMax = Math.Max(0, singleValue) + padding;
+                        // Use ±0.5 on the category (Y) axis to match bar index spacing for a single bar
+                        myPlot.Axes.SetLimits(xMin, xMax, -0.5, 0.5);
+                    }
+                    else
+                    {
+                        // Value is on the Y-axis for vertical orientation
+                        double yMin = Math.Min(0, singleValue) - padding;
+                        double yMax = Math.Max(0, singleValue) + padding;
+                        // Use ±0.5 on the category (X) axis to match bar index spacing for a single bar
+                        myPlot.Axes.SetLimits(-0.5, 0.5, yMin, yMax);
+                    }
+                }
+
+                // Apply watermark if enabled
+                ApplyWatermark(myPlot);
+
+                // Set filepath
                 string Filepath = _outputFolderPath ?? System.IO.Directory.GetCurrentDirectory();
 
                 // Save Plot

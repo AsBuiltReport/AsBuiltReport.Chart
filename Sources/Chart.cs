@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using AsBuiltReportChart.Enums;
 
@@ -101,6 +102,7 @@ namespace AsBuiltReportChart
             { ColorPalettes.Aurora, new ScottPlot.Palettes.Aurora() },
             { ColorPalettes.Building, new ScottPlot.Palettes.Building() },
             { ColorPalettes.ColorblindFriendly, new ScottPlot.Palettes.ColorblindFriendly() },
+            { ColorPalettes.ColorblindFriendlyDark, new ScottPlot.Palettes.ColorblindFriendlyDark() },
             { ColorPalettes.Dark, new ScottPlot.Palettes.Dark() },
             { ColorPalettes.DarkPastel, new ScottPlot.Palettes.DarkPastel() },
             { ColorPalettes.Frost, new ScottPlot.Palettes.Frost() },
@@ -138,7 +140,7 @@ namespace AsBuiltReportChart
         internal static string[] _customColorPalette;
         public static string[] CustomColorPalette
         {
-            get => _customColorPalette ?? new string[0];
+            get => _customColorPalette ?? Array.Empty<string>();
             set
             {
                 if (value != null && value.Length > 0)
@@ -196,11 +198,10 @@ namespace AsBuiltReportChart
         public static bool IsValidHexColor(string hexCode)
         {
             // Regex for #RGB, #RRGGBB, #RGBA, or #RRGGBBAA formats (case-insensitive)
-            var regex = MyRegex();
-            return regex.IsMatch(hexCode);
+            return HexColorRegex.IsMatch(hexCode);
         }
 
-        private static Regex MyRegex() => new Regex("^#([A-Fa-f0-9]{3,4}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$");
+        private static readonly Regex HexColorRegex = new Regex("^#([A-Fa-f0-9]{3,4}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$", RegexOptions.Compiled);
 
         internal static readonly IReadOnlyDictionary<BorderStyles, LinePattern> LegendBorderStyleMap = new Dictionary<BorderStyles, LinePattern>()
     {
@@ -251,6 +252,19 @@ namespace AsBuiltReportChart
         { BasicColors.Blue,  Colors.Blue },
         { BasicColors.DarkBlue,  Colors.DarkBlue },
         { BasicColors.DarkGreen,  Colors.DarkGreen },
+    };
+
+        internal static readonly IReadOnlyDictionary<Alignments, Alignment> WatermarkAlignmentMap = new Dictionary<Alignments, Alignment>()
+    {
+        {Alignments.LowerCenter, Alignment.LowerCenter},
+        {Alignments.LowerLeft,Alignment.LowerLeft},
+        {Alignments.LowerRight, Alignment.LowerRight},
+        {Alignments.MiddleCenter,Alignment.MiddleCenter},
+        {Alignments.MiddleLeft, Alignment.MiddleLeft},
+        {Alignments.MiddleRight,Alignment.MiddleRight},
+        {Alignments.UpperCenter,Alignment.UpperCenter},
+        {Alignments.UpperLeft,Alignment.UpperLeft},
+        {Alignments.UpperRight, Alignment.UpperRight},
     };
 
         // Set area axes margins
@@ -319,15 +333,117 @@ namespace AsBuiltReportChart
             }
         }
 
+        // Chart background color settings (All Charts)
+        public static BasicColors? FigureBackgroundColor { get; set; }
+        public static BasicColors? DataBackgroundColor { get; set; }
+
+        // Watermark settings (All Charts)
+        public static bool EnableWatermark { get; set; }
+        public static string WatermarkText { get; set; } = "Confidential";
+
+        public static Alignments WatermarkAlignment { get; set; } = Alignments.MiddleCenter;
+
+        public static float WatermarkRotation { get; set; } = 0;
+
+        public static string WatermarkFontName { get; set; } = "Arial";
+        public static int WatermarkFontSize { get; set; } = 24;
+        public static BasicColors WatermarkColor { get; set; } = BasicColors.Gray;
+
+        internal static double _watermarkOpacity = 0.3;
+        public static double WatermarkOpacity
+        {
+            get { return _watermarkOpacity; }
+            set
+            {
+                if (value >= 0.0 && value <= 1.0)
+                {
+                    _watermarkOpacity = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Error: WatermarkOpacity value range must be from 0.0 to 1.0.");
+                }
+            }
+        }
+
+        internal static void ApplyWatermark(Plot plot)
+        {
+            if (!EnableWatermark || string.IsNullOrEmpty(WatermarkText))
+                return;
+
+            var annotation = plot.Add.Annotation(WatermarkText, WatermarkAlignmentMap[WatermarkAlignment]);
+            annotation.LabelFontColor = ColorMap[WatermarkColor].WithOpacity(WatermarkOpacity);
+            annotation.LabelFontSize = WatermarkFontSize;
+            annotation.LabelFontName = WatermarkFontName;
+            annotation.LabelBackgroundColor = Colors.Transparent;
+            annotation.LabelBorderColor = Colors.Transparent;
+            annotation.LabelBorderWidth = 0;
+            annotation.LabelShadowColor = Colors.Transparent;
+            annotation.LabelRotation = WatermarkRotation;
+        }
+
         public static Color GetDrawingColor(BasicColors color)
         {
             return ColorMap[color];
         }
+
+        internal static void Reset()
+        {
+            Format = Formats.png;
+            Title = null;
+            TitleFontBold = false;
+            TitleFontSize = 14;
+            TitleFontColor = BasicColors.Black;
+            FontName = "Arial";
+            LabelFontSize = 14;
+            LabelFontColor = BasicColors.Black;
+            LabelBold = false;
+            LabelYAxis = "Count";
+            LabelXAxis = "Values";
+            _labelDistance = 0.6;
+            AreaOrientation = Orientations.Vertical;
+            _areaExplodeFraction = 0;
+            EnableLegend = false;
+            LegendFontSize = 12;
+            LegendFontColor = BasicColors.Black;
+            LegendBold = false;
+            LegendBorderStyle = BorderStyles.Solid;
+            LegendBorderSize = 1;
+            LegendBorderColor = BasicColors.Black;
+            LegendOrientation = Orientations.Vertical;
+            LegendAlignment = Alignments.LowerRight;
+            EnableChartBorder = false;
+            ChartBorderStyle = BorderStyles.Solid;
+            ChartBorderSize = 1;
+            ChartBorderColor = BasicColors.Black;
+            colorPalette = ColorPaletteMap[ColorPalettes.Category10];
+            InvertCustomColorPalette = false;
+            _customColorPalette = null;
+            EnableCustomColorPalette = false;
+            _outputFolderPath = null;
+            _axesMarginsTop = 0.07;
+            _axesMarginsDown = 0.07;
+            _axesMarginsLeft = 0.05;
+            _axesMarginsRight = 0.05;
+            FigureBackgroundColor = null;
+            DataBackgroundColor = null;
+            EnableWatermark = false;
+            WatermarkText = "Confidential";
+            WatermarkAlignment = Alignments.MiddleCenter;
+            WatermarkRotation = 0;
+            WatermarkFontName = "Arial";
+            WatermarkFontSize = 24;
+            WatermarkColor = BasicColors.Gray;
+            _watermarkOpacity = 0.3;
+        }
+
         public static string GenerateToken(Byte length)
         {
             var bytes = new byte[length];
-            var rnd = new Random();
-            rnd.NextBytes(bytes);
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(bytes);
+            }
             return Convert.ToBase64String(bytes).Replace("=", "").Replace("+", "").Replace("/", "");
         }
         public static object SaveInFormat(Plot plot, int width, int height, string filepath, string filename, Formats Format)
@@ -346,10 +462,10 @@ namespace AsBuiltReportChart
                         throw new ArgumentException("Error: Unable to Export Chart Exception");
                     }
                 case Formats.jpg:
-                    plot.SaveJpeg(Path.Combine(filepath, $"{filename}.jpeg"), width, height);
-                    if (File.Exists(Path.Combine(filepath, $"{filename}.jpeg")))
+                    plot.SaveJpeg(Path.Combine(filepath, $"{filename}.jpg"), width, height);
+                    if (File.Exists(Path.Combine(filepath, $"{filename}.jpg")))
                     {
-                        FileInfo fileInfo = new FileInfo(Path.Combine(filepath, $"{filename}.jpeg"));
+                        FileInfo fileInfo = new FileInfo(Path.Combine(filepath, $"{filename}.jpg"));
                         return fileInfo;
                     }
                     else
@@ -357,10 +473,10 @@ namespace AsBuiltReportChart
                         throw new ArgumentException("Error: Unable to Export Chart Exception");
                     }
                 case Formats.jpeg:
-                    plot.SaveJpeg(Path.Combine(filepath, $"{filename}.jpg"), width, height);
-                    if (File.Exists(Path.Combine(filepath, $"{filename}.jpg")))
+                    plot.SaveJpeg(Path.Combine(filepath, $"{filename}.jpeg"), width, height);
+                    if (File.Exists(Path.Combine(filepath, $"{filename}.jpeg")))
                     {
-                        FileInfo fileInfo = new FileInfo(Path.Combine(filepath, $"{filename}.jpg"));
+                        FileInfo fileInfo = new FileInfo(Path.Combine(filepath, $"{filename}.jpeg"));
                         return fileInfo;
                     }
                     else
@@ -400,16 +516,7 @@ namespace AsBuiltReportChart
                         throw new ArgumentException("Error: Unable to Export Chart Exception");
                     }
                 default:
-                    plot.SavePng(Path.Combine(filepath, $"{filename}.png"), width, height);
-                    if (File.Exists(Path.Combine(filepath, $"{filename}.png")))
-                    {
-                        FileInfo fileInfo = new FileInfo(Path.Combine(filepath, $"{filename}.png"));
-                        return fileInfo;
-                    }
-                    else
-                    {
-                        throw new ArgumentException("Error: Unable to Export Chart Exception");
-                    }
+                    throw new ArgumentException($"Error: Unsupported format '{Format}'.");
             }
         }
     }

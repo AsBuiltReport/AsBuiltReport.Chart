@@ -34,11 +34,7 @@
 <!-- ********** REMOVE THIS MESSAGE WHEN THE MODULE IS FUNCTIONAL ********** -->
 ## :exclamation: THIS ASBUILTREPORT MODULE IS CURRENTLY IN DEVELOPMENT AND MIGHT NOT YET BE FUNCTIONAL ❗
 
-AsBuiltReport.Chart is a PowerShell module which works in conjunction with [AsBuiltReport.Core](https://github.com/AsBuiltReport/AsBuiltReport.Core).
-
-[AsBuiltReport](https://github.com/AsBuiltReport/AsBuiltReport) is an open-sourced community project which utilises PowerShell to produce as-built documentation in multiple document formats for multiple vendors and technologies.
-
-Please refer to the AsBuiltReport [website](https://www.asbuiltreport.com) for more detailed information about this project.
+AsBuiltReport.Chart is a PowerShell module which provides a set of cmdlets for generating charts and visualizations in As Built Reports. This module is designed to work seamlessly with the AsBuiltReport.Core module, allowing users to create visually appealing and informative reports with ease.
 
 # :beginner: Getting Started
 
@@ -58,19 +54,19 @@ This report is compatible with the following PowerShell versions;
 
 ## 🗺️ Language Support
 <!-- ********** Update supported languages ********** -->
-The AsBuiltReport Chart As Built Report supports the following languages;
+The AsBuiltReport Chart supports the following languages;
 
 - English (US) (Default)
 
 ## :wrench: System Requirements
 <!-- ********** Update system requirements ********** -->
-PowerShell 7, and the following PowerShell modules are required for generating a AsBuiltReport Chart.
+PowerShell 5.1 or PowerShell 7, and the following PowerShell modules are required for generating an AsBuiltReport Chart.
 
 - [AsBuiltReport.Core Module](https://www.powershellgallery.com/packages/AsBuiltReport.Core/)
 
 ### :closed_lock_with_key: Required Privileges
-<!-- ********** Define required privileges ********** -->
-<!-- ********** Try to follow best practices to define least privileges ********** -->
+
+Local user privilege
 
 ## :package: Module Installation
 
@@ -84,26 +80,86 @@ install-module AsBuiltReport.Chart -Force
 update-module AsBuiltReport.Chart -Force
 ```
 
-### GitHub
-
-If you are unable to use the PowerShell Gallery, you can still install the module manually. Ensure you repeat the following steps for the [system requirements](https://github.com/AsBuiltReport/AsBuiltReport.Chart#wrench-system-requirements) also.
-
-1. Download the code package / [latest release](https://github.com/AsBuiltReport/AsBuiltReport.Chart/releases/latest) zip from GitHub
-2. Extract the zip file
-3. Copy the folder `AsBuiltReport.Chart` to a path that is set in `$env:PSModulePath`.
-4. Open a PowerShell terminal window and unblock the downloaded files with
-
-    ```powershell
-    $path = (Get-Module -Name AsBuiltReport.Chart -ListAvailable).ModuleBase; Unblock-File -Path $path\*.psd1; Unblock-File -Path $path\Src\Public\*.ps1; Unblock-File -Path $path\Src\Private\*.ps1
-    ```
-
-5. Close and reopen the PowerShell terminal window.
-
-_Note: You are not limited to installing the module to those example paths, you can add a new entry to the environment variable PSModulePath if you want to use another path._
-
-### Options
-
-The **Options** schema allows certain options within the report to be toggled on or off.
-
 ## :computer: Examples
-<!-- ********** Add some examples. Use other AsBuiltReport modules as a guide. ********** -->
+Here are some examples to get you going.
+
+### Pie Chart
+```powershell
+# Generate a Pie Chart with the title 'Test', values of 1 and 2, labels 'A' and 'B', and export the chart in PNG format. Enable the legend and set the width to 600 pixels, height to 400 pixels, title font size to 20, and label font size to 16.
+New-PieChart -Title 'Test' -Values @(1,2) -Labels @('A','B') -Format 'png' -EnableLegend -Width 600 -Height 400 -TitleFontSize 20 -LabelFontSize 16
+```
+![PieChart](./Samples/PieChart.png)
+
+### Bar Chart
+```powershell
+# Generate a Bar Chart with the title 'Test', values of 1 and 2, labels 'A' and 'B', and export the chart in PNG format. Enable the legend and set the width to 600 pixels, height to 400 pixels, title font size to 20, and label font size to 16.
+New-BarChart -Title 'Test' -Values @(1,2) -Labels @('A','B') -Format 'png' -EnableLegend -Width 600 -Height 400 -TitleFontSize 20 -LabelFontSize 16 -AxesMarginsTop 1
+```
+![BarChart](./Samples/BarChart.png)
+
+### Stacked Bar Chart
+```powershell
+# Generate a Stacked Bar Chart with the title 'Test', values @(1,2) for bar 'A' and @(3,4) for bar 'B' (one inner -Values array per bar matching -Labels), legend categories 'Value1' and 'Value2' for the stacked segments, and export the chart in PNG format. Enable the legend, set the legend orientation to horizontal, align the legend to the upper center, set the width to 600 pixels, height to 400 pixels, title font size to 20, label font size to 16, and axes margins top to 1.
+New-StackedBarChart -Title 'Test' -Values @(@(1,2),@(3,4)) -Labels @('A','B') -LegendCategories @('Value1','Value2') -Format 'png' -EnableLegend -LegendOrientation Horizontal -LegendAlignment UpperCenter -Width 600 -Height 400 -TitleFontSize 20 -LabelFontSize 16 -AxesMarginsTop 1
+```
+![StackedBarChart](./Samples/StackedBarChart.png)
+
+### :blue_book: Example Index
+
+All examples in the latest release of AsBuiltReport.Chart can be found in the table below.
+
+| Name                                 | Description                                          |
+| ------------------------------------ | ---------------------------------------------------- |
+| [Example1](./Examples/Example01.ps1) | Basic Pie Chart                                      |
+| [Example2](./Examples/Example02.ps1) | Pie Chart with Legend, Custom Colors and Border      |
+| [Example3](./Examples/Example03.ps1) | Basic Bar Chart                                      |
+| [Example4](./Examples/Example04.ps1) | Bar Chart with Advanced Options                      |
+| [Example5](./Examples/Example05.ps1) | Basic Stacked Bar Chart                              |
+| [Example6](./Examples/Example06.ps1) | Stacked Bar Chart with Advanced Options              |
+| [Example7](./Examples/Example07.ps1) | Basic Signal Chart (Line Chart)                      |
+| [Example8](./Examples/Example08.ps1) | Signal Chart with DateTime X-Axis (Time-Series Data) |
+| [Example9](./Examples/Example09.ps1) | Signal Chart with Multiple Lines                     |
+
+## Watermark Support
+
+All chart types support an optional watermark that overlays semi-transparent text in the center of the chart. The watermark is **disabled by default** and is activated only when the `-EnableWatermark` switch is supplied.
+
+### Watermark Parameters
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `EnableWatermark` | Switch | (off) | Enables the watermark overlay. |
+| `WatermarkText` | String | `Confidential` | Text to display as the watermark. |
+| `WatermarkFontName` | String | `Arial` | Font family for the watermark text. |
+| `WatermarkFontSize` | Int | `24` | Font size (points) for the watermark text. |
+| `WatermarkColor` | BasicColors | `Gray` | Color of the watermark text. |
+| `WatermarkOpacity` | Double | `0.3` | Opacity (0.0–1.0) of the watermark. Lower values are more transparent. |
+
+### Watermark Examples
+
+```powershell
+# Pie chart with default watermark (gray "Confidential" at 30% opacity)
+New-PieChart -Title 'Sales' -Values @(10, 20, 30) -Labels @('A', 'B', 'C') -Format 'png' -EnableWatermark
+
+# Bar chart with a custom watermark text, color, and opacity
+New-BarChart -Title 'Revenue' -Values @(100, 200, 150) -Labels @('Q1', 'Q2', 'Q3') -Format 'png' `
+    -EnableWatermark -WatermarkText 'CONFIDENTIAL' -WatermarkColor Red -WatermarkOpacity 0.2
+
+# Stacked bar chart with a larger watermark font
+New-StackedBarChart -Title 'Budget' -Values @(@(1,2),@(3,4)) -Labels @('A','B') -LegendCategories @('X','Y') -Format 'png' `
+    -EnableWatermark -WatermarkFontSize 36 -WatermarkText 'DRAFT'
+
+# Signal chart with a custom font and opacity
+New-SignalChart -Title 'Throughput' -Values @(,[double[]]@(1,2,3,4,5)) -Format 'png' `
+    -EnableWatermark -WatermarkFontName 'Arial' -WatermarkOpacity 0.5
+```
+
+## :x: Known Issues
+
+ - No known issues at this time.
+
+
+
+
+
+

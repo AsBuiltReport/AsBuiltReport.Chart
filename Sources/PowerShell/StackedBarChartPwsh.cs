@@ -21,7 +21,7 @@ namespace AsBuiltReportChart.PowerShell
         [Parameter(Mandatory = true, HelpMessage = "Provide an array of strings for the labels of each bar in the chart.")]
         public string[] Labels { get; set; }
 
-        [Parameter(Mandatory = true, HelpMessage = "Povide an array of strings for the legend categories in the chart.")]
+        [Parameter(Mandatory = true, HelpMessage = "Provide an array of strings for the legend categories in the chart.")]
         public string[] LegendCategories { get; set; }
 
         // Title settings
@@ -125,6 +125,37 @@ namespace AsBuiltReportChart.PowerShell
         [Parameter(Mandatory = false, HelpMessage = "Set the right margin for the chart area axes.")]
         public double AxesMarginsRight { get; set; } = 0.05;
 
+        [Parameter(Mandatory = false, HelpMessage = "Background color of the entire figure (canvas).")]
+        public BasicColors? FigureBackgroundColor { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Background color of the data area inside the axes.")]
+        public BasicColors? DataBackgroundColor { get; set; }
+
+        // Watermark settings
+        [Parameter(Mandatory = false, HelpMessage = "Enable a watermark on the chart.")]
+        public SwitchParameter EnableWatermark { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Text to display as the watermark. Defaults to 'Confidential'.")]
+        public string WatermarkText { get; set; } = "Confidential";
+
+        [Parameter(Mandatory = false, HelpMessage = "Alignment of the watermark text. Defaults to 'MiddleCenter'.")]
+        public Enums.Alignments WatermarkAlignment { get; set; } = Enums.Alignments.MiddleCenter;
+
+        [Parameter(Mandatory = false, HelpMessage = "Font name for the watermark text.")]
+        public string WatermarkFontName { get; set; } = "Arial";
+
+        [Parameter(Mandatory = false, HelpMessage = "Font size for the watermark text in points. Defaults to 24.")]
+        public int WatermarkFontSize { get; set; } = 24;
+
+        [Parameter(Mandatory = false, HelpMessage = "Color of the watermark text.")]
+        public BasicColors WatermarkColor { get; set; } = BasicColors.Gray;
+
+        [Parameter(Mandatory = false, HelpMessage = "Opacity of the watermark (0.0 fully transparent to 1.0 fully opaque). Defaults to 0.3.")]
+        public double WatermarkOpacity { get; set; } = 0.3;
+
+        [Parameter(Mandatory = false, HelpMessage = "Rotation angle of the watermark text in degrees. Defaults to 0.")]
+        public float WatermarkRotation { get; set; } = 0;
+
         // Set chart Size WxH
         [Parameter(Mandatory = false, HelpMessage = "Set the width of the chart in pixels.")]
         public int Width { get; set; } = 400;
@@ -138,6 +169,7 @@ namespace AsBuiltReportChart.PowerShell
 
         protected override void ProcessRecord()
         {
+            Chart.Reset();
             if (Values != null && Labels != null && LegendCategories != null)
             {
 
@@ -177,7 +209,7 @@ namespace AsBuiltReportChart.PowerShell
                     }
                     else
                     {
-                        throw new Exception("EnableCustomColorPalette requires CustomColorPalette to be set.");
+                        throw new InvalidOperationException("EnableCustomColorPalette requires CustomColorPalette to be set.");
                     }
                 }
                 else
@@ -212,6 +244,20 @@ namespace AsBuiltReportChart.PowerShell
                 Chart.AxesMarginsDown = AxesMarginsDown;
                 Chart.AxesMarginsLeft = AxesMarginsLeft;
                 Chart.AxesMarginsRight = AxesMarginsRight;
+
+                // Background color settings
+                Chart.FigureBackgroundColor = FigureBackgroundColor;
+                Chart.DataBackgroundColor = DataBackgroundColor;
+
+                // Watermark settings
+                Chart.EnableWatermark = EnableWatermark;
+                Chart.WatermarkText = WatermarkText;
+                Chart.WatermarkAlignment = WatermarkAlignment;
+                Chart.WatermarkFontName = WatermarkFontName;
+                Chart.WatermarkFontSize = WatermarkFontSize;
+                Chart.WatermarkColor = WatermarkColor;
+                Chart.WatermarkOpacity = WatermarkOpacity;
+                Chart.WatermarkRotation = WatermarkRotation;
 
                 // Set file directory save path
                 Chart.OutputFolderPath = OutputFolderPath;
