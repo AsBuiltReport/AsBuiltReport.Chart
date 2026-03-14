@@ -30,8 +30,10 @@ $OutputFolderPath = Resolve-Path $Path
     Define the data to be displayed in the chart.
 
     For a Stacked Bar Chart:
-    - $Values is an array of double arrays. Each inner array contains the values for one category
-      (stack segment) across all bars.
+    - $Values is an array of double arrays. Each inner array represents one bar and contains the
+      values for all stack segments (categories) for that bar, in the same order as $LegendCategories.
+      The number of inner arrays should match $Labels.Length, and the length of each inner array
+      should match $LegendCategories.Length.
     - $Labels contains the label for each bar (X-axis entries).
     - $LegendCategories contains the label for each series (stack segments shown in the legend).
 
@@ -46,16 +48,19 @@ $ChartTitle = 'Datastore Capacity (GB)'
 $Labels = @('datastore-01', 'datastore-02', 'datastore-03', 'datastore-04')
 $LegendCategories = @('Used Space', 'Free Space')
 
-# Each inner array represents one category's values across all bars.
+# Each inner array represents one bar's segment values, ordered by $LegendCategories.
 $Values = @(@(800, 200), @(600, 400), @(1500, 500), @(300, 700))
 
 <#
     The New-StackedBarChart cmdlet generates the Stacked Bar Chart image.
 
     -Title              : Sets the chart title displayed at the top of the image.
-    -Values             : Array of double arrays. Each inner array is one stack segment across all bars.
+    -Values             : Array of double arrays. Each inner array represents one bar and contains
+                          the values for each stack segment (category) for that bar, ordered to match
+                          $LegendCategories. The number of inner arrays should equal the number of
+                          $Labels.
     -Labels             : Array of label strings, one per bar (X-axis entries).
-    -LegendCategories   : Array of category names shown in the legend (one per inner array in Values).
+    -LegendCategories   : Array of category names shown in the legend (one per value position in each inner array).
     -EnableLegend       : Enables the legend on the chart.
     -LabelXAxis         : Label for the X-axis.
     -LabelYAxis         : Label for the Y-axis.
