@@ -36,8 +36,8 @@ $OutputFolderPath = Resolve-Path $Path
     Define the data to be displayed in the chart.
 
     For a Stacked Bar Chart:
-    - $Values is an array of double arrays. Each inner array contains the values for one category
-      (stack segment) across all bars.
+    - $Values is an array of double arrays. Each inner array contains the values for all categories
+      (stack segments) for a single bar.
     - $Labels contains the label for each bar (X-axis entries).
     - $LegendCategories contains the label for each series (stack segments shown in the legend).
 
@@ -48,7 +48,8 @@ $ChartTitle = 'Network Adapter Traffic (Mbps)'
 $Labels = @('vmnic0', 'vmnic1', 'vmnic2', 'vmnic3')
 $LegendCategories = @('Inbound', 'Outbound', 'Dropped')
 
-# Values are organized by category (stack segment), so each inner array corresponds to one category across all bars.
+# Values are organized by bar (network adapter), so each inner array corresponds to one adapter and
+# contains the values for each traffic type (stack segment) in the order of $LegendCategories.
 # Example values for Inbound, Outbound, and Dropped traffic for each network adapter:
 # - vmnic0: 450 Mbps Inbound, 320 Mbps Outbound, 280 Mbps Dropped
 $vmnic0 = [double[]]@(450, 320, 280)
