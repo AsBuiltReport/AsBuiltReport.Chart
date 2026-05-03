@@ -288,7 +288,7 @@ namespace AsBuiltReportChart
                     xMin = minVal;
                     xMax = maxVal;
                     yMin = barIndex - 2;
-                    yMax = barIndex +2;
+                    yMax = barIndex + 2;
                 }
                 else
                 {
