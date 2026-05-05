@@ -287,14 +287,14 @@ namespace AsBuiltReportChart
                     // Horizontal bars: X is value, Y is category (bar index)
                     xMin = minVal;
                     xMax = maxVal;
-                    yMin = barIndex - 0.5;
-                    yMax = barIndex + 0.5;
+                    yMin = barIndex - 2;
+                    yMax = barIndex + 2;
                 }
                 else
                 {
                     // Vertical bars: X is category (bar index), Y is value
-                    xMin = barIndex - 0.5;
-                    xMax = barIndex + 0.5;
+                    xMin = barIndex - 2;
+                    xMax = barIndex + 2;
                     yMin = minVal;
                     yMax = maxVal;
                 }

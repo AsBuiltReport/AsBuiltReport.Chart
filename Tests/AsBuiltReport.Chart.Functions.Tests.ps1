@@ -20,6 +20,9 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
     It 'Should export New-SignalChart' {
         Get-Command -Module AsBuiltReport.Chart -Name New-SignalChart | Should -Not -BeNullOrEmpty
     }
+    It 'Should export New-SingleStackedBarChart' {
+        Get-Command -Module AsBuiltReport.Chart -Name New-SingleStackedBarChart | Should -Not -BeNullOrEmpty
+    }
 
     Context 'New-PieChart' {
         It 'Should run without error with sample input' {
@@ -80,6 +83,44 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
             $result = New-StackedBarChart -Title 'Test' -Values @(,[double[]]@(1, 2)) -Labels @('A') -LegendCategories @('X', 'Y') -Format 'png' -OutputFolderPath $TestDrive
             $result | Should -BeOfType 'System.IO.FileSystemInfo'
             Test-Path $result | Should -BeTrue
+        }
+    }
+
+    Context 'New-SingleStackedBarChart' {
+        It 'Should run without error with sample input' {
+            { New-SingleStackedBarChart -Title 'Test' -Values @(40, 50, 10) -Label 'Total' -LegendCategories @('A', 'B', 'C') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+        }
+        It 'Should return a file path as output' {
+            $result = New-SingleStackedBarChart -Title 'Test' -Values @(40, 50, 10) -Label 'Total' -LegendCategories @('A', 'B', 'C') -Format 'png' -OutputFolderPath $TestDrive
+            $result | Should -BeOfType 'System.IO.FileSystemInfo'
+            Test-Path $result | Should -BeTrue
+        }
+        It 'Should throw error for missing mandatory parameters' {
+            { New-SingleStackedBarChart } | Should -Throw
+        }
+        It 'Should throw error for mismatched Values and LegendCategories' {
+            { New-SingleStackedBarChart -Title 'Test' -Values @(40, 50) -Label 'Total' -LegendCategories @('A') -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw -ExpectedMessage "Error: Values and category names length must be equal."
+        }
+        It 'Should run without error with legend enabled' {
+            { New-SingleStackedBarChart -Title 'Test' -Values @(40, 50, 10) -Label 'Total' -LegendCategories @('A', 'B', 'C') -Format 'png' -OutputFolderPath $TestDrive -EnableLegend -LegendOrientation Horizontal -LegendAlignment LowerCenter } | Should -Not -Throw
+        }
+        It 'Should run without error with watermark enabled' {
+            { New-SingleStackedBarChart -Title 'Test' -Values @(40, 50, 10) -Label 'Total' -LegendCategories @('A', 'B', 'C') -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark } | Should -Not -Throw
+        }
+        It 'Should run without error with horizontal orientation' {
+            { New-SingleStackedBarChart -Title 'Test' -Values @(40, 50, 10) -Label 'Total' -LegendCategories @('A', 'B', 'C') -Format 'png' -OutputFolderPath $TestDrive -AreaOrientation Horizontal } | Should -Not -Throw
+        }
+        It 'Should run without error with custom color palette' {
+            { New-SingleStackedBarChart -Title 'Test' -Values @(40, 50, 10) -Label 'Total' -LegendCategories @('A', 'B', 'C') -Format 'png' -OutputFolderPath $TestDrive -EnableCustomColorPalette -CustomColorPalette @('#4472C4', '#ED7D31', '#A5A5A5') } | Should -Not -Throw
+        }
+        It 'Should run without error with no suffix (generic numeric data)' {
+            { New-SingleStackedBarChart -Title 'Test' -Values @(1.5, 2.3, 0.8) -Label 'Total' -LegendCategories @('A', 'B', 'C') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+        }
+        It 'Should run without error with a custom ValueSuffix' {
+            { New-SingleStackedBarChart -Title 'Test' -Values @(512, 1024, 256) -Label 'Disk' -LegendCategories @('OS', 'Data', 'Swap') -Format 'png' -OutputFolderPath $TestDrive -ValueSuffix ' GB' } | Should -Not -Throw
+        }
+        It 'Should run without error with percent suffix' {
+            { New-SingleStackedBarChart -Title 'Test' -Values @(40, 50, 10) -Label 'Total' -LegendCategories @('A', 'B', 'C') -Format 'png' -OutputFolderPath $TestDrive -ValueSuffix '%' } | Should -Not -Throw
         }
     }
 

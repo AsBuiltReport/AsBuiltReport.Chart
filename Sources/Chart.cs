@@ -337,6 +337,9 @@ namespace AsBuiltReportChart
         public static BasicColors? FigureBackgroundColor { get; set; }
         public static BasicColors? DataBackgroundColor { get; set; }
 
+        // Value axis suffix (SingleStackedBarChart)
+        public static string ValueSuffix { get; set; } = "";
+
         // Watermark settings (All Charts)
         public static bool EnableWatermark { get; set; }
         public static string WatermarkText { get; set; } = "Confidential";
@@ -427,6 +430,7 @@ namespace AsBuiltReportChart
             _axesMarginsRight = 0.05;
             FigureBackgroundColor = null;
             DataBackgroundColor = null;
+            ValueSuffix = "";
             EnableWatermark = false;
             WatermarkText = "Confidential";
             WatermarkAlignment = Alignments.MiddleCenter;
