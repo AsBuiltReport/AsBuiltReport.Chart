@@ -210,16 +210,16 @@ namespace AsBuiltReportChart
                         // Value is on the X-axis for horizontal orientation
                         double xMin = Math.Min(0, singleValue) - padding;
                         double xMax = Math.Max(0, singleValue) + padding;
-                        // Use ±0.5 on the category (Y) axis to match bar index spacing for a single bar
-                        myPlot.Axes.SetLimits(xMin, xMax, -0.5, 0.5);
+                        // Use ±2 on the category (Y) axis to match bar index spacing for a single bar
+                        myPlot.Axes.SetLimits(xMin, xMax, -2, 2);
                     }
                     else
                     {
                         // Value is on the Y-axis for vertical orientation
                         double yMin = Math.Min(0, singleValue) - padding;
                         double yMax = Math.Max(0, singleValue) + padding;
-                        // Use ±0.5 on the category (X) axis to match bar index spacing for a single bar
-                        myPlot.Axes.SetLimits(-0.5, 0.5, yMin, yMax);
+                        // Use ±2 on the category (X) axis to match bar index spacing for a single bar
+                        myPlot.Axes.SetLimits(-2, 2, yMin, yMax);
                     }
                 }
 
