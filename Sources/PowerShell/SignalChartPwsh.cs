@@ -170,6 +170,7 @@ namespace AsBuiltReportChart.PowerShell
 
         // Set OutputFolderPath
         [Parameter(Mandatory = false, HelpMessage = "Output folder path where the chart will be saved.")]
+        [ValidatePath()]
         public string OutputFolderPath { get; set; } = Directory.GetCurrentDirectory();
 
         protected override void ProcessRecord()

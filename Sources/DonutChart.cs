@@ -1,11 +1,12 @@
 ﻿using ScottPlot;
 using System;
 using System.IO;
+using System.Collections.Generic;
 namespace AsBuiltReportChart
 {
-    internal class Pie : Chart
+    internal class Donut : Chart
     {
-        public Pie() { }
+        public Donut() { }
         public object Chart(double[] values, string[] labels, string filename = "output", int width = 400, int height = 300)
         {
             if (values.Length == labels.Length)
@@ -14,6 +15,7 @@ namespace AsBuiltReportChart
 
                 if (EnableCustomColorPalette)
                 {
+
                     if (_customColorPalette != null && _customColorPalette.Length > 0)
                     {
                         myPlot.Add.Palette = colorPalette = new ScottPlot.Palettes.Custom(_customColorPalette);
@@ -22,6 +24,7 @@ namespace AsBuiltReportChart
                     {
                         throw new InvalidOperationException("CustomColorPalette is empty. Please provide valid color values.");
                     }
+
                 }
                 else
                 {
@@ -32,23 +35,24 @@ namespace AsBuiltReportChart
                     }
                 }
 
-                var pie = myPlot.Add.Pie(values);
-                pie.ExplodeFraction = _areaExplodeFraction;
-
-                // set each slice value to its label
-                for (var i = 0; i < pie.Slices.Count; i++)
+                List<PieSlice> slices = new List<PieSlice>();
+                for (int i = 0; i < values.Length; i++)
                 {
-                    pie.Slices[i].LabelText = values[i].ToString();
-                    pie.Slices[i].LabelFontSize = LabelFontSize;
-                    pie.Slices[i].LabelFontColor = GetDrawingColor(LabelFontColor);
-                    pie.Slices[i].LabelBold = LabelBold;
-                    pie.Slices[i].LabelFontName = FontName;
-
-                    if (EnableLegend)
+                    slices.Add(new PieSlice()
                     {
-                        pie.Slices[i].LegendText = labels[i];
-                    }
+                        Value = values[i],
+                        LabelText = HideValues ? null : values[i].ToString(),
+                        LabelFontSize = LabelFontSize,
+                        LabelFontColor = GetDrawingColor(LabelFontColor),
+                        LabelBold = LabelBold,
+                        LabelFontName = FontName,
+                        LegendText = EnableLegend ? labels[i] : null,
+                        FillColor = colorPalette.GetColor(i)
+                    });
                 }
+
+                var pie = myPlot.Add.Pie(slices);
+                pie.DonutFraction = DonutFraction;
 
                 // hide unnecessary plot components
                 myPlot.Axes.Frameless();
@@ -105,7 +109,7 @@ namespace AsBuiltReportChart
                     myPlot.DataBackground.Color = GetDrawingColor(DataBackgroundColor.Value);
                 }
 
-                // Set the distance of the chart area elements (Pie Chart)
+                // Set label distance from the center of the donut slices
                 pie.SliceLabelDistance = _labelDistance;
 
                 // Apply watermark if enabled
