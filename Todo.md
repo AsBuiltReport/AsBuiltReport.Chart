@@ -1,1 +1,1 @@
-
+- Add radar chart support: [Radar Chart](https://scottplot.net/cookbook/5/Radar/)
