@@ -9,20 +9,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add New-DonutChart cmdlet and update module exports
+- Add support for Donut from Slices chart: [Donut from Slices](https://scottplot.net/cookbook/5/Pie/PieDonut/)
 - Add pester test to validate the functionality of the New-DonutChart cmdlet
-
-### Changed
-
-- Update module version to 0.3.3
-
-## [0.3.2] - 2026-05-05
+- Add example 12/13 to document on how to use the New-DonutChart cmdlet
 
 ### Changed
 
 - Update module v0.3.3
 - Update SkiaSharp .NET dependency to v3.119.4
 - Update HarfBuzzSharp .NET dependency to v8.3.1.5
+
+## [0.3.2] - 2026-05-05
+
+### Added
+
+- Add New-SingleStackedBarChart cmdlet and update module exports
+- Add pester test to validate the functionality of the New-SingleStackedBarChart cmdlet
+
+### Changed
+
+- Update module version to 0.3.2
 
 ## [0.3.1] - 2026-04-23
 
