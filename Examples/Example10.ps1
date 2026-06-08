@@ -45,7 +45,8 @@ $OutputFolderPath = Resolve-Path $Path
     - $Label is a single string that labels the one bar on the category axis.
     - $LegendCategories is an array of strings, one name per segment, shown in the legend.
 
-    The segment labels rendered inside the bar automatically include the '%' suffix.
+    In this example, the segment labels rendered inside the bar include the '%' suffix
+    because `-ValueSuffix '%'` is specified when the chart is created.
     The value axis (Y-axis for Vertical, X-axis for Horizontal) is also formatted as percentages.
 #>
 

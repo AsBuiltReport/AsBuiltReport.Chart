@@ -116,5 +116,5 @@ New-SingleStackedBarChart `
     -Height 300 `
     -Format $Format `
     -OutputFolderPath $OutputFolderPath `
-    -Filename 'Example11-SingleStackedBarChart-Advanced' ` `
+    -Filename 'Example11-SingleStackedBarChart-Advanced' `
     -ValueSuffix '%'

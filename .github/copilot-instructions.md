@@ -14,7 +14,7 @@ Sources/                   ← C# library (ScottPlot + SkiaSharp, netstandard2.0
 AsBuiltReport.Chart/       ← PowerShell module
   AsBuiltReport.Chart.psm1 ← Loads the correct DLL based on PSEdition + OS + architecture
   AsBuiltReport.Chart.psd1 ← Module manifest; exports: New-PieChart, New-BarChart,
-                             New-StackedBarChart, New-SignalChart
+                             New-StackedBarChart, New-SingleStackedBarChart, New-SignalChart
   Src/Assemblies/          ← Pre-compiled DLLs, organized by platform:
     Core/linux-x64/
     Core/windows-x64/
