@@ -90,6 +90,13 @@ New-PieChart -Title 'Test' -Values @(1,2) -Labels @('A','B') -Format 'png' -Enab
 ```
 ![PieChart](./Samples/PieChart.png)
 
+### Donut Chart
+```powershell
+# Generate a Donut Chart with the title 'Test', values of 1 and 2, labels 'A' and 'B', and export the chart in PNG format. Enable the legend and set the width to 600 pixels, height to 400 pixels, title font size to 20, and label font size to 16.
+New-DonutChart -Title 'Test' -Values @(1,2) -Labels @('A','B') -Format 'png' -EnableLegend -Width 600 -Height 400 -TitleFontSize 20 -LabelFontSize 16
+```
+![DonutChart](./Samples/DonutChart.png)
+
 ### Bar Chart
 ```powershell
 # Generate a Bar Chart with the title 'Test', values of 1 and 2, labels 'A' and 'B', and export the chart in PNG format. Enable the legend and set the width to 600 pixels, height to 400 pixels, title font size to 20, and label font size to 16.
@@ -103,6 +110,20 @@ New-BarChart -Title 'Test' -Values @(1,2) -Labels @('A','B') -Format 'png' -Enab
 New-StackedBarChart -Title 'Test' -Values @(@(1,2),@(3,4)) -Labels @('A','B') -LegendCategories @('Value1','Value2') -Format 'png' -EnableLegend -LegendOrientation Horizontal -LegendAlignment UpperCenter -Width 600 -Height 400 -TitleFontSize 20 -LabelFontSize 16 -AxesMarginsTop 1
 ```
 ![StackedBarChart](./Samples/StackedBarChart.png)
+
+### Single Stacked Bar Chart
+```powershell
+# Generate a Single Stacked Bar Chart with the title 'Test', values @(18, 15, 10, 5, 8) for bar 'A' and @(18, 15, 10, 5, 8) for bar 'B' (one inner -Values array per bar matching -Labels), legend categories 'Value1' and 'Value2' for the stacked segments, and export the chart in PNG format. Enable the legend, set the legend orientation to horizontal, align the legend to the upper center, set the width to 600 pixels, height to 400 pixels, title font size to 20, label font size to 16, and axes margins top to 1.
+New-SingleStackedBarChart -Title 'Test' -Values @(18, 15, 10, 5, 8) -Label 'Workload Type' -LegendCategories @('Category 1', 'Category 2', 'Category 3', 'Category 4', 'Category 5') -Width 600 -Height 200 -Format png -AreaOrientation Horizontal -EnableLegend -LegendOrientation Horizontal -LegendAlignment UpperCenter -TitleFontBold -TitleFontSize 20
+```
+![SingleStackedBarChart](./Samples/SingleStackedBarChart.png)
+
+### Radar Chart
+```powershell
+# Generate a Radar Chart with the title 'Test', values of 1 and 2, labels 'A' and 'B', and export the chart in PNG format. Enable the legend and set the width to 600 pixels, height to 400 pixels, title font size to 20, and label font size to 16.
+New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8),@(3,5,4,2)) -LegendLabels @('A', 'B') -Format 'png' -EnableLegend -LegendOrientation Horizontal -LegendAlignment UpperCenter -Filename RadarChart -Width 600 -Height 400 -SpokeLabels @("Wins", "Poles", "Podiums", "Points") -TitleFontSize 20
+```
+![RadarChart](./Samples/RadarChart.png)
 
 ### :blue_book: Example Index
 
@@ -157,9 +178,3 @@ New-SignalChart -Title 'Throughput' -Values @(,[double[]]@(1,2,3,4,5)) -Format '
 ## :x: Known Issues
 
  - No known issues at this time.
-
-
-
-
-
-
