@@ -10,8 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add support for Donut from Slices chart: [Donut from Slices](https://scottplot.net/cookbook/5/Pie/PieDonut/)
-- Add pester test to validate the functionality of the New-DonutChart cmdlet
-- Add example 12/13 to document on how to use the New-DonutChart cmdlet
+  - Add pester test to validate the functionality of the New-DonutChart cmdlet
+  - Add example 12/13 to document on how to use the New-DonutChart cmdlet
+- Add radar chart support: implement New-RadarChart cmdlet and associated classes
 
 ### Changed
 

@@ -1,0 +1,269 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Management.Automation;
+
+namespace AsBuiltReportChart.PowerShell
+{
+    [Cmdlet(VerbsCommon.New, "RadarChart")]
+    public class NewRadarChartCommand : Cmdlet
+    {
+        // Declare the parameters for the cmdlet.
+        [Parameter(Mandatory = false, HelpMessage = "Output filename for the chart. Defaults to a randomly generated 8-character token.")]
+        public string Filename { get; set; } = Chart.GenerateToken(8);
+
+        [Parameter(Mandatory = true, HelpMessage = "List of arrays containing numeric values for each radar series.")]
+        public List<double[]> Values { get; set; }
+
+        [Parameter(Mandatory = true, HelpMessage = "Array of labels corresponding to each radar series.")]
+        public string[] LegendLabels { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Array of labels corresponding to each radar series.")]
+        public string[] SpokeLabels { get; set; }
+
+        [Parameter(Mandatory = true, HelpMessage = "Title text to display on the chart.")]
+        public string Title { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Switch to make the title font bold.")]
+        public SwitchParameter TitleFontBold { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Font size for the title. Defaults to 14.")]
+        public int TitleFontSize { get; set; } = 14;
+
+        [Parameter(Mandatory = false, HelpMessage = "Font color for the title.")]
+        public BasicColors TitleFontColor { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Switch to enable the legend on the chart.")]
+        public SwitchParameter EnableLegend { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Orientation of the legend (Vertical or Horizontal). Defaults to Vertical.")]
+        public Enums.Orientations LegendOrientation { get; set; } = Enums.Orientations.Vertical;
+
+        [Parameter(Mandatory = false, HelpMessage = "Alignment of the legend on the chart. Defaults to UpperRight.")]
+        public Enums.Alignments LegendAlignment { get; set; } = Enums.Alignments.UpperRight;
+
+        [Parameter(Mandatory = true, HelpMessage = "Output format for the chart (e.g., PNG, JPG, SVG).")]
+        public Formats Format { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Color of the chart border.")]
+        public BasicColors ChartBorderColor { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Size of the chart border in pixels. Defaults to 1.")]
+        public int ChartBorderSize { get; set; } = 1;
+
+        [Parameter(Mandatory = false, HelpMessage = "Style of the chart border.")]
+        public Enums.BorderStyles ChartBorderStyle { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Switch to enable the chart border.")]
+        public SwitchParameter EnableChartBorder { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Font size for the legend. Defaults to 14.")]
+        public int LegendFontSize { get; set; } = 14;
+
+        [Parameter(Mandatory = false, HelpMessage = "Font color for the legend. Defaults to Black.")]
+        public BasicColors LegendFontColor { get; set; } = BasicColors.Black;
+
+        [Parameter(Mandatory = false, HelpMessage = "Border style for the legend.")]
+        public Enums.BorderStyles LegendBorderStyle { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Border size for the legend in pixels. Defaults to 1.")]
+        public int LegendBorderSize { get; set; } = 1;
+
+        [Parameter(Mandatory = false, HelpMessage = "Border color for the legend. Defaults to Black.")]
+        public BasicColors LegendBorderColor { get; set; } = BasicColors.Black;
+
+        [Parameter(Mandatory = false, HelpMessage = "Color palette for the chart. Defaults to Category10.")]
+        public Enums.ColorPalettes ColorPalette { get; set; } = Enums.ColorPalettes.Category10;
+
+        [Parameter(Mandatory = false, HelpMessage = "Switch to enable custom color palette.")]
+        public SwitchParameter EnableCustomColorPalette { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Invert the custom color palette.")]
+        public SwitchParameter InvertCustomColorPalette { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Array of custom hex color values for the chart.")]
+        public string[] CustomColorPalette { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Font name to use for all text. Defaults to Arial.")]
+        public string FontName { get; set; } = "Arial";
+
+        // Label Font settings
+        [Parameter(Mandatory = false, HelpMessage = "Font size for chart labels. Defaults to 14.")]
+        public int LabelFontSize { get; set; } = 14;
+
+        [Parameter(Mandatory = false, HelpMessage = "Font color for labels. Defaults to Black.")]
+        public BasicColors LabelFontColor { get; set; } = BasicColors.Black;
+
+        [Parameter(Mandatory = false, HelpMessage = "Switch to make label font bold.")]
+        public SwitchParameter LabelBold { get; set; }
+
+        // this set the distance of the labels from the chart center (Radar Chart)
+        [Parameter(Mandatory = false, HelpMessage = "Distance of labels from the chart center (10 to 50). Defaults to 10.")]
+        public double SpokesLength { get; set; } = 10;
+
+        // this set the area axes margins  (Bar Chart)
+        [Parameter(Mandatory = false, HelpMessage = "Top margin for the chart area. Defaults to 0.2.")]
+        public double AxesMarginsTop { get; set; } = 0.2;
+
+        [Parameter(Mandatory = false, HelpMessage = "Bottom margin for the chart area. Defaults to 0.05.")]
+        public double AxesMarginsDown { get; set; } = 0.05;
+
+        [Parameter(Mandatory = false, HelpMessage = "Left margin for the chart area. Defaults to 0.05.")]
+        public double AxesMarginsLeft { get; set; } = 0.05;
+
+        [Parameter(Mandatory = false, HelpMessage = "Right margin for the chart area. Defaults to 0.05.")]
+        public double AxesMarginsRight { get; set; } = 0.05;
+
+        [Parameter(Mandatory = false, HelpMessage = "Background color of the entire figure (canvas).")]
+        public BasicColors? FigureBackgroundColor { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Background color of the data area inside the axes.")]
+        public BasicColors? DataBackgroundColor { get; set; }
+
+        // Watermark settings
+        [Parameter(Mandatory = false, HelpMessage = "Enable a watermark on the chart.")]
+        public SwitchParameter EnableWatermark { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Text to display as the watermark. Defaults to 'Confidential'.")]
+        public string WatermarkText { get; set; } = "Confidential";
+
+        [Parameter(Mandatory = false, HelpMessage = "Alignment of the watermark text. Defaults to 'MiddleCenter'.")]
+        public Enums.Alignments WatermarkAlignment { get; set; } = Enums.Alignments.MiddleCenter;
+
+        [Parameter(Mandatory = false, HelpMessage = "Font name for the watermark text.")]
+        public string WatermarkFontName { get; set; } = "Arial";
+
+        [Parameter(Mandatory = false, HelpMessage = "Font size for the watermark text in points. Defaults to 24.")]
+        public int WatermarkFontSize { get; set; } = 24;
+
+        [Parameter(Mandatory = false, HelpMessage = "Color of the watermark text.")]
+        public BasicColors WatermarkColor { get; set; } = BasicColors.Gray;
+
+        [Parameter(Mandatory = false, HelpMessage = "Opacity of the watermark (0.0 fully transparent to 1.0 fully opaque). Defaults to 0.3.")]
+        public double WatermarkOpacity { get; set; } = 0.3;
+
+        [Parameter(Mandatory = false, HelpMessage = "Rotation angle of the watermark text in degrees. Defaults to 0.")]
+        public float WatermarkRotation { get; set; } = 0;
+
+        // Set chart Size WxH
+        [Parameter(Mandatory = false, HelpMessage = "Width of the chart in pixels. Defaults to 400.")]
+        public int Width { get; set; } = 400;
+
+        [Parameter(Mandatory = false, HelpMessage = "Height of the chart in pixels. Defaults to 300.")]
+        public int Height { get; set; } = 300;
+
+        // Set OutputFolderPath
+        [Parameter(Mandatory = false, HelpMessage = "Directory path where the chart file will be saved. Defaults to current directory.")]
+        [ValidatePath()]
+        public string OutputFolderPath { get; set; } = Directory.GetCurrentDirectory();
+
+        protected override void ProcessRecord()
+        {
+            Chart.Reset();
+            if (Values != null && LegendLabels != null)
+            {
+                if (EnableLegend)
+                {
+                    Chart.EnableLegend = EnableLegend;
+                    // Legend box settings
+                    Chart.LegendOrientation = LegendOrientation;
+                    Chart.LegendAlignment = LegendAlignment;
+
+                    // Legend font settings
+                    Chart.LegendFontSize = LegendFontSize;
+                    Chart.LegendFontColor = LegendFontColor;
+                    // Legend border settings
+                    Chart.LegendBorderStyle = LegendBorderStyle;
+                    Chart.LegendBorderSize = LegendBorderSize;
+                    Chart.LegendBorderColor = LegendBorderColor;
+                }
+
+                if (EnableChartBorder)
+                {
+                    // Chart area settings
+                    Chart.EnableChartBorder = EnableChartBorder;
+                    Chart.ChartBorderColor = ChartBorderColor;
+                    Chart.ChartBorderSize = ChartBorderSize;
+                    Chart.ChartBorderStyle = ChartBorderStyle;
+                }
+                // Color palette settings
+                if (EnableCustomColorPalette)
+                {
+                    if (CustomColorPalette != null && CustomColorPalette.Length > 0)
+                    {
+                        // Set ScottPlot custom color palette
+                        Chart.EnableCustomColorPalette = EnableCustomColorPalette;
+                        Chart.InvertCustomColorPalette = InvertCustomColorPalette;
+                        Chart.CustomColorPalette = CustomColorPalette;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("EnableCustomColorPalette requires CustomColorPalette to be set.");
+                    }
+                }
+                else
+                {
+                    Chart.ColorPalette = ColorPalette;
+                }
+
+                // this set the area axes margins  (Bar Chart)
+                Chart.AxesMarginsTop = AxesMarginsTop;
+                Chart.AxesMarginsDown = AxesMarginsDown;
+                Chart.AxesMarginsLeft = AxesMarginsLeft;
+                Chart.AxesMarginsRight = AxesMarginsRight;
+
+                // Title settings
+                if (Title != null)
+                {
+                    Chart.Title = Title;
+                    Chart.TitleFontBold = TitleFontBold;
+                    Chart.TitleFontSize = TitleFontSize;
+                    Chart.TitleFontColor = TitleFontColor;
+                }
+
+                // This set the distance of the labels from the chart center (Radar Chart)
+                Chart.SpokesLength = SpokesLength;
+
+                // Font Settings
+                Chart.FontName = FontName;
+                Chart.LabelFontSize = LabelFontSize;
+                Chart.LabelFontColor = LabelFontColor;
+                Chart.LabelBold = LabelBold;
+
+                // Background color settings
+                Chart.FigureBackgroundColor = FigureBackgroundColor;
+                Chart.DataBackgroundColor = DataBackgroundColor;
+
+                // Watermark settings
+                Chart.EnableWatermark = EnableWatermark;
+                Chart.WatermarkText = WatermarkText;
+                Chart.WatermarkAlignment = WatermarkAlignment;
+                Chart.WatermarkFontName = WatermarkFontName;
+                Chart.WatermarkFontSize = WatermarkFontSize;
+                Chart.WatermarkColor = WatermarkColor;
+                Chart.WatermarkOpacity = WatermarkOpacity;
+                Chart.WatermarkRotation = WatermarkRotation;
+
+                // Set file directory save path
+                Chart.OutputFolderPath = OutputFolderPath;
+
+                Chart.Format = Format;
+
+                Radar myRadar = new Radar();
+
+                if (SpokeLabels != null && SpokeLabels.Length > 0)
+                {
+                    WriteObject(myRadar.Chart(Values, LegendLabels, SpokeLabels, Filename, Width, Height));
+                }
+                else
+                {
+                    WriteObject(myRadar.Chart(Values, LegendLabels, Filename, Width, Height));
+                }
+            }
+            else
+            {
+                WriteObject("Please provide both Values and LegendLabels parameters.");
+            }
+        }
+    }
+}
