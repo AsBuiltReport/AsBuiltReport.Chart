@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.3] - Unreleased
+
+### Added
+
+- Add support for Donut from Slices chart: [Donut from Slices](https://scottplot.net/cookbook/5/Pie/PieDonut/)
+  - Add pester test to validate the functionality of the New-DonutChart cmdlet
+  - Add example 12/13 to document on how to use the New-DonutChart cmdlet
+- Add radar chart support: implement New-RadarChart cmdlet and associated classes
+
+### Changed
+
+- Update module v0.3.3
+- Update SkiaSharp .NET dependency to v3.119.4
+- Update HarfBuzzSharp .NET dependency to v8.3.1.5
+
 ## [0.3.2] - 2026-05-05
 
 ### Added

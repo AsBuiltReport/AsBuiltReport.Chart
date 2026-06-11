@@ -41,6 +41,23 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
         }
     }
 
+    Context 'New-DonutChart' {
+        It 'Should run without error with sample input' {
+            { New-DonutChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+        }
+        It 'Should return a file path as output' {
+            $result = New-DonutChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive
+            $result | Should -BeOfType 'System.IO.FileSystemInfo'
+            Test-Path $result | Should -BeTrue
+        }
+        It 'Should throw error for missing mandatory parameters' {
+            { New-DonutChart } | Should -Throw
+        }
+        It 'Should throw error for mismatched Values and Labels' {
+            { New-DonutChart -Title 'Test' -Values @(1, 2) -Labels @('A') -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw -ExpectedMessage  "Error: Values and labels must be equal."
+        }
+    }
+
     Context 'New-BarChart' {
         It 'Should run without error with sample input' {
             { New-BarChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
@@ -77,10 +94,10 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
             { New-StackedBarChart -Title 'Test' -Values @(@(1, 2), @(3, 4)) -Labels @('A', 'B') -LegendCategories @('X') -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw -ExpectedMessage "Error: Each set of values must have the same length as category names."
         }
         It 'Should run without error with a single element (single-bar chart)' {
-            { New-StackedBarChart -Title 'Test' -Values @(,[double[]]@(1, 2)) -Labels @('A') -LegendCategories @('X', 'Y') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+            { New-StackedBarChart -Title 'Test' -Values @(, [double[]]@(1, 2)) -Labels @('A') -LegendCategories @('X', 'Y') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
         }
         It 'Should return a file path as output for a single element' {
-            $result = New-StackedBarChart -Title 'Test' -Values @(,[double[]]@(1, 2)) -Labels @('A') -LegendCategories @('X', 'Y') -Format 'png' -OutputFolderPath $TestDrive
+            $result = New-StackedBarChart -Title 'Test' -Values @(, [double[]]@(1, 2)) -Labels @('A') -LegendCategories @('X', 'Y') -Format 'png' -OutputFolderPath $TestDrive
             $result | Should -BeOfType 'System.IO.FileSystemInfo'
             Test-Path $result | Should -BeTrue
         }
@@ -126,10 +143,10 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
 
     Context 'New-SignalChart' {
         It 'Should run without error with a single signal line' {
-            { New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3, 4)) -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+            { New-SignalChart -Title 'Test' -Values @(, [double[]]@(1, 2, 3, 4)) -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
         }
         It 'Should return a file path as output' {
-            $result = New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3, 4)) -Format 'png' -OutputFolderPath $TestDrive
+            $result = New-SignalChart -Title 'Test' -Values @(, [double[]]@(1, 2, 3, 4)) -Format 'png' -OutputFolderPath $TestDrive
             $result | Should -BeOfType 'System.IO.FileSystemInfo'
             Test-Path $result | Should -BeTrue
         }
@@ -138,15 +155,15 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
         }
         It 'Should run without error with DateTime ticks' {
             $xOffset = (Get-Date '2024-01-01').ToOADate()
-            { New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3)) -XOffset $xOffset -Period 1.0 -DateTimeTicksBottom -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+            { New-SignalChart -Title 'Test' -Values @(, [double[]]@(1, 2, 3)) -XOffset $xOffset -Period 1.0 -DateTimeTicksBottom -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
         }
         It 'Should run without error in scatter mode with explicit X values' {
-            $xValues = @(,[double[]]@(1.0, 2.0, 3.0, 4.0))
-            { New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3, 4)) -ScatterXValues $xValues -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+            $xValues = @(, [double[]]@(1.0, 2.0, 3.0, 4.0))
+            { New-SignalChart -Title 'Test' -Values @(, [double[]]@(1, 2, 3, 4)) -ScatterXValues $xValues -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
         }
         It 'Should return a file path as output in scatter mode' {
-            $xValues = @(,[double[]]@(1.0, 2.0, 3.0, 4.0))
-            $result = New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3, 4)) -ScatterXValues $xValues -Format 'png' -OutputFolderPath $TestDrive
+            $xValues = @(, [double[]]@(1.0, 2.0, 3.0, 4.0))
+            $result = New-SignalChart -Title 'Test' -Values @(, [double[]]@(1, 2, 3, 4)) -ScatterXValues $xValues -Format 'png' -OutputFolderPath $TestDrive
             $result | Should -BeOfType 'System.IO.FileSystemInfo'
             Test-Path $result | Should -BeTrue
         }
@@ -154,7 +171,7 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
             $startDate = (Get-Date '2024-01-01').ToOADate()
             {
                 $xArr = [double[]]@($startDate, ($startDate + 1.0), ($startDate + 2.0))
-                New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3)) -ScatterXValues @(,$xArr) -DateTimeTicksBottom -Format 'png' -OutputFolderPath $TestDrive
+                New-SignalChart -Title 'Test' -Values @(, [double[]]@(1, 2, 3)) -ScatterXValues @(, $xArr) -DateTimeTicksBottom -Format 'png' -OutputFolderPath $TestDrive
             } | Should -Not -Throw
         }
         It 'Should run without error in scatter mode with multiple lines' {
@@ -162,12 +179,12 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
             { New-SignalChart -Title 'Test' -Values @(@(1, 2, 3), @(4, 5, 6)) -ScatterXValues $xValues -Labels @('Line1', 'Line2') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
         }
         It 'Should throw error when ScatterXValues count does not match Values count' {
-            $xValues = @(,[double[]]@(1.0, 2.0, 3.0))
+            $xValues = @(, [double[]]@(1.0, 2.0, 3.0))
             { New-SignalChart -Title 'Test' -Values @(@(1, 2, 3), @(4, 5, 6)) -ScatterXValues $xValues -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw -ExpectedMessage "Error: XValues and Values must have the same number of arrays."
         }
         It 'Should throw error when XValues elements count does not match Values elements count' {
-            $xValues = @(,[double[]]@(1.0, 2.0))
-            { New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3)) -ScatterXValues $xValues -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw -ExpectedMessage "Error: XValues and Values at index 0 must have the same number of elements."
+            $xValues = @(, [double[]]@(1.0, 2.0))
+            { New-SignalChart -Title 'Test' -Values @(, [double[]]@(1, 2, 3)) -ScatterXValues $xValues -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw -ExpectedMessage "Error: XValues and Values at index 0 must have the same number of elements."
         }
         It 'Should throw error for missing mandatory parameters' {
             { New-SignalChart } | Should -Throw
@@ -277,18 +294,18 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
 
         Context 'New-SignalChart with watermark' {
             It 'Should run without error with watermark enabled using defaults' {
-                { New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3, 4)) -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark } | Should -Not -Throw
+                { New-SignalChart -Title 'Test' -Values @(, [double[]]@(1, 2, 3, 4)) -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark } | Should -Not -Throw
             }
             It 'Should return a file when watermark is enabled' {
-                $result = New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3, 4)) -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark
+                $result = New-SignalChart -Title 'Test' -Values @(, [double[]]@(1, 2, 3, 4)) -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark
                 $result | Should -BeOfType 'System.IO.FileSystemInfo'
                 Test-Path $result | Should -BeTrue
             }
             It 'Should run without error with custom watermark color and opacity' {
-                { New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3, 4)) -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark -WatermarkColor Green -WatermarkOpacity 0.4 } | Should -Not -Throw
+                { New-SignalChart -Title 'Test' -Values @(, [double[]]@(1, 2, 3, 4)) -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark -WatermarkColor Green -WatermarkOpacity 0.4 } | Should -Not -Throw
             }
             It 'Should run without error without watermark (disabled by default)' {
-                { New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3, 4)) -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+                { New-SignalChart -Title 'Test' -Values @(, [double[]]@(1, 2, 3, 4)) -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
             }
         }
     }
@@ -332,8 +349,8 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
             { New-BarChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
         }
         It 'EnableWatermark should not persist from one New-SignalChart call to the next' {
-            New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3)) -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark | Out-Null
-            { New-SignalChart -Title 'Test' -Values @(,[double[]]@(1, 2, 3)) -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+            New-SignalChart -Title 'Test' -Values @(, [double[]]@(1, 2, 3)) -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark | Out-Null
+            { New-SignalChart -Title 'Test' -Values @(, [double[]]@(1, 2, 3)) -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
         }
     }
 }
