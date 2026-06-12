@@ -144,7 +144,8 @@ All examples in the latest release of AsBuiltReport.Chart can be found in the ta
 | [Example11](./Examples/Example11.ps1) | Single Stacked Bar Chart with Advanced Options       |
 | [Example12](./Examples/Example12.ps1) | Basic Donut Chart                                    |
 | [Example13](./Examples/Example13.ps1) | Donut Chart with Legend, Custom Colors and Border    |
-
+| [Example14](./Examples/Example14.ps1) | Basic Radar Chart with Legend                        |
+| [Example15](./Examples/Example15.ps1) | Radar Chart with Legend, Custom Colors and Border    |
 
 ## Watermark Support
 
