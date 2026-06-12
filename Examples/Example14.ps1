@@ -32,7 +32,7 @@ $OutputFolderPath = Resolve-Path $Path
 #>
 
 $ChartTitle  = 'Security Posture Assessment'
-$Values      = @(@(3,5,4,2))
+$Values      = ,@(3,5,4,2) # The comma before the array ensures it's treated as a single array object
 $Labels      = @('USA DataCenter')
 
 <#
