@@ -1,10 +1,10 @@
 <#
     .SYNOPSIS
-    Example 12 - Basic Donut Chart
+    Example 15 - Advanced Radar Chart
 
     .DESCRIPTION
-    This example demonstrates how to create a basic Donut Chart using the AsBuiltReport.Chart module.
-    The chart displays a simple breakdown of VM power states across a vSphere environment.
+    This example demonstrates how to create a Advanced Radar Chart using the AsBuiltReport.Chart module.
+    The chart displays a security posture assessment for two data centers across multiple categories.
 #>
 
 [CmdletBinding()]
@@ -31,16 +31,19 @@ $OutputFolderPath = Resolve-Path $Path
     In a real-world scenario these values would come from your infrastructure query.
 #>
 
-$ChartTitle  = 'User Type Breakdown'
-$Values      = @(800, 80, 200)
-$Labels      = @('Members', 'Guests', 'Disabled')
+$ChartTitle = 'Security Posture Assessment'
+$Values = @(@(1, 2, 5, 8), @(3, 5, 4, 2))
+$Labels = @('USA DataCenter', 'UK DataCenter')
+$Spokes = @('Network Security', 'Endpoint Security', 'Identity Management', 'Data Protection')
 
 <#
-    The New-DonutChart cmdlet generates the Donut Chart image.
+    The New-RadarChart cmdlet generates the Radar Chart image.
 
     -Title              : Sets the chart title displayed at the top of the image.
-    -Values             : Array of numeric values, one per slice.
-    -Labels             : Array of label strings corresponding to each value.
+    -Values             : Array of numeric values, one per axis.
+    -LegendLabels       : Array of label strings corresponding to each value.
+    -SpokeLabels        : Array of label strings for each spoke on the radar chart.
+    -SpokesLength       : Length of the spokes (axes) in the radar chart.
     -Format             : Output file format (e.g. png, jpg, svg).
     -OutputFolderPath   : Directory where the generated chart file will be saved.
     -Width              : Width of the chart image in pixels.
@@ -49,13 +52,16 @@ $Labels      = @('Members', 'Guests', 'Disabled')
     -Filename           : Name of the output file (without extension).
 #>
 
-New-DonutChart `
+New-RadarChart `
     -Title $ChartTitle `
     -Values $Values `
-    -Labels $Labels `
+    -LegendLabels $Labels `
+    -SpokeLabels $Spokes `
+    -SpokesLength 9 `
     -Format $Format `
+    -EnableLegend `
     -OutputFolderPath $OutputFolderPath `
     -Width 600 `
     -Height 400 `
-    -ColorPalette Category20 `
-    -Filename 'Example12-DonutChart'
+    -ColorPalette Aurora `
+    -Filename 'Example15-RadarChart'

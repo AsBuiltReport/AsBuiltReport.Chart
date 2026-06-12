@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Add pester test to validate the functionality of the New-DonutChart cmdlet
   - Add example 12/13 to document on how to use the New-DonutChart cmdlet
 - Add radar chart support: implement New-RadarChart cmdlet and associated classes
+  - Add pester test to validate the functionality of the New-RadarChart cmdlet
+  - Add example 14/15 to document on how to use the New-RadarChart cmdlet
 
 ### Changed
 
