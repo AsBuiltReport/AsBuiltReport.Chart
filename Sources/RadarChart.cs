@@ -165,6 +165,7 @@ namespace AsBuiltReportChart
                             radar.PolarAxis.Spokes[i].LabelStyle.ForeColor = GetDrawingColor(LabelFontColor);
                             radar.PolarAxis.Spokes[i].LabelStyle.Bold = LabelBold;
                             radar.PolarAxis.Spokes[i].LabelStyle.FontName = FontName;
+                            radar.PolarAxis.Spokes[i].LabelPaddingFraction = LabelDistance;
                         }
                     }
                     else

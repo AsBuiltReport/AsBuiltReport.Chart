@@ -112,6 +112,16 @@ namespace AsBuiltReportChart
                 // Set label distance from the center of the donut slices
                 pie.SliceLabelDistance = _labelDistance;
 
+                if (DonutCenterText != null)
+                {
+                    var annotation = myPlot.Add.Annotation(DonutCenterText);
+                    annotation.Alignment = Alignment.MiddleCenter;
+                    annotation.LabelStyle.FontSize = 12;
+                    annotation.LabelStyle.BackgroundColor = Colors.White;
+                    annotation.LabelStyle.BorderColor = Colors.White;
+                    annotation.LabelShadowColor = Colors.Transparent;
+                }
+
                 // Apply watermark if enabled
                 ApplyWatermark(myPlot);
 
@@ -128,5 +138,3 @@ namespace AsBuiltReportChart
         }
     }
 }
-
-

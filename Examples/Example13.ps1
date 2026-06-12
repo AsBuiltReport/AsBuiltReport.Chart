@@ -1,6 +1,6 @@
 <#
     .SYNOPSIS
-    Example 02 - Donut Chart with Legend, Custom Colors and Border
+    Example 13 - Donut Chart with Legend, Custom Colors and Border
 
     .DESCRIPTION
     This example demonstrates how to create a Donut Chart with additional visual options, including:

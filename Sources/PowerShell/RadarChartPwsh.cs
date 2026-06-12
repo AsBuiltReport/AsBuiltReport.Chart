@@ -98,6 +98,11 @@ namespace AsBuiltReportChart.PowerShell
         public SwitchParameter LabelBold { get; set; }
 
         // this set the distance of the labels from the chart center (Radar Chart)
+        [Parameter(Mandatory = false, HelpMessage = "Distance of labels from the chart center (0.5 to 0.9). Defaults to 0.6.")]
+        [ValidateSet("0.5", "0.6", "0.7", "0.8", "0.9")]
+        public double LabelDistance { get; set; } = 0.8;
+
+        // this set the distance of the labels from the chart center (Radar Chart)
         [Parameter(Mandatory = false, HelpMessage = "Distance of labels from the chart center (10 to 50). Defaults to 10.")]
         public double SpokesLength { get; set; } = 10;
 
@@ -221,8 +226,11 @@ namespace AsBuiltReportChart.PowerShell
                     Chart.TitleFontColor = TitleFontColor;
                 }
 
-                // This set the distance of the labels from the chart center (Radar Chart)
+                // This set the distance of the spokes from the chart center (Radar Chart)
                 Chart.SpokesLength = SpokesLength;
+
+                // This set the distance of the labels from the chart center (Radar Chart)
+                Chart.LabelDistance = LabelDistance;
 
                 // Font Settings
                 Chart.FontName = FontName;
