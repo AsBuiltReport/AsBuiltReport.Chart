@@ -45,12 +45,11 @@ $OutputFolderPath = Resolve-Path $Path
 #>
 
 $ChartTitle = 'Datastore Capacity (GB)'
-$Labels = @('datastore-01', 'datastore-02', 'datastore-03', 'datastore-04')
+$Labels = @('datastore-01')
 $LegendCategories = @('Used Space', 'Free Space')
 
 # Each inner array represents one bar's segment values, ordered by $LegendCategories.
-$Values = @(@(800, 200), @(600, 400), @(1500, 500), @(300, 700))
-
+$Values = ,@(800, 200) # The comma before the array creates a single-element array containing the inner array, which is required for the Stacked Bar Chart format.
 <#
     The New-StackedBarChart cmdlet generates the Stacked Bar Chart image.
 

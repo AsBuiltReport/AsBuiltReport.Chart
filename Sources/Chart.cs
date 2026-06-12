@@ -33,7 +33,7 @@ namespace AsBuiltReportChart
         public static string LabelXAxis { get; set; } = "Values";
 
         // this set the distance of the labels from the chart center (Pie Chart)
-        internal static double _labelDistance = 0.6;
+        internal static double _labelDistance;
         public static double LabelDistance
         {
             get { return _labelDistance; }
@@ -46,6 +46,24 @@ namespace AsBuiltReportChart
                 else
                 {
                     throw new ArgumentException("Error: LabelDistance value range must be from 0.5 to 0.9.");
+                }
+            }
+        }
+
+        // this set the distance of the labels from the chart center (Pie Chart)
+        internal static double _spokesLength;
+        public static double SpokesLength
+        {
+            get { return _spokesLength; }
+            set
+            {
+                if (value >= 5 && value <= 50)
+                {
+                    _spokesLength = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Error: SpokesLength value range must be from 5 to 50.");
                 }
             }
         }
@@ -71,6 +89,27 @@ namespace AsBuiltReportChart
             }
         }
 
+        // Center text for Donut Chart
+        public static string DonutCenterText { get; set; }
+
+        // this set the distance of the chart area elements (Donut Chart)
+        internal static double _donutFraction;
+        public static double DonutFraction
+        {
+            get { return _donutFraction; }
+            set
+            {
+                if (value >= 0.0 && value <= 0.5)
+                {
+                    _donutFraction = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Error: DonutFraction value range must be from 0.0 to 0.5.");
+                }
+            }
+        }
+
         // Legend setting (Pie Chart)
         public static bool EnableLegend { get; set; }
 
@@ -86,6 +125,9 @@ namespace AsBuiltReportChart
         public static Orientations LegendOrientation { get; set; } = Orientations.Vertical;
 
         public static Alignments LegendAlignment { get; set; } = Alignments.LowerRight;
+
+        // Hide Values
+        public static bool HideValues { get; set; }
 
         // Chart border settings (All Charts)
         public static bool EnableChartBorder { get; set; }
@@ -439,6 +481,9 @@ namespace AsBuiltReportChart
             WatermarkFontSize = 24;
             WatermarkColor = BasicColors.Gray;
             _watermarkOpacity = 0.3;
+            DonutFraction = 0.5;
+            HideValues = false;
+            SpokesLength = 10;
         }
 
         public static string GenerateToken(Byte length)

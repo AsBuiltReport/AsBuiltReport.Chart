@@ -5,16 +5,18 @@
 This project is a **hybrid C# + PowerShell module**. The C# layer compiles into platform-specific DLLs; the PowerShell layer loads the right DLL at import time and exposes cmdlets.
 
 ```
-Sources/                   ← C# library (ScottPlot + SkiaSharp, netstandard2.0)
+Sources/                   ← C# library (ScottPlot + SkiaSharp, net8.0 / netstandard2.0)
   Chart.cs                 ← Static base class; all chart settings live here as static props
-  PieChart.cs / BarChart.cs / StackedBarChart.cs / SignalChart.cs  ← Chart implementations
+  PieChart.cs / DonutChart.cs / BarChart.cs / StackedBarChart.cs / SignalChart.cs / RadarChart.cs
+                           ← Chart implementations
   PowerShell/              ← One PSCmdlet class per chart type (New-*Chart cmdlets)
   Enums/Enums.cs           ← All shared enums (BasicColors, Formats, ColorPalettes, etc.)
 
 AsBuiltReport.Chart/       ← PowerShell module
   AsBuiltReport.Chart.psm1 ← Loads the correct DLL based on PSEdition + OS + architecture
-  AsBuiltReport.Chart.psd1 ← Module manifest; exports: New-PieChart, New-BarChart,
-                             New-StackedBarChart, New-SingleStackedBarChart, New-SignalChart
+  AsBuiltReport.Chart.psd1 ← Module manifest; exports: New-PieChart, New-DonutChart,
+                             New-BarChart, New-StackedBarChart, New-SingleStackedBarChart,
+                             New-SignalChart, New-RadarChart
   Src/Assemblies/          ← Pre-compiled DLLs, organized by platform:
     Core/linux-x64/
     Core/windows-x64/
@@ -70,7 +72,25 @@ Invoke-ScriptAnalyzer -Path . -Recurse -Settings .\.github\workflows\PSScriptAna
 
 Excluded rules: `PSUseToExportFieldsInManifest`, `PSReviewUnusedParameter`, `PSUseDeclaredVarsMoreThanAssignments`, `PSAvoidGlobalVars`.
 
+### Build (Pester Tests) in CI/CD
+
+```powershell
+.\Tests\Invoke-Tests.ps1 -CodeCoverage -OutputFormat NUnitXml
+```
+
+Supports optional flags:
+- `-CodeCoverage` – Enable code coverage analysis
+- `-OutputFormat <Console|NUnitXml|JUnitXml>` – Output format for test results (default: Console)
+
 ## Key Conventions
+
+### Cross-platform DLL loading
+
+The `.psm1` module import process detects the current PowerShell edition, OS, and architecture, then loads the appropriate pre-compiled DLL:
+- **PowerShell 7+** on Windows/Linux/macOS → Loads from `Core/` folder
+- **PowerShell 5.1 (Desktop)** on Windows → Loads from `Desktop/windows-x64/` folder (Windows-only)
+
+If the correct DLL cannot be found for the runtime, the module import fails with a clear error message.
 
 ### Adding a new chart type
 

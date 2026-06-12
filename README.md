@@ -90,6 +90,13 @@ New-PieChart -Title 'Test' -Values @(1,2) -Labels @('A','B') -Format 'png' -Enab
 ```
 ![PieChart](./Samples/PieChart.png)
 
+### Donut Chart
+```powershell
+# Generate a Donut Chart with the title 'Test', values of 1 and 2, labels 'A' and 'B', and export the chart in PNG format. Enable the legend and set the width to 600 pixels, height to 400 pixels, title font size to 20, and label font size to 16.
+New-DonutChart -Title 'Test' -Values @(1,2) -Labels @('A','B') -Format 'png' -EnableLegend -Width 600 -Height 400 -TitleFontSize 20 -LabelFontSize 16
+```
+![DonutChart](./Samples/DonutChart.png)
+
 ### Bar Chart
 ```powershell
 # Generate a Bar Chart with the title 'Test', values of 1 and 2, labels 'A' and 'B', and export the chart in PNG format. Enable the legend and set the width to 600 pixels, height to 400 pixels, title font size to 20, and label font size to 16.
@@ -104,21 +111,41 @@ New-StackedBarChart -Title 'Test' -Values @(@(1,2),@(3,4)) -Labels @('A','B') -L
 ```
 ![StackedBarChart](./Samples/StackedBarChart.png)
 
+### Single Stacked Bar Chart
+```powershell
+# Generate a Single Stacked Bar Chart with the title 'Test', values @(18, 15, 10, 5, 8) for bar 'A' and @(18, 15, 10, 5, 8) for bar 'B' (one inner -Values array per bar matching -Labels), legend categories 'Value1' and 'Value2' for the stacked segments, and export the chart in PNG format. Enable the legend, set the legend orientation to horizontal, align the legend to the upper center, set the width to 600 pixels, height to 400 pixels, title font size to 20, label font size to 16, and axes margins top to 1.
+New-SingleStackedBarChart -Title 'Test' -Values @(18, 15, 10, 5, 8) -Label 'Workload Type' -LegendCategories @('Category 1', 'Category 2', 'Category 3', 'Category 4', 'Category 5') -Width 600 -Height 200 -Format png -AreaOrientation Horizontal -EnableLegend -LegendOrientation Horizontal -LegendAlignment UpperCenter -TitleFontBold -TitleFontSize 20
+```
+![SingleStackedBarChart](./Samples/SingleStackedBarChart.png)
+
+### Radar Chart
+```powershell
+# Generate a Radar Chart with the title 'Test', values of 1 and 2, labels 'A' and 'B', and export the chart in PNG format. Enable the legend and set the width to 600 pixels, height to 400 pixels, title font size to 20, and label font size to 16.
+New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8),@(3,5,4,2)) -LegendLabels @('A', 'B') -Format 'png' -EnableLegend -LegendOrientation Horizontal -LegendAlignment UpperCenter -Filename RadarChart -Width 600 -Height 400 -SpokeLabels @("Wins", "Poles", "Podiums", "Points") -TitleFontSize 20
+```
+![RadarChart](./Samples/RadarChart.png)
+
 ### :blue_book: Example Index
 
 All examples in the latest release of AsBuiltReport.Chart can be found in the table below.
 
-| Name                                 | Description                                          |
-| ------------------------------------ | ---------------------------------------------------- |
-| [Example1](./Examples/Example01.ps1) | Basic Pie Chart                                      |
-| [Example2](./Examples/Example02.ps1) | Pie Chart with Legend, Custom Colors and Border      |
-| [Example3](./Examples/Example03.ps1) | Basic Bar Chart                                      |
-| [Example4](./Examples/Example04.ps1) | Bar Chart with Advanced Options                      |
-| [Example5](./Examples/Example05.ps1) | Basic Stacked Bar Chart                              |
-| [Example6](./Examples/Example06.ps1) | Stacked Bar Chart with Advanced Options              |
-| [Example7](./Examples/Example07.ps1) | Basic Signal Chart (Line Chart)                      |
-| [Example8](./Examples/Example08.ps1) | Signal Chart with DateTime X-Axis (Time-Series Data) |
-| [Example9](./Examples/Example09.ps1) | Signal Chart with Multiple Lines                     |
+| Name                                  | Description                                          |
+| ------------------------------------- | ---------------------------------------------------- |
+| [Example1](./Examples/Example01.ps1)  | Basic Pie Chart                                      |
+| [Example2](./Examples/Example02.ps1)  | Pie Chart with Legend, Custom Colors and Border      |
+| [Example3](./Examples/Example03.ps1)  | Basic Bar Chart                                      |
+| [Example4](./Examples/Example04.ps1)  | Bar Chart with Advanced Options                      |
+| [Example5](./Examples/Example05.ps1)  | Basic Stacked Bar Chart                              |
+| [Example6](./Examples/Example06.ps1)  | Stacked Bar Chart with Advanced Options              |
+| [Example7](./Examples/Example07.ps1)  | Basic Signal Chart (Line Chart)                      |
+| [Example8](./Examples/Example08.ps1)  | Signal Chart with DateTime X-Axis (Time-Series Data) |
+| [Example9](./Examples/Example09.ps1)  | Signal Chart with Multiple Lines                     |
+| [Example10](./Examples/Example10.ps1) | Basic Single Stacked Bar Chart                       |
+| [Example11](./Examples/Example11.ps1) | Single Stacked Bar Chart with Advanced Options       |
+| [Example12](./Examples/Example12.ps1) | Basic Donut Chart                                    |
+| [Example13](./Examples/Example13.ps1) | Donut Chart with Legend, Custom Colors and Border    |
+| [Example14](./Examples/Example14.ps1) | Basic Radar Chart with Legend                        |
+| [Example15](./Examples/Example15.ps1) | Radar Chart with Legend, Custom Colors and Border    |
 
 ## Watermark Support
 
@@ -126,14 +153,14 @@ All chart types support an optional watermark that overlays semi-transparent tex
 
 ### Watermark Parameters
 
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `EnableWatermark` | Switch | (off) | Enables the watermark overlay. |
-| `WatermarkText` | String | `Confidential` | Text to display as the watermark. |
-| `WatermarkFontName` | String | `Arial` | Font family for the watermark text. |
-| `WatermarkFontSize` | Int | `24` | Font size (points) for the watermark text. |
-| `WatermarkColor` | BasicColors | `Gray` | Color of the watermark text. |
-| `WatermarkOpacity` | Double | `0.3` | Opacity (0.0–1.0) of the watermark. Lower values are more transparent. |
+| Parameter           | Type        | Default        | Description                                                            |
+| ------------------- | ----------- | -------------- | ---------------------------------------------------------------------- |
+| `EnableWatermark`   | Switch      | (off)          | Enables the watermark overlay.                                         |
+| `WatermarkText`     | String      | `Confidential` | Text to display as the watermark.                                      |
+| `WatermarkFontName` | String      | `Arial`        | Font family for the watermark text.                                    |
+| `WatermarkFontSize` | Int         | `24`           | Font size (points) for the watermark text.                             |
+| `WatermarkColor`    | BasicColors | `Gray`         | Color of the watermark text.                                           |
+| `WatermarkOpacity`  | Double      | `0.3`          | Opacity (0.0–1.0) of the watermark. Lower values are more transparent. |
 
 ### Watermark Examples
 
@@ -157,9 +184,3 @@ New-SignalChart -Title 'Throughput' -Values @(,[double[]]@(1,2,3,4,5)) -Format '
 ## :x: Known Issues
 
  - No known issues at this time.
-
-
-
-
-
-

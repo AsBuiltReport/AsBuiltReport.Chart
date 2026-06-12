@@ -1,128 +1,118 @@
 using System;
 using System.IO;
-using System.Collections.Generic;
 using System.Management.Automation;
 
 namespace AsBuiltReportChart.PowerShell
 {
-    [Cmdlet(VerbsCommon.New, "StackedBarChart")]
-    public class NewStackedBarChartCommand : Cmdlet
+    [Cmdlet(VerbsCommon.New, "DonutChart")]
+    public class NewDonutChartCommand : Cmdlet
     {
         // Declare the parameters for the cmdlet.
-        [Parameter(
-            Mandatory = false,
-            HelpMessage = "Provide a filename for the chart. If not provided, a random filename will be generated."
-            )]
+        [Parameter(Mandatory = false, HelpMessage = "Output filename for the chart. Defaults to a randomly generated 8-character token.")]
         public string Filename { get; set; } = Chart.GenerateToken(8);
 
-        [Parameter(Mandatory = true, HelpMessage = "Provide a list of double arrays for the values to be plotted. Each array represents a series in the stacked bar chart.")]
-        public List<double[]> Values { get; set; }
+        [Parameter(Mandatory = true, HelpMessage = "Array of numeric values to display in the donut chart.")]
+        public double[] Values { get; set; }
 
-        [Parameter(Mandatory = true, HelpMessage = "Provide an array of strings for the labels of each bar in the chart.")]
+        [Parameter(Mandatory = true, HelpMessage = "Array of labels corresponding to each donut slice.")]
         public string[] Labels { get; set; }
 
-        [Parameter(Mandatory = true, HelpMessage = "Provide an array of strings for the legend categories in the chart.")]
-        public string[] LegendCategories { get; set; }
-
-        // Title settings
-        [Parameter(Mandatory = true, HelpMessage = "Provide a title for the chart. If not provided, no title will be displayed.")]
+        [Parameter(Mandatory = true, HelpMessage = "Title text to display on the chart.")]
         public string Title { get; set; }
 
-        [Parameter(Mandatory = false, HelpMessage = "Enable bold font for the chart title.")]
+        [Parameter(Mandatory = false, HelpMessage = "Switch to make the title font bold.")]
         public SwitchParameter TitleFontBold { get; set; }
 
-        [Parameter(Mandatory = false, HelpMessage = "Set the font size for the chart title.")]
+        [Parameter(Mandatory = false, HelpMessage = "Font size for the title. Defaults to 14.")]
         public int TitleFontSize { get; set; } = 14;
 
-        [Parameter(Mandatory = false, HelpMessage = "Set the font color for the chart title.")]
-        public BasicColors TitleFontColor { get; set; } = BasicColors.Black;
+        [Parameter(Mandatory = false, HelpMessage = "Font color for the title.")]
+        public BasicColors TitleFontColor { get; set; }
 
-        [Parameter(Mandatory = false, HelpMessage = "Enable the legend for the chart.")]
+        [Parameter(Mandatory = false, HelpMessage = "Switch to enable the legend on the chart.")]
         public SwitchParameter EnableLegend { get; set; }
 
-        [Parameter(Mandatory = false, HelpMessage = "Set the orientation of the legend.")]
+        [Parameter(Mandatory = false, HelpMessage = "Orientation of the legend (Vertical or Horizontal). Defaults to Vertical.")]
         public Enums.Orientations LegendOrientation { get; set; } = Enums.Orientations.Vertical;
 
-        [Parameter(Mandatory = false, HelpMessage = "Set the alignment of the legend.")]
+        [Parameter(Mandatory = false, HelpMessage = "Alignment of the legend on the chart. Defaults to UpperRight.")]
         public Enums.Alignments LegendAlignment { get; set; } = Enums.Alignments.UpperRight;
 
-        [Parameter(Mandatory = false, HelpMessage = "Set the font size for the legend.")]
-        public int LegendFontSize { get; set; } = 14;
-
-        [Parameter(Mandatory = false, HelpMessage = "Set the font color for the legend.")]
-        public BasicColors LegendFontColor { get; set; } = BasicColors.Black;
-
-        [Parameter(Mandatory = false, HelpMessage = "Set the border style for the legend.")]
-        public Enums.BorderStyles LegendBorderStyle { get; set; }
-
-        [Parameter(Mandatory = false, HelpMessage = "Set the border size for the legend.")]
-        public int LegendBorderSize { get; set; } = 1;
-
-        [Parameter(Mandatory = false, HelpMessage = "Set the border color for the legend.")]
-        public BasicColors LegendBorderColor { get; set; } = BasicColors.Black;
-
-        [Parameter(Mandatory = true, HelpMessage = "Provide a format for the chart output.")]
+        [Parameter(Mandatory = true, HelpMessage = "Output format for the chart (e.g., PNG, JPG, SVG).")]
         public Formats Format { get; set; }
 
-        [Parameter(Mandatory = false, HelpMessage = "Set the border color for the chart area.")]
-        public BasicColors ChartBorderColor { get; set; } = BasicColors.Black;
+        [Parameter(Mandatory = false, HelpMessage = "Fraction to explode donut slices (0.0 to 0.5).")]
+        [ValidateSet("0.0", "0.1", "0.2", "0.3", "0.4", "0.5")]
+        public double DonutFraction { get; set; } = 0.5;
 
-        [Parameter(Mandatory = false, HelpMessage = "Set the border size for the chart area.")]
+        [Parameter(Mandatory = false, HelpMessage = "Color of the chart border.")]
+        public BasicColors ChartBorderColor { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Size of the chart border in pixels. Defaults to 1.")]
         public int ChartBorderSize { get; set; } = 1;
 
-        [Parameter(Mandatory = false, HelpMessage = "Set the border style for the chart area.")]
+        [Parameter(Mandatory = false, HelpMessage = "Style of the chart border.")]
         public Enums.BorderStyles ChartBorderStyle { get; set; }
 
-        [Parameter(Mandatory = false, HelpMessage = "Enable the border for the chart area.")]
+        [Parameter(Mandatory = false, HelpMessage = "Switch to enable the chart border.")]
         public SwitchParameter EnableChartBorder { get; set; }
 
-        [Parameter(Mandatory = false, HelpMessage = "Set the color palette for the chart.")]
+        [Parameter(Mandatory = false, HelpMessage = "Font size for the legend. Defaults to 14.")]
+        public int LegendFontSize { get; set; } = 14;
+
+        [Parameter(Mandatory = false, HelpMessage = "Font color for the legend. Defaults to Black.")]
+        public BasicColors LegendFontColor { get; set; } = BasicColors.Black;
+
+        [Parameter(Mandatory = false, HelpMessage = "Border style for the legend.")]
+        public Enums.BorderStyles LegendBorderStyle { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Border size for the legend in pixels. Defaults to 1.")]
+        public int LegendBorderSize { get; set; } = 1;
+
+        [Parameter(Mandatory = false, HelpMessage = "Border color for the legend. Defaults to Black.")]
+        public BasicColors LegendBorderColor { get; set; } = BasicColors.Black;
+
+        [Parameter(Mandatory = false, HelpMessage = "Color palette for the chart. Defaults to Category10.")]
         public Enums.ColorPalettes ColorPalette { get; set; } = Enums.ColorPalettes.Category10;
 
-        [Parameter(Mandatory = false, HelpMessage = "Enable custom color palette for the chart.")]
+        [Parameter(Mandatory = false, HelpMessage = "Switch to enable custom color palette.")]
         public SwitchParameter EnableCustomColorPalette { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "Invert the custom color palette.")]
         public SwitchParameter InvertCustomColorPalette { get; set; }
 
-        [Parameter(Mandatory = false, HelpMessage = "Set the custom color palette for the chart.")]
+        [Parameter(Mandatory = false, HelpMessage = "Array of custom hex color values for the chart.")]
         public string[] CustomColorPalette { get; set; }
 
-        [Parameter(Mandatory = false, HelpMessage = "Set the font name for the chart.")]
+        [Parameter(Mandatory = false, HelpMessage = "Font name to use for all text. Defaults to Arial.")]
         public string FontName { get; set; } = "Arial";
 
         // Label Font settings
-        [Parameter(Mandatory = false, HelpMessage = "Set the font size for the chart labels.")]
+        [Parameter(Mandatory = false, HelpMessage = "Font size for chart labels. Defaults to 14.")]
         public int LabelFontSize { get; set; } = 14;
 
-        [Parameter(Mandatory = false, HelpMessage = "Set the font color for the chart labels.")]
+        [Parameter(Mandatory = false, HelpMessage = "Font color for labels. Defaults to Black.")]
         public BasicColors LabelFontColor { get; set; } = BasicColors.Black;
 
-        [Parameter(Mandatory = false, HelpMessage = "Enable bold font for the chart labels.")]
+        [Parameter(Mandatory = false, HelpMessage = "Switch to make label font bold.")]
         public SwitchParameter LabelBold { get; set; }
 
-        // Set font for the X and Y axis labels (Bar Chart)
-        [Parameter(Mandatory = false, HelpMessage = "Set the label for the Y-axis.")]
-        public string LabelYAxis { get; set; } = "Count";
-
-        [Parameter(Mandatory = false, HelpMessage = "Set the label for the X-axis.")]
-        public string LabelXAxis { get; set; } = "Values";
-
-        // this set the orientation chart area  (Bar Chart)
-        [Parameter(Mandatory = false, HelpMessage = "Set the orientation of the chart area.")]
-        public Enums.Orientations AreaOrientation { get; set; } = Enums.Orientations.Vertical;
+        // this set the distance of the labels from the chart center (Donut Chart)
+        [Parameter(Mandatory = false, HelpMessage = "Distance of labels from the chart center (0.5 to 0.9). Defaults to 0.6.")]
+        [ValidateSet("0.5", "0.6", "0.7", "0.8", "0.9")]
+        public double LabelDistance { get; set; } = 0.7;
 
         // this set the area axes margins  (Bar Chart)
-        [Parameter(Mandatory = false, HelpMessage = "Set the top margin for the chart area axes.")]
+        [Parameter(Mandatory = false, HelpMessage = "Top margin for the chart area. Defaults to 0.2.")]
         public double AxesMarginsTop { get; set; } = 0.2;
 
-        [Parameter(Mandatory = false, HelpMessage = "Set the bottom margin for the chart area axes.")]
+        [Parameter(Mandatory = false, HelpMessage = "Bottom margin for the chart area. Defaults to 0.05.")]
         public double AxesMarginsDown { get; set; } = 0.05;
 
-        [Parameter(Mandatory = false, HelpMessage = "Set the left margin for the chart area axes.")]
+        [Parameter(Mandatory = false, HelpMessage = "Left margin for the chart area. Defaults to 0.05.")]
         public double AxesMarginsLeft { get; set; } = 0.05;
 
-        [Parameter(Mandatory = false, HelpMessage = "Set the right margin for the chart area axes.")]
+        [Parameter(Mandatory = false, HelpMessage = "Right margin for the chart area. Defaults to 0.05.")]
         public double AxesMarginsRight { get; set; } = 0.05;
 
         [Parameter(Mandatory = false, HelpMessage = "Background color of the entire figure (canvas).")]
@@ -157,23 +147,26 @@ namespace AsBuiltReportChart.PowerShell
         public float WatermarkRotation { get; set; } = 0;
 
         // Set chart Size WxH
-        [Parameter(Mandatory = false, HelpMessage = "Set the width of the chart in pixels.")]
+        [Parameter(Mandatory = false, HelpMessage = "Width of the chart in pixels. Defaults to 400.")]
         public int Width { get; set; } = 400;
 
-        [Parameter(Mandatory = false, HelpMessage = "Set the height of the chart in pixels.")]
+        [Parameter(Mandatory = false, HelpMessage = "Height of the chart in pixels. Defaults to 300.")]
         public int Height { get; set; } = 300;
 
         // Set OutputFolderPath
-        [Parameter(Mandatory = false, HelpMessage = "Set the output folder path for the chart file.")]
+        [Parameter(Mandatory = false, HelpMessage = "Directory path where the chart file will be saved. Defaults to current directory.")]
         [ValidatePath()]
         public string OutputFolderPath { get; set; } = Directory.GetCurrentDirectory();
+
+        // Switch to hide values on the chart
+        [Parameter(Mandatory = false, HelpMessage = "Switch to hide values on the chart.")]
+        public SwitchParameter HideValues { get; set; }
 
         protected override void ProcessRecord()
         {
             Chart.Reset();
-            if (Values != null && Labels != null && LegendCategories != null)
+            if (Values != null && Labels != null)
             {
-
                 if (EnableLegend)
                 {
                     Chart.EnableLegend = EnableLegend;
@@ -190,6 +183,12 @@ namespace AsBuiltReportChart.PowerShell
                     Chart.LegendBorderColor = LegendBorderColor;
                 }
 
+                if (HideValues)
+                {
+                    Chart.HideValues = HideValues;
+                }
+
+                Chart.DonutFraction = DonutFraction;
                 if (EnableChartBorder)
                 {
                     // Chart area settings
@@ -218,6 +217,12 @@ namespace AsBuiltReportChart.PowerShell
                     Chart.ColorPalette = ColorPalette;
                 }
 
+                // this set the area axes margins  (Bar Chart)
+                Chart.AxesMarginsTop = AxesMarginsTop;
+                Chart.AxesMarginsDown = AxesMarginsDown;
+                Chart.AxesMarginsLeft = AxesMarginsLeft;
+                Chart.AxesMarginsRight = AxesMarginsRight;
+
                 // Title settings
                 if (Title != null)
                 {
@@ -227,24 +232,14 @@ namespace AsBuiltReportChart.PowerShell
                     Chart.TitleFontColor = TitleFontColor;
                 }
 
+                // This set the distance of the labels from the chart center (Donut Chart)
+                Chart.LabelDistance = LabelDistance;
+
                 // Font Settings
                 Chart.FontName = FontName;
                 Chart.LabelFontSize = LabelFontSize;
                 Chart.LabelFontColor = LabelFontColor;
                 Chart.LabelBold = LabelBold;
-
-                // Set font for the X and Y axis labels
-                Chart.LabelXAxis = LabelXAxis;
-                Chart.LabelYAxis = LabelYAxis;
-
-                // this set the orientation chart area  (Bar Chart)
-                Chart.AreaOrientation = AreaOrientation;
-
-                // this set the area axes margins  (Bar Chart)
-                Chart.AxesMarginsTop = AxesMarginsTop;
-                Chart.AxesMarginsDown = AxesMarginsDown;
-                Chart.AxesMarginsLeft = AxesMarginsLeft;
-                Chart.AxesMarginsRight = AxesMarginsRight;
 
                 // Background color settings
                 Chart.FigureBackgroundColor = FigureBackgroundColor;
@@ -264,12 +259,12 @@ namespace AsBuiltReportChart.PowerShell
                 Chart.OutputFolderPath = OutputFolderPath;
 
                 Chart.Format = Format;
-                StackedBar myStackedBar = new StackedBar();
-                WriteObject(myStackedBar.Chart(Values, Labels, LegendCategories, Filename, Width, Height));
+                Donut myDonut = new Donut();
+                WriteObject(myDonut.Chart(Values, Labels, Filename, Width, Height));
             }
             else
             {
-                WriteObject("Please provide Values, Labels and  LegendCategories parameters.");
+                WriteObject("Please provide both Values and Labels parameters.");
             }
         }
     }
