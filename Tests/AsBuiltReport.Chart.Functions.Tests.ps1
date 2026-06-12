@@ -23,6 +23,12 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
     It 'Should export New-SingleStackedBarChart' {
         Get-Command -Module AsBuiltReport.Chart -Name New-SingleStackedBarChart | Should -Not -BeNullOrEmpty
     }
+    It 'Should export New-DonutChart' {
+        Get-Command -Module AsBuiltReport.Chart -Name New-DonutChart | Should -Not -BeNullOrEmpty
+    }
+    It 'Should export New-RadarChart' {
+        Get-Command -Module AsBuiltReport.Chart -Name New-RadarChart | Should -Not -BeNullOrEmpty
+    }
 
     Context 'New-PieChart' {
         It 'Should run without error with sample input' {
@@ -234,6 +240,62 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
         }
     }
 
+    Context 'New-RadarChart' {
+        It 'Should run without error with sample input' {
+            { New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+        }
+        It 'Should return a file path as output' {
+            $result = New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'png' -OutputFolderPath $TestDrive
+            $result | Should -BeOfType 'System.IO.FileSystemInfo'
+            Test-Path $result | Should -BeTrue
+        }
+        It 'Should throw error for missing mandatory parameters' {
+            { New-RadarChart } | Should -Throw
+        }
+        It 'Should throw error for missing Title' {
+            { New-RadarChart -Values @(@(1, 2, 5, 8)) -LegendLabels @('A') -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw
+        }
+        It 'Should throw error for missing Values' {
+            { New-RadarChart -Title 'Test' -LegendLabels @('A') -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw
+        }
+        It 'Should throw error for missing LegendLabels' {
+            { New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8)) -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw
+        }
+        It 'Should throw error for mismatched Values and LegendLabels' {
+            { New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A') -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw -ExpectedMessage "Error: Values and labels must be equal."
+        }
+        It 'Should throw error for mismatched Values elements and SpokeLabels' {
+            { New-RadarChart -Title 'Test' -Values @(@(1, 2, 5), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw -ExpectedMessage "Every collection in the series must have the same number of items"
+        }
+        It 'Should run without error with legend enabled' {
+            { New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'png' -OutputFolderPath $TestDrive -EnableLegend } | Should -Not -Throw
+        }
+        It 'Should run without error with legend positioned horizontally' {
+            { New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'png' -OutputFolderPath $TestDrive -EnableLegend -LegendOrientation Horizontal -LegendAlignment UpperCenter } | Should -Not -Throw
+        }
+        It 'Should run without error with chart border enabled' {
+            { New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'png' -OutputFolderPath $TestDrive -EnableChartBorder } | Should -Not -Throw
+        }
+        It 'Should run without error with custom color palette' {
+            { New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'png' -OutputFolderPath $TestDrive -EnableCustomColorPalette -CustomColorPalette @('#4472C4', '#ED7D31') } | Should -Not -Throw
+        }
+        It 'Should run without error with bold title' {
+            { New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'png' -OutputFolderPath $TestDrive -TitleFontBold } | Should -Not -Throw
+        }
+        It 'Should run without error with custom title font size' {
+            { New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'png' -OutputFolderPath $TestDrive -TitleFontSize 20 } | Should -Not -Throw
+        }
+        It 'Should run without error with custom label font size' {
+            { New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'png' -OutputFolderPath $TestDrive -LabelFontSize 12 } | Should -Not -Throw
+        }
+        It 'Should run without error with custom filename' {
+            { New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Filename 'MyRadarChart' -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+        }
+        It 'Should run without error without SpokeLabels' {
+            { New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+        }
+    }
+
     Context 'Watermark support' {
         Context 'New-PieChart with watermark' {
             It 'Should run without error with watermark enabled using defaults' {
@@ -308,6 +370,23 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
                 { New-SignalChart -Title 'Test' -Values @(, [double[]]@(1, 2, 3, 4)) -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
             }
         }
+
+        Context 'New-RadarChart with watermark' {
+            It 'Should run without error with watermark enabled using defaults' {
+                { New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark } | Should -Not -Throw
+            }
+            It 'Should return a file when watermark is enabled' {
+                $result = New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark
+                $result | Should -BeOfType 'System.IO.FileSystemInfo'
+                Test-Path $result | Should -BeTrue
+            }
+            It 'Should run without error with custom watermark text, color, and opacity' {
+                { New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark -WatermarkText 'DRAFT' -WatermarkColor Blue -WatermarkOpacity 0.25 } | Should -Not -Throw
+            }
+            It 'Should run without error without watermark (disabled by default)' {
+                { New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+            }
+        }
     }
 
     Context 'Output format file extensions' {
@@ -331,6 +410,16 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
             $result.Extension | Should -Be '.jpeg'
             Test-Path $result | Should -BeTrue
         }
+        It 'New-RadarChart with Format jpg should produce a .jpg file' {
+            $result = New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'jpg' -OutputFolderPath $TestDrive
+            $result.Extension | Should -Be '.jpg'
+            Test-Path $result | Should -BeTrue
+        }
+        It 'New-RadarChart with Format jpeg should produce a .jpeg file' {
+            $result = New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'jpeg' -OutputFolderPath $TestDrive
+            $result.Extension | Should -Be '.jpeg'
+            Test-Path $result | Should -BeTrue
+        }
     }
 
     Context 'State isolation between cmdlet calls' {
@@ -351,6 +440,10 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
         It 'EnableWatermark should not persist from one New-SignalChart call to the next' {
             New-SignalChart -Title 'Test' -Values @(, [double[]]@(1, 2, 3)) -Format 'png' -OutputFolderPath $TestDrive -EnableWatermark | Out-Null
             { New-SignalChart -Title 'Test' -Values @(, [double[]]@(1, 2, 3)) -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+        }
+        It 'EnableLegend should not persist from one New-RadarChart call to the next' {
+            New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'png' -OutputFolderPath $TestDrive -EnableLegend | Out-Null
+            { New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8), @(3, 5, 4, 2)) -LegendLabels @('A', 'B') -SpokeLabels @('Wins', 'Poles', 'Podiums', 'Points') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
         }
     }
 }
