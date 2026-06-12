@@ -483,6 +483,7 @@ namespace AsBuiltReportChart
             _watermarkOpacity = 0.3;
             DonutFraction = 0.5;
             HideValues = false;
+            SpokesLength = 10;
         }
 
         public static string GenerateToken(Byte length)
