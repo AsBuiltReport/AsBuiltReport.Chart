@@ -129,17 +129,22 @@ New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8),@(3,5,4,2)) -LegendLabels @
 
 All examples in the latest release of AsBuiltReport.Chart can be found in the table below.
 
-| Name                                 | Description                                          |
-| ------------------------------------ | ---------------------------------------------------- |
-| [Example1](./Examples/Example01.ps1) | Basic Pie Chart                                      |
-| [Example2](./Examples/Example02.ps1) | Pie Chart with Legend, Custom Colors and Border      |
-| [Example3](./Examples/Example03.ps1) | Basic Bar Chart                                      |
-| [Example4](./Examples/Example04.ps1) | Bar Chart with Advanced Options                      |
-| [Example5](./Examples/Example05.ps1) | Basic Stacked Bar Chart                              |
-| [Example6](./Examples/Example06.ps1) | Stacked Bar Chart with Advanced Options              |
-| [Example7](./Examples/Example07.ps1) | Basic Signal Chart (Line Chart)                      |
-| [Example8](./Examples/Example08.ps1) | Signal Chart with DateTime X-Axis (Time-Series Data) |
-| [Example9](./Examples/Example09.ps1) | Signal Chart with Multiple Lines                     |
+| Name                                  | Description                                          |
+| ------------------------------------- | ---------------------------------------------------- |
+| [Example1](./Examples/Example01.ps1)  | Basic Pie Chart                                      |
+| [Example2](./Examples/Example02.ps1)  | Pie Chart with Legend, Custom Colors and Border      |
+| [Example3](./Examples/Example03.ps1)  | Basic Bar Chart                                      |
+| [Example4](./Examples/Example04.ps1)  | Bar Chart with Advanced Options                      |
+| [Example5](./Examples/Example05.ps1)  | Basic Stacked Bar Chart                              |
+| [Example6](./Examples/Example06.ps1)  | Stacked Bar Chart with Advanced Options              |
+| [Example7](./Examples/Example07.ps1)  | Basic Signal Chart (Line Chart)                      |
+| [Example8](./Examples/Example08.ps1)  | Signal Chart with DateTime X-Axis (Time-Series Data) |
+| [Example9](./Examples/Example09.ps1)  | Signal Chart with Multiple Lines                     |
+| [Example10](./Examples/Example10.ps1) | Basic Single Stacked Bar Chart                       |
+| [Example11](./Examples/Example11.ps1) | Single Stacked Bar Chart with Advanced Options       |
+| [Example12](./Examples/Example12.ps1) | Basic Donut Chart                                    |
+| [Example13](./Examples/Example13.ps1) | Donut Chart with Legend, Custom Colors and Border    |
+
 
 ## Watermark Support
 
@@ -147,14 +152,14 @@ All chart types support an optional watermark that overlays semi-transparent tex
 
 ### Watermark Parameters
 
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `EnableWatermark` | Switch | (off) | Enables the watermark overlay. |
-| `WatermarkText` | String | `Confidential` | Text to display as the watermark. |
-| `WatermarkFontName` | String | `Arial` | Font family for the watermark text. |
-| `WatermarkFontSize` | Int | `24` | Font size (points) for the watermark text. |
-| `WatermarkColor` | BasicColors | `Gray` | Color of the watermark text. |
-| `WatermarkOpacity` | Double | `0.3` | Opacity (0.0–1.0) of the watermark. Lower values are more transparent. |
+| Parameter           | Type        | Default        | Description                                                            |
+| ------------------- | ----------- | -------------- | ---------------------------------------------------------------------- |
+| `EnableWatermark`   | Switch      | (off)          | Enables the watermark overlay.                                         |
+| `WatermarkText`     | String      | `Confidential` | Text to display as the watermark.                                      |
+| `WatermarkFontName` | String      | `Arial`        | Font family for the watermark text.                                    |
+| `WatermarkFontSize` | Int         | `24`           | Font size (points) for the watermark text.                             |
+| `WatermarkColor`    | BasicColors | `Gray`         | Color of the watermark text.                                           |
+| `WatermarkOpacity`  | Double      | `0.3`          | Opacity (0.0–1.0) of the watermark. Lower values are more transparent. |
 
 ### Watermark Examples
 
