@@ -1,2 +1,1 @@
-[Done] Add radar chart support: [Radar Chart](https://scottplot.net/cookbook/5/Radar/)
-[] Calculate the spoke length based on the maximum value in the dataset to ensure the radar chart is properly scaled.
+- [] Add support for ScottPlot 5.1.59
