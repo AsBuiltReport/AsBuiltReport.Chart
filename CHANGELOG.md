@@ -10,8 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Update module v0.3.4
-- Update SkiaSharp .NET dependency to v4.148.0
-- Update HarfBuzzSharp .NET dependency to v14.2.0
 - Update ScottPlot NET dependency to v5.1.59
 
 ## [0.3.3] - 2026-06-12
