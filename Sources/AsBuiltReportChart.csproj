@@ -3,13 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <!-- <OutputType>Exe</OutputType> -->
-        <Version>0.3.3</Version>
+        <Version>0.3.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="8.3.1.5" />
     <PackageReference Include="PowerShellStandard.Library" Version="5.1.1" />
-    <PackageReference Include="ScottPlot" Version="5.1.58" />
+    <PackageReference Include="ScottPlot" Version="5.1.59" />
     <PackageReference Include="SkiaSharp" Version="3.119.4" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.4" />
   </ItemGroup>
