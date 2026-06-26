@@ -31,9 +31,6 @@
 
 # AsBuiltReport.Chart
 
-<!-- ********** REMOVE THIS MESSAGE WHEN THE MODULE IS FUNCTIONAL ********** -->
-## :exclamation: THIS ASBUILTREPORT MODULE IS CURRENTLY IN DEVELOPMENT AND MIGHT NOT YET BE FUNCTIONAL ❗
-
 AsBuiltReport.Chart is a PowerShell module which provides a set of cmdlets for generating charts and visualizations in As Built Reports. This module is designed to work seamlessly with the AsBuiltReport.Core module, allowing users to create visually appealing and informative reports with ease.
 
 # :beginner: Getting Started
