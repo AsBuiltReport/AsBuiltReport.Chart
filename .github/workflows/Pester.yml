@@ -39,7 +39,7 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v7
             - name: Setup .NET
-              uses: actions/setup-dotnet@v5
+              uses: actions/setup-dotnet@v6
               with:
                   dotnet-version: "8.0.x"
             - name: Restore dependencies
@@ -74,10 +74,6 @@ jobs:
             - name: Set up PowerShell Gallery
               run: |
                   Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-
-            - name: Install Pester
-              run: |
-                  Install-Module -Name Pester -MinimumVersion 5.0.0 -Repository PSGallery -Force -AllowClobber -Scope CurrentUser
 
             - name: Run Pester Tests
               run: |
