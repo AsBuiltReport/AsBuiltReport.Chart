@@ -122,6 +122,16 @@ New-RadarChart -Title 'Test' -Values @(@(1, 2, 5, 8),@(3,5,4,2)) -LegendLabels @
 ```
 ![RadarChart](./Samples/RadarChart.png)
 
+### Heat Map Chart
+```powershell
+# Generate a Heat Map Chart showing utilization across clusters and metrics.
+New-HeatMapChart -Title 'Cluster Utilization' -Values @(
+    @(78, 81, 74),
+    @(66, 72, 80),
+    @(88, 91, 85)
+) -RowLabels @('Cluster A', 'Cluster B', 'Cluster C') -ColumnLabels @('CPU', 'Memory', 'Storage') -Format 'png' -OutputFolderPath $PWD
+```
+
 ### :blue_book: Example Index
 
 All examples in the latest release of AsBuiltReport.Chart can be found in the table below.
@@ -143,6 +153,7 @@ All examples in the latest release of AsBuiltReport.Chart can be found in the ta
 | [Example13](./Examples/Example13.ps1) | Donut Chart with Legend, Custom Colors and Border    |
 | [Example14](./Examples/Example14.ps1) | Basic Radar Chart with Legend                        |
 | [Example15](./Examples/Example15.ps1) | Radar Chart with Legend, Custom Colors and Border    |
+| [Example16](./Examples/Example16.ps1) | Heat Map Chart for cluster utilization               |
 
 ## Watermark Support
 

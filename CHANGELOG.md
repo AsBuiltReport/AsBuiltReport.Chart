@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add SkiaSharp.NativeAssets.macOS dependency to the module to support macOS platform
 - Add support for macOS intel in the Pester workflow to test the module on macOS intel platform
 - Add Pester test for missing OutputFolderPath in New-PieChart
+- Add Heatmap chart support:
+  - Implement New-HeatmapChart cmdlet and associated classes
+  - Add pester test to validate the functionality of the New-HeatmapChart cmdlet
+  - Add example 16 to document on how to use the New-HeatmapChart cmdlet
 
 ### Changed
 
