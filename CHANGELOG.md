@@ -18,7 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update Pester workflow to use the latest version of the Pester module
 - Update workflows to use the latest action version
 
-
 ## [0.3.4] - 2026-06-25
 
 ### Changed
