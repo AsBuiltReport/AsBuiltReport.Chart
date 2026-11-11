@@ -57,7 +57,7 @@ if ($PSVersion.Major -lt 7) {
 Write-Host "`nInstalling required modules..." -ForegroundColor Yellow
 
 $RequiredModules = @(
-    @{ Name = 'Pester'; MinimumVersion = '5.0.0' }
+    @{ Name = 'Pester'; MinimumVersion = '6.2.0' }
 )
 
 foreach ($Module in $RequiredModules) {
@@ -75,7 +75,7 @@ foreach ($Module in $RequiredModules) {
 }
 
 # Import Pester
-Import-Module Pester -MinimumVersion 5.0.0 -Force
+Import-Module Pester -MinimumVersion 6.2.0 -Force
 
 # Configure Pester
 $PesterConfiguration = New-PesterConfiguration

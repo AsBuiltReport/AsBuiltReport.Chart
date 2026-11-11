@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <!-- <OutputType>Exe</OutputType> -->
-        <Version>0.3.4</Version>
+        <Version>0.3.5</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +12,7 @@
     <PackageReference Include="ScottPlot" Version="5.1.59" />
     <PackageReference Include="SkiaSharp" Version="3.119.4" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.4" />
+    <PackageReference Include="SkiaSharp.NativeAssets.macOS" Version="3.119.4" />
   </ItemGroup>
 
 </Project>

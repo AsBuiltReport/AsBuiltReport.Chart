@@ -445,7 +445,7 @@ namespace AsBuiltReportChart
             LabelBold = false;
             LabelYAxis = "Count";
             LabelXAxis = "Values";
-            _labelDistance = 0.6;
+            LabelDistance = 0.6;
             AreaOrientation = Orientations.Vertical;
             _areaExplodeFraction = 0;
             EnableLegend = false;
@@ -482,6 +482,7 @@ namespace AsBuiltReportChart
             WatermarkColor = BasicColors.Gray;
             _watermarkOpacity = 0.3;
             DonutFraction = 0.5;
+            DonutCenterText = null;
             HideValues = false;
             SpokesLength = 10;
         }

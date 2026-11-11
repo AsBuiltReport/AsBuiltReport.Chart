@@ -1,1 +1,1 @@
-- [] Add support for ScottPlot 5.1.59
+- [Done] Add support for ScottPlot 5.1.59

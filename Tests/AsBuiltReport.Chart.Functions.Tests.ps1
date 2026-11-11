@@ -45,6 +45,10 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
         It 'Should throw error for mismatched Values and Labels' {
             { New-PieChart -Title 'Test' -Values @(1, 2) -Labels @('A') -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw -ExpectedMessage  "Error: Values and labels must be equal."
         }
+        It 'Should throw when OutputFolderPath does not exist' {
+            $missingPath = Join-Path -Path $TestDrive -ChildPath 'missing-folder'
+            { New-PieChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $missingPath } | Should -Throw
+        }
     }
 
     Context 'New-DonutChart' {
