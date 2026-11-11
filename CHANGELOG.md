@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add SkiaSharp.NativeAssets.macOS dependency to the module to support macOS platform
+- Add support for macOS intel in the Pester workflow to test the module on macOS intel platform
 
 ### Changed
 

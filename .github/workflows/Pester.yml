@@ -20,7 +20,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                os: [windows-latest, ubuntu-latest, macos-latest]
+                os: [windows-latest, ubuntu-latest, macos-latest, macos-26-intel]
                 shell: [pwsh]
                 include:
                     - os: windows-latest
@@ -29,6 +29,8 @@ jobs:
                     - os: ubuntu-latest
                       shell: powershell
                     - os: macos-latest
+                      shell: powershell
+                    - os: macos-26-intel
                       shell: powershell
 
         defaults:
@@ -44,12 +46,18 @@ jobs:
                   dotnet-version: "8.0.x"
             - name: Restore dependencies
               run: dotnet restore ./Sources
-            - name: Build the library for MacOS
+            - name: Build the library for MacOS ARM64
               run: dotnet publish ./Sources -c Release -r osx-arm64
               if: matrix.os == 'macos-latest'
-            - name: Copy the library for MacOS
+            - name: Copy the library for MacOS ARM64
               run: Copy-Item -Path ./Sources/bin/Release/netstandard2.0/osx-arm64/publish/* -Destination ./AsBuiltReport.Chart/Src/Assemblies/Core/mac-osx/osx-arm64 -Recurse
               if: matrix.os == 'macos-latest'
+            - name: Build the library for MacOS Intel
+              run: dotnet publish ./Sources -c Release -r osx-x64
+              if: matrix.os == 'macos-26-intel'
+            - name: Copy the library for MacOS Intel
+              run: Copy-Item -Path ./Sources/bin/Release/netstandard2.0/osx-x64/publish/* -Destination ./AsBuiltReport.Chart/Src/Assemblies/Core/mac-osx/osx-x64 -Recurse
+              if: matrix.os == 'macos-26-intel'
             - name: Build the library for Linux
               run: dotnet publish ./Sources -c Release -r linux-x64
               if: matrix.os == 'ubuntu-latest'
