@@ -29,6 +29,9 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
     It 'Should export New-RadarChart' {
         Get-Command -Module AsBuiltReport.Chart -Name New-RadarChart | Should -Not -BeNullOrEmpty
     }
+    It 'Should export New-HeatMapChart' {
+        Get-Command -Module AsBuiltReport.Chart -Name New-HeatMapChart | Should -Not -BeNullOrEmpty
+    }
 
     Context 'New-PieChart' {
         It 'Should run without error with sample input' {
@@ -44,6 +47,10 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
         }
         It 'Should throw error for mismatched Values and Labels' {
             { New-PieChart -Title 'Test' -Values @(1, 2) -Labels @('A') -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw -ExpectedMessage  "Error: Values and labels must be equal."
+        }
+        It 'Should throw when OutputFolderPath does not exist' {
+            $missingPath = Join-Path -Path $TestDrive -ChildPath 'missing-folder'
+            { New-PieChart -Title 'Test' -Values @(1, 2) -Labels @('A', 'B') -Format 'png' -OutputFolderPath $missingPath } | Should -Throw
         }
     }
 
@@ -237,6 +244,23 @@ Describe 'AsBuiltReport.Chart Exported Functions' {
                 $result | Should -BeOfType 'System.IO.FileSystemInfo'
                 Test-Path $result | Should -BeTrue
             }
+        }
+    }
+
+    Context 'New-HeatMapChart' {
+        It 'Should run without error with sample input' {
+            { New-HeatMapChart -Title 'Test' -Values @(@(1, 2), @(3, 4)) -RowLabels @('R1', 'R2') -ColumnLabels @('C1', 'C2') -Format 'png' -OutputFolderPath $TestDrive } | Should -Not -Throw
+        }
+        It 'Should return a file path as output' {
+            $result = New-HeatMapChart -Title 'Test' -Values @(@(1, 2), @(3, 4)) -RowLabels @('R1', 'R2') -ColumnLabels @('C1', 'C2') -Format 'png' -OutputFolderPath $TestDrive
+            $result | Should -BeOfType 'System.IO.FileSystemInfo'
+            Test-Path $result | Should -BeTrue
+        }
+        It 'Should run without error when the color scale legend is enabled' {
+            { New-HeatMapChart -Title 'Test' -Values @(@(1, 2), @(3, 4)) -RowLabels @('R1', 'R2') -ColumnLabels @('C1', 'C2') -Format 'png' -OutputFolderPath $TestDrive -EnableLegend } | Should -Not -Throw
+        }
+        It 'Should throw error for mismatched row counts' {
+            { New-HeatMapChart -Title 'Test' -Values @(@(1, 2), @(3, 4, 5)) -RowLabels @('R1', 'R2') -ColumnLabels @('C1', 'C2') -Format 'png' -OutputFolderPath $TestDrive } | Should -Throw -ExpectedMessage "Error: All rows in Values must have the same length."
         }
     }
 
