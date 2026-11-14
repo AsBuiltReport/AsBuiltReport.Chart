@@ -1,15 +1,15 @@
 <!-- ********** DO NOT EDIT THESE LINKS ********** -->
 <p align="center">
-    <a href="https://www.asbuiltreport.com/" alt="AsBuiltReport"></a>
-            <img src='https://github.com/AsBuiltReport.png' width="8%" height="8%" /></a>
+    <a href="https://www.asbuiltreport.com/">
+        <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/repo-banners/AsBuiltReport.Chart.png" alt="AsBuiltReport.Chart" width="880"></a>
 </p>
 <p align="center">
     <a href="https://www.powershellgallery.com/packages/AsBuiltReport.Chart/" alt="PowerShell Gallery Version">
-        <img src="https://img.shields.io/powershellgallery/v/AsBuiltReport.Chart.svg" /></a>
+        <img src="https://img.shields.io/powershellgallery/v/AsBuiltReport.Chart.svg?color=1F5FD0" /></a>
     <a href="https://www.powershellgallery.com/packages/AsBuiltReport.Chart/" alt="PS Gallery Downloads">
-        <img src="https://img.shields.io/powershellgallery/dt/AsBuiltReport.Chart.svg" /></a>
+        <img src="https://img.shields.io/powershellgallery/dt/AsBuiltReport.Chart.svg?color=012456" /></a>
     <a href="https://www.powershellgallery.com/packages/AsBuiltReport.Chart/" alt="PS Platform">
-        <img src="https://img.shields.io/powershellgallery/p/AsBuiltReport.Chart.svg" /></a>
+        <img src="https://img.shields.io/powershellgallery/p/AsBuiltReport.Chart.svg?color=FFD02B" /></a>
 </p>
 <p align="center">
     <a href="https://github.com/AsBuiltReport/AsBuiltReport.Chart/graphs/commit-activity" alt="GitHub Last Commit">
@@ -17,11 +17,7 @@
     <a href="https://raw.githubusercontent.com/AsBuiltReport/AsBuiltReport.Chart/master/LICENSE" alt="GitHub License">
         <img src="https://img.shields.io/github/license/AsBuiltReport/AsBuiltReport.Chart.svg" /></a>
     <a href="https://github.com/AsBuiltReport/AsBuiltReport.Chart/graphs/contributors" alt="GitHub Contributors">
-        <img src="https://img.shields.io/github/contributors/AsBuiltReport/AsBuiltReport.Chart.svg"/></a>
-</p>
-<p align="center">
-    <a href="https://twitter.com/AsBuiltReport" alt="Twitter">
-            <img src="https://img.shields.io/twitter/follow/AsBuiltReport.svg?style=social"/></a>
+        <img src="https://img.shields.io/github/contributors/AsBuiltReport/AsBuiltReport.Chart.svg?color=012456"/></a>
 </p>
 
 <p align="center">
@@ -29,15 +25,13 @@
 </p>
 <!-- ********** DO NOT EDIT THESE LINKS ********** -->
 
-# AsBuiltReport.Chart
-
 AsBuiltReport.Chart is a PowerShell module which provides a set of cmdlets for generating charts and visualizations in As Built Reports. This module is designed to work seamlessly with the AsBuiltReport.Core module, allowing users to create visually appealing and informative reports with ease.
 
-# :beginner: Getting Started
+# <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/getting-started.svg" alt="" width="28" height="28" align="top"> Getting Started
 
 The following simple list of instructions will get you started with the AsBuiltReport.Chart module.
 
-## :floppy_disk: Supported Versions
+## <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/supported-versions.svg" alt="" width="24" height="24" align="top"> Supported Versions
 <!-- ********** Update supported Chart versions ********** -->
 
 ### PowerShell
@@ -49,23 +43,23 @@ This report is compatible with the following PowerShell versions;
 | :--------------------: | :----------------: |
 |   :white_check_mark:   | :white_check_mark: |
 
-## 🗺️ Language Support
+## <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/language-support.svg" alt="" width="24" height="24" align="top"> Language Support
 <!-- ********** Update supported languages ********** -->
 The AsBuiltReport Chart supports the following languages;
 
 - English (US) (Default)
 
-## :wrench: System Requirements
+## <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/system-requirements.svg" alt="" width="24" height="24" align="top"> System Requirements
 <!-- ********** Update system requirements ********** -->
 PowerShell 5.1 or PowerShell 7, and the following PowerShell modules are required for generating an AsBuiltReport Chart.
 
 - [AsBuiltReport.Core Module](https://www.powershellgallery.com/packages/AsBuiltReport.Core/)
 
-### :closed_lock_with_key: Required Privileges
+### <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/required-privileges.svg" alt="" width="20" height="20" align="top"> Required Privileges
 
 Local user privilege
 
-## :package: Module Installation
+## <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/module-installation.svg" alt="" width="24" height="24" align="top"> Module Installation
 
 ### PowerShell
 <!-- ********** Add installation for any additional PowerShell module(s) ********** -->
@@ -77,7 +71,7 @@ install-module AsBuiltReport.Chart -Force
 update-module AsBuiltReport.Chart -Force
 ```
 
-## :computer: Examples
+## <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/examples.svg" alt="" width="24" height="24" align="top"> Examples
 Here are some examples to get you going.
 
 ### Pie Chart
@@ -132,7 +126,7 @@ New-HeatMapChart -Title 'Cluster Utilization' -Values @(
 ) -RowLabels @('Cluster A', 'Cluster B', 'Cluster C') -ColumnLabels @('CPU', 'Memory', 'Storage') -Format 'png' -OutputFolderPath $PWD
 ```
 
-### :blue_book: Example Index
+### <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/example-index.svg" alt="" width="20" height="20" align="top"> Example Index
 
 All examples in the latest release of AsBuiltReport.Chart can be found in the table below.
 
@@ -189,6 +183,6 @@ New-SignalChart -Title 'Throughput' -Values @(,[double[]]@(1,2,3,4,5)) -Format '
     -EnableWatermark -WatermarkFontName 'Arial' -WatermarkOpacity 0.5
 ```
 
-## :x: Known Issues
+## <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/known-issues.svg" alt="" width="24" height="24" align="top"> Known Issues
 
  - No known issues at this time.
